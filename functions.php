@@ -117,8 +117,11 @@ add_filter( 'rank_math/frontend/robots', function ( $robots ) {
 } );
 
 add_filter( 'rank_math/sitemap/entry', function ( $url, $type, $object ) {
-	if ( 'post' === $type && $object instanceof WP_Post && in_array( $object->post_name, p3d_seo_hidden_slugs(), true ) ) {
-		return false;
+	if ( 'post' === $type && is_object( $object ) ) {
+		$slug = $object->post_name ?? ( isset( $object->ID ) ? get_post_field( 'post_name', $object->ID ) : '' );
+		if ( in_array( $slug, p3d_seo_hidden_slugs(), true ) ) {
+			return false;
+		}
 	}
 	return $url;
 }, 10, 3 );
