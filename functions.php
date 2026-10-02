@@ -12,6 +12,7 @@ require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/data.php';
 require_once __DIR__ . '/inc/form.php';
 require_once __DIR__ . '/inc/shop.php';
+require_once __DIR__ . '/inc/personalizare.php';
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );

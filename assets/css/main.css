@@ -409,6 +409,29 @@ a.contact-item:hover { background: var(--tint); color: var(--ink); }
   .woocommerce div.product div.images, .woocommerce div.product div.summary { grid-column: 1 / -1; }
 }
 
+/* Personalizare (nume, culori, opțiuni) */
+.p3d-pers { flex: 1 0 100%; display: grid; gap: 18px; margin: 0 0 6px; }
+.p3d-field label, .p3d-field-label { display: block; font-weight: 600; margin-bottom: 8px; }
+.p3d-field-label strong { font-weight: 600; color: var(--accent-text); }
+.p3d-field input[type=text] { width: 100%; max-width: 380px; border: 1px solid var(--line-2); border-radius: 12px; padding: 11px 14px; font: inherit; background: var(--surface); }
+.p3d-field input[type=text]:focus { border-color: var(--accent); outline: none; }
+.p3d-field small { display: block; color: var(--muted); font-size: 14px; margin-top: 6px; }
+.p3d-color-swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.p3d-cs { position: relative; width: 36px; height: 36px; cursor: pointer; margin: 0 !important; }
+.p3d-cs input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.p3d-cs span { display: block; width: 100%; height: 100%; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); border: 3px solid var(--bg); outline: 2px solid transparent; transition: outline-color .12s; }
+.p3d-cs:hover span { outline-color: var(--line-2); }
+.p3d-cs input:checked + span { outline-color: var(--ink); }
+.p3d-cs input:focus-visible + span { outline-color: var(--accent); }
+.p3d-cs-other span { background: conic-gradient(#f26a1b,#f5c518,#2fa84f,#6ec1ef,#1f6fd1,#8e44ad,#f48fb1,#f26a1b); }
+.p3d-color-other { margin-top: 10px; }
+.p3d-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.p3d-chip { margin: 0 !important; font-weight: 400 !important; cursor: pointer; }
+.p3d-chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.p3d-chip span { display: inline-block; padding: 8px 16px; border: 1px solid var(--line-2); border-radius: 999px; background: var(--surface); font-size: 15px; }
+.p3d-chip input:checked + span { background: var(--ink); color: #fff; border-color: var(--ink); }
+.p3d-chip input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+
 /* Coș, finalizare comandă, mesaje */
 .woocommerce-message, .woocommerce-info, .woocommerce-error { border-top-color: var(--accent) !important; background: var(--surface) !important; border-radius: 12px; }
 .woocommerce-message::before, .woocommerce-info::before { color: var(--accent) !important; }
