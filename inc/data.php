@@ -22,7 +22,7 @@ function p3d_services() {
 			'lead'     => 'Imprimanta nu mai printează cum trebuie? O verificăm, o reparăm și o reglăm, ca să printeze din nou precis și fiabil. Întreținere și suport tehnic specializat pentru cele mai populare imprimante 3D.',
 			'card'     => 'Diagnoză, reparații, piese de schimb și întreținere pentru cele mai populare imprimante 3D.',
 			'points'   => array( 'Diagnoză și evaluare', 'Piese de schimb și reparații', 'Întreținere preventivă' ),
-			'brands'   => array( 'Anycubic', 'Prusa', 'Voron', 'și multe altele' ),
+			'brands'   => array( 'Bambu Lab', 'Prusa', 'Creality', 'Anycubic', 'Elegoo', 'Voron', 'și alte mărci' ),
 			'problems' => array(
 				array( 'Nu mai extrudă', 'Duză înfundată, extruder care sare sau filament care nu mai iese.' ),
 				array( 'Primul strat nu se prinde', 'Piesele se dezlipesc de pe pat sau se deformează la colțuri.' ),
@@ -47,7 +47,7 @@ function p3d_services() {
 				array( 'Reparăm și reglăm', 'Înlocuim ce e nevoie, calibrăm și imprimanta e gata de lucru.' ),
 			),
 			'faq'      => array(
-				array( 'Ce mărci de imprimante 3D reparați?', 'Lucrăm cu cele mai populare imprimante 3D, printre care Anycubic, Prusa și Voron, și multe altele. Dacă nu ești sigur, sună-ne sau scrie-ne modelul imprimantei.' ),
+				array( 'Ce mărci de imprimante 3D reparați?', 'Lucrăm cu cele mai populare imprimante 3D, printre care Bambu Lab, Prusa, Creality, Anycubic, Elegoo și Voron, dar și alte mărci. Dacă nu ești sigur, sună-ne sau scrie-ne modelul imprimantei.' ),
 				array( 'Pot trimite întâi poze sau un video cu problema?', 'Da. Scrie-ne pe WhatsApp cu o descriere și, dacă poți, poze sau un video scurt. Ne ajută să înțelegem problema mai repede.' ),
 				array( 'Faceți și întreținere preventivă?', 'Da. Întreținerea preventivă (curățare, reglaje, verificarea pieselor uzate) ajută imprimanta să funcționeze fiabil și previne defectele.' ),
 				array( 'Puteți actualiza sau optimiza imprimanta?', 'Da, facem actualizări și optimizări, ca imprimanta să profite de funcții noi și să printeze mai bine.' ),
@@ -141,7 +141,7 @@ function p3d_service_url( $slug ) {
  */
 function p3d_home_faq() {
 	return array(
-		array( 'Reparați imprimante 3D în București?', 'Da. Facem diagnoză, reparații, înlocuire de piese și întreținere pentru cele mai populare imprimante 3D, printre care Anycubic, Prusa și Voron.' ),
+		array( 'Reparați imprimante 3D în București?', 'Da. Facem diagnoză, reparații, înlocuire de piese și întreținere pentru cele mai populare imprimante 3D, printre care Bambu Lab, Prusa, Creality, Anycubic, Elegoo și Voron.' ),
 		array( 'Ce trebuie să trimit pentru o printare 3D?', 'Modelul 3D al piesei. Dacă nu îl ai, poți aduce piesa existentă sau ne poți descrie ideea, iar noi o proiectăm.' ),
 		array( 'Pot alege materialul și culoarea?', 'Da, alegi materialul, culoarea și dimensiunile potrivite nevoilor tale.' ),
 		array( 'Cum primesc piesele printate?', 'Poți alege ridicarea personală sau livrarea la domiciliu.' ),
