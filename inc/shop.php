@@ -261,3 +261,20 @@ add_filter( 'woocommerce_product_supports', function ( $supports, $feature, $pro
 
 // Ordinea implicită din magazin: cea stabilită de noi (câmpul „Ordine” al produsului).
 add_filter( 'woocommerce_default_catalog_orderby', function () { return 'menu_order'; } );
+
+// Peste pragul de livrare gratuită nu mai afișăm și curierul cu plată (rămân gratuit + ridicare personală).
+add_filter( 'woocommerce_package_rates', function ( $rates ) {
+	$has_free = false;
+	foreach ( $rates as $rate ) {
+		if ( 'free_shipping' === $rate->method_id ) {
+			$has_free = true;
+			break;
+		}
+	}
+	if ( ! $has_free ) {
+		return $rates;
+	}
+	return array_filter( $rates, function ( $rate ) {
+		return 'flat_rate' !== $rate->method_id;
+	} );
+}, 100 );
