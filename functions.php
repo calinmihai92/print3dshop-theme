@@ -120,6 +120,16 @@ add_action( 'wp_head', function () {
 }, 30 );
 
 /**
+ * Pluginurile temei vechi își impun propriile șabloane; pentru servicii folosim mereu șablonul acestei teme.
+ */
+add_filter( 'template_include', function ( $template ) {
+	if ( is_singular( 'cpt_services' ) ) {
+		return get_template_directory() . '/single-cpt_services.php';
+	}
+	return $template;
+}, PHP_INT_MAX );
+
+/**
  * Formularul de contact existent (Contact Form 7), dacă există.
  */
 function p3d_contact_form() {
