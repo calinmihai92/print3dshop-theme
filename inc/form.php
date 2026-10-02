@@ -28,7 +28,7 @@ function p3d_callback_form( $preset = '' ) {
 				<?php foreach ( $opts as $o ) : ?><option<?php selected( $preset, $o ); ?>><?php echo esc_html( $o ); ?></option><?php endforeach; ?>
 			</select>
 		</label>
-		<label>Pe scurt (opțional)<textarea name="mesaj" placeholder="Ex.: imprimanta nu mai extrudă / aș vrea o piesă printată…"></textarea></label>
+		<label>Pe scurt (opțional)<textarea name="mesaj" placeholder="Ex.: imprimanta nu mai extrudează / aș vrea o piesă printată…"></textarea></label>
 		<label class="hp" aria-hidden="true">Nu completa<input type="text" name="site" tabindex="-1" autocomplete="off"></label>
 		<label class="consent"><input type="checkbox" name="acord" value="1" required> <span>Sunt de acord ca datele mele să fie folosite pentru a fi contactat, conform <a href="<?php echo esc_url( home_url( '/politica-de-confidentialitate/' ) ); ?>">politicii de confidențialitate</a>.</span></label>
 		<div><button type="submit" class="btn btn-primary">Te sunăm noi <?php echo p3d_icon( 'arrow', 16 ); // phpcs:ignore ?></button></div>

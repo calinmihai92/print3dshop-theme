@@ -28,7 +28,7 @@
 		</div>
 	</div>
 	<div class="foot-bottom">
-		<span>© <?php echo esc_html( gmdate( 'Y' ) ); ?> Print3D Shop</span>
+		<span>© <?php echo esc_html( gmdate( 'Y' ) ); ?> Print3D Shop · Site realizat de <a href="https://www.123ai.ro/" class="credit">123ai</a> — website-uri și automatizări pentru firme</span>
 		<span>
 			<a href="<?php echo esc_url( home_url( '/politica-de-confidentialitate/' ) ); ?>">Confidențialitate</a> ·
 			<a href="<?php echo esc_url( home_url( '/termeni-si-conditii/' ) ); ?>">Termeni și condiții</a> ·

@@ -24,7 +24,7 @@ function p3d_services() {
 			'points'   => array( 'Diagnoză și evaluare', 'Piese de schimb și reparații', 'Întreținere preventivă' ),
 			'brands'   => array( 'Bambu Lab', 'Prusa', 'Creality', 'Anycubic', 'Elegoo', 'Voron', 'și alte mărci' ),
 			'problems' => array(
-				array( 'Nu mai extrudă', 'Duză înfundată, extruder care sare sau filament care nu mai iese.' ),
+				array( 'Nu mai extrudează', 'Duză înfundată, extruder care sare sau filament care nu mai iese.' ),
 				array( 'Primul strat nu se prinde', 'Piesele se dezlipesc de pe pat sau se deformează la colțuri.' ),
 				array( 'Straturi decalate, zgomote', 'Axe care sar, curele slăbite, mișcări neregulate.' ),
 				array( 'Erori de temperatură', 'Hotend sau pat care nu încălzesc, erori de senzor.' ),
