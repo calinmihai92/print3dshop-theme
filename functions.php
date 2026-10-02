@@ -102,6 +102,28 @@ add_action( 'template_redirect', function () {
 } );
 
 /**
+ * SEO: pagini care nu trebuie să apară în Google (coș, finalizare comandă, cont, pagina duplicat de termeni)
+ * și serviciile ascunse — noindex și scoase din sitemap (Rank Math).
+ */
+function p3d_seo_hidden_slugs() {
+	return array_merge( array( 'cart', 'checkout', 'my-account', 'privacy-policy' ), p3d_hidden_services() );
+}
+
+add_filter( 'rank_math/frontend/robots', function ( $robots ) {
+	if ( is_singular() && in_array( get_post_field( 'post_name', get_queried_object_id() ), p3d_seo_hidden_slugs(), true ) ) {
+		$robots['index'] = 'noindex';
+	}
+	return $robots;
+} );
+
+add_filter( 'rank_math/sitemap/entry', function ( $url, $type, $object ) {
+	if ( 'post' === $type && $object instanceof WP_Post && in_array( $object->post_name, p3d_seo_hidden_slugs(), true ) ) {
+		return false;
+	}
+	return $url;
+}, 10, 3 );
+
+/**
  * FAQ ca date structurate pe paginile de servicii și pe prima pagină.
  */
 add_action( 'wp_head', function () {
