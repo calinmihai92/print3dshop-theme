@@ -258,3 +258,6 @@ add_filter( 'woocommerce_product_supports', function ( $supports, $feature, $pro
 	}
 	return $supports;
 }, 10, 3 );
+
+// Ordinea implicită din magazin: cea stabilită de noi (câmpul „Ordine” al produsului).
+add_filter( 'woocommerce_default_catalog_orderby', function () { return 'menu_order'; } );
