@@ -54,10 +54,20 @@ add_action( 'wp_head', function () {
 		printf( '<link rel="preload" href="%s/assets/fonts/%s.woff2" as="font" type="font/woff2" crossorigin>' . "\n", esc_url( P3D_URI ), esc_attr( $f ) );
 	}
 	echo '<meta name="theme-color" content="#f7f5f2">' . "\n";
+	printf( '<link rel="icon" href="%s/assets/img/favicon.svg" type="image/svg+xml">' . "\n", esc_url( P3D_URI ) );
 	if ( ! has_site_icon() ) {
-		printf( '<link rel="icon" href="%s/assets/img/favicon.svg" type="image/svg+xml">' . "\n", esc_url( P3D_URI ) );
+		printf( '<link rel="icon" href="%1$s/assets/img/icon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="%1$s/assets/img/icon-180.png">' . "\n", esc_url( P3D_URI ) );
 	}
 }, 2 );
+
+/**
+ * Pictograma site-ului (favicon, bara de admin, ecranul telefonului) = semnul din logo.
+ */
+add_filter( 'get_site_icon_url', function ( $url, $size ) {
+	$size = (int) $size;
+	$file = $size <= 32 ? 32 : ( $size <= 180 ? 180 : ( $size <= 192 ? 192 : 512 ) );
+	return P3D_URI . '/assets/img/icon-' . $file . '.png';
+}, 10, 2 );
 
 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
