@@ -278,3 +278,26 @@ add_filter( 'woocommerce_package_rates', function ( $rates ) {
 		return 'flat_rate' !== $rate->method_id;
 	} );
 }, 100 );
+
+// Finalizare comandă: doar ce trebuie pentru livrare — nume, adresă, telefon, email.
+add_filter( 'woocommerce_checkout_fields', function ( $fields ) {
+	foreach ( array( 'billing', 'shipping' ) as $group ) {
+		unset( $fields[ $group ][ $group . '_company' ], $fields[ $group ][ $group . '_address_2' ] );
+		if ( isset( $fields[ $group ][ $group . '_postcode' ] ) ) {
+			$fields[ $group ][ $group . '_postcode' ]['required'] = false;
+		}
+	}
+	if ( isset( $fields['billing']['billing_phone'] ) ) {
+		$fields['billing']['billing_phone']['required'] = true;
+		$fields['billing']['billing_phone']['label']    = 'Telefon (pentru curier)';
+	}
+	if ( isset( $fields['order']['order_comments'] ) ) {
+		$fields['order']['order_comments']['placeholder'] = 'Ex. interval orar pentru livrare sau alte detalii.';
+	}
+	return $fields;
+} );
+
+add_filter( 'woocommerce_get_country_locale', function ( $locale ) {
+	$locale['RO']['postcode']['required'] = false;
+	return $locale;
+} );
