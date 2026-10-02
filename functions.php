@@ -138,6 +138,25 @@ add_action( 'admin_init', function () {
 } );
 
 /**
+ * Produsele scoase temporar (ciornă) trimit 301 spre /magazin/, ca să nu se piardă vizitele din Google.
+ */
+add_action( 'template_redirect', function () {
+	if ( ! is_404() ) {
+		return;
+	}
+	$path = trim( (string) wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' ); // phpcs:ignore
+	$slug = sanitize_title( basename( $path ) );
+	if ( '' === $slug ) {
+		return;
+	}
+	$found = get_posts( array( 'post_type' => 'product', 'name' => $slug, 'post_status' => array( 'draft', 'private', 'pending' ), 'numberposts' => 1, 'fields' => 'ids' ) );
+	if ( $found ) {
+		wp_safe_redirect( home_url( '/magazin/' ), 301 );
+		exit;
+	}
+} );
+
+/**
  * FAQ ca date structurate pe paginile de servicii și pe prima pagină.
  */
 add_action( 'wp_head', function () {
