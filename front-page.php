@@ -69,18 +69,29 @@ get_header();
 	</div>
 </section>
 
+<?php
+$p3d_shop_items = function_exists( 'wc_get_products' ) ? wc_get_products( array( 'status' => 'publish', 'limit' => 3, 'orderby' => 'menu_order', 'order' => 'ASC' ) ) : array();
+if ( $p3d_shop_items ) :
+	?>
 <section class="section">
 	<div class="wrap">
-		<div class="card soon">
-			<span class="icon-tile"><?php echo p3d_icon( 'cart', 22 ); // phpcs:ignore ?></span>
-			<div>
-				<h2 class="h3">Magazinul <em>vine în curând</em></h2>
-				<p>Lucrăm la noul magazin cu modele printate 3D. Până atunci, îți printăm orice piesă la comandă.</p>
-			</div>
-			<a href="<?php echo esc_url( p3d_service_url( 'printare-3d-personalizata' ) ); ?>" class="btn btn-dark">Printare la comandă <?php echo p3d_icon( 'arrow', 16 ); // phpcs:ignore ?></a>
+		<div class="head">
+			<span class="eyebrow">Din magazin</span>
+			<h2 class="h2">Proiectate și printate <em>de noi</em></h2>
 		</div>
+		<div class="grid grid-3 home-products">
+			<?php foreach ( $p3d_shop_items as $p3d_p ) : ?>
+				<a class="card home-product" href="<?php echo esc_url( $p3d_p->get_permalink() ); ?>">
+					<?php echo $p3d_p->get_image( 'woocommerce_thumbnail' ); // phpcs:ignore ?>
+					<span class="home-product-name"><?php echo esc_html( $p3d_p->get_name() ); ?></span>
+					<span class="home-product-price"><?php echo wp_kses_post( $p3d_p->get_price_html() ); ?></span>
+				</a>
+			<?php endforeach; ?>
+		</div>
+		<p class="center" style="margin-top:28px"><a href="<?php echo esc_url( home_url( '/magazin/' ) ); ?>" class="btn btn-dark">Vezi tot magazinul <?php echo p3d_icon( 'arrow', 16 ); // phpcs:ignore ?></a></p>
 	</div>
 </section>
+<?php endif; ?>
 
 <?php get_template_part( 'template-parts/faq', null, array( 'items' => p3d_home_faq() ) ); ?>
 <?php get_template_part( 'template-parts/contact' ); ?>

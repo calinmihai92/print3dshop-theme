@@ -11,6 +11,7 @@ define( 'P3D_URI', get_template_directory_uri() );
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/data.php';
 require_once __DIR__ . '/inc/form.php';
+require_once __DIR__ . '/inc/shop.php';
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
