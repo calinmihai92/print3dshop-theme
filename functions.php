@@ -123,6 +123,17 @@ add_filter( 'rank_math/sitemap/entry', function ( $url, $type, $object ) {
 	return $url;
 }, 10, 3 );
 
+// După fiecare versiune nouă a temei, golim cache-ul sitemap-ului Rank Math.
+add_action( 'admin_init', function () {
+	if ( get_option( 'p3d_sitemap_ver' ) === P3D_VER ) {
+		return;
+	}
+	if ( class_exists( '\\RankMath\\Sitemap\\Cache' ) ) {
+		\RankMath\Sitemap\Cache::invalidate_storage();
+	}
+	update_option( 'p3d_sitemap_ver', P3D_VER, false );
+} );
+
 /**
  * FAQ ca date structurate pe paginile de servicii și pe prima pagină.
  */
