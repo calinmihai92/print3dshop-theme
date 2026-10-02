@@ -120,7 +120,7 @@ get_header();
 	</div>
 </section>
 
-<?php get_template_part( 'template-parts/contact', null, array( 'wa' => $s['wa'] ) ); ?>
+<?php get_template_part( 'template-parts/contact', null, array( 'wa' => $s['wa'], 'preset' => array( 'support' => 'Service imprimantă 3D', 'printare-3d-personalizata' => 'Printare 3D', 'prototyping' => 'Proiectare 3D' )[ $slug ] ?? '' ) ); ?>
 
 <?php
 get_footer();

@@ -5,7 +5,7 @@
  */
 defined( 'ABSPATH' ) || exit;
 $wa_text = $args['wa'] ?? 'Bună ziua! Vă scriu de pe print3dshop.ro.';
-$form    = p3d_contact_form();
+$form    = p3d_callback_form( $args['preset'] ?? '' );
 ?>
 <section class="section" id="contact">
 	<div class="wrap">
@@ -24,7 +24,7 @@ $form    = p3d_contact_form();
 			</div>
 			<?php if ( $form ) : ?>
 				<div class="card contact-form">
-					<h3 class="h3" style="margin-bottom:18px">Trimite-ne un <em>mesaj</em></h3>
+					<h3 class="h3" style="margin-bottom:18px">Te sunăm <em>noi</em></h3>
 					<?php echo $form; // phpcs:ignore ?>
 				</div>
 			<?php endif; ?>

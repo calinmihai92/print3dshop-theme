@@ -100,7 +100,9 @@ p { margin: 0 0 1em; }
 .grid { display: grid; gap: 18px; }
 .grid-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
 .grid-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
-.grid-4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+.grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1000px) { .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .grid-4 { grid-template-columns: 1fr; } }
 
 .check-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .check-list li { display: flex; gap: 10px; align-items: flex-start; }
@@ -234,6 +236,22 @@ a.contact-item:hover { background: var(--tint); color: var(--ink); }
 .contact-form .wpcf7 input[type=submit] { font: inherit; font-weight: 600; background: var(--accent); color: var(--ink); border: 0; border-radius: 999px; min-height: 48px; padding: 0 24px; cursor: pointer; }
 .contact-form .wpcf7 p { margin: 0 0 14px; }
 .map-link { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--accent-text); text-decoration: none; }
+
+/* ---------- Formular „Te sun eu” ---------- */
+.p3d-form { display: flex; flex-direction: column; gap: 14px; }
+.p3d-form label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 15px; }
+.p3d-form input[type=text], .p3d-form input[type=tel], .p3d-form select, .p3d-form textarea {
+  width: 100%; font: inherit; font-weight: 400; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink);
+}
+.p3d-form textarea { min-height: 110px; resize: vertical; }
+.p3d-form .row { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+@media (max-width: 560px) { .p3d-form .row { grid-template-columns: 1fr; } }
+.p3d-form .consent { flex-direction: row; align-items: flex-start; gap: 10px; font-weight: 400; font-size: 14.5px; color: var(--muted); }
+.p3d-form .consent input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--accent); }
+.p3d-form .hp { position: absolute; left: -9999px; }
+.form-ok, .form-err { padding: 14px 16px; border-radius: 12px; font-weight: 600; }
+.form-ok { background: #e6f4ea; color: #1e6b3a; }
+.form-err { background: #fdecea; color: #a1281b; }
 
 /* ---------- Service page ---------- */
 .svc-hero { padding: 60px 0 72px; }
