@@ -243,3 +243,18 @@ add_action( 'woocommerce_after_shop_loop_item_title', function () {
 		echo '<span class="p3d-loop-ship">' . p3d_icon( 'truck', 14 ) . ' Livrare în ' . esc_html( $livrare ) . '</span>'; // phpcs:ignore
 	}
 }, 15 );
+
+// Produsul cu culoare la alegere nu se poate pune direct în coș din listă: trimitem la pagina lui.
+add_filter( 'woocommerce_loop_add_to_cart_link', function ( $html, $product ) {
+	if ( 'yes' !== p3d_meta( $product, '_p3d_culoare_custom' ) ) {
+		return $html;
+	}
+	return sprintf( '<a href="%s" class="button">Alege culoarea</a>', esc_url( $product->get_permalink() ) );
+}, 10, 2 );
+
+add_filter( 'woocommerce_product_supports', function ( $supports, $feature, $product ) {
+	if ( 'ajax_add_to_cart' === $feature && 'yes' === p3d_meta( $product, '_p3d_culoare_custom' ) ) {
+		return false;
+	}
+	return $supports;
+}, 10, 3 );
