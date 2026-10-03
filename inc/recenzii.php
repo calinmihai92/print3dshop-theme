@@ -75,17 +75,30 @@ add_action( 'comment_post', function ( $comment_id, $approved, $data ) {
 	}
 }, 10, 3 );
 
-// Afișăm fotografia sub textul recenziei.
+// Afișăm fotografiile sub textul recenziei (una încărcată de client sau mai multe, la recenziile preluate).
+function p3d_review_photo_ids( $comment_id ) {
+	$ids = array_filter( array_map( 'intval', explode( ',', (string) get_comment_meta( $comment_id, 'p3d_review_photos', true ) ) ) );
+	$one = (int) get_comment_meta( $comment_id, 'p3d_review_photo', true );
+	if ( $one ) {
+		array_unshift( $ids, $one );
+	}
+	return array_values( array_unique( $ids ) );
+}
+
 add_action( 'woocommerce_review_after_comment_text', function ( $comment ) {
-	$att = (int) get_comment_meta( $comment->comment_ID, 'p3d_review_photo', true );
-	if ( ! $att ) {
+	$ids = p3d_review_photo_ids( $comment->comment_ID );
+	if ( ! $ids ) {
 		return;
 	}
-	printf(
-		'<a class="p3d-review-photo" href="%s" target="_blank" rel="noopener">%s</a>',
-		esc_url( wp_get_attachment_image_url( $att, 'large' ) ),
-		wp_get_attachment_image( $att, 'medium', false, array( 'loading' => 'lazy', 'alt' => 'Fotografie de la client' ) )
-	);
+	echo '<div class="p3d-review-photos">';
+	foreach ( $ids as $att ) {
+		printf(
+			'<a class="p3d-review-photo" href="%s" target="_blank" rel="noopener">%s</a>',
+			esc_url( wp_get_attachment_image_url( $att, 'large' ) ),
+			wp_get_attachment_image( $att, 'medium', false, array( 'loading' => 'lazy', 'alt' => 'Fotografie de la client' ) )
+		);
+	}
+	echo '</div>';
 } );
 
 // În administrare (Comentarii) se vede și fotografia.
@@ -93,8 +106,8 @@ add_filter( 'comment_text', function ( $text, $comment = null ) {
 	if ( ! is_admin() || ! $comment ) {
 		return $text;
 	}
-	$att = (int) get_comment_meta( $comment->comment_ID, 'p3d_review_photo', true );
-	return $att ? $text . '<p>' . wp_get_attachment_image( $att, 'thumbnail' ) . '</p>' : $text;
+	$ids = p3d_review_photo_ids( $comment->comment_ID );
+	return $ids ? $text . '<p>' . implode( ' ', array_map( function ( $a ) { return wp_get_attachment_image( $a, 'thumbnail' ); }, $ids ) ) . '</p>' : $text;
 }, 10, 2 );
 
 /* ---------- Recenziile tuturor culorilor pe fiecare produs din grup ---------- */
@@ -128,14 +141,20 @@ add_filter( 'comments_template_query_args', function ( $args ) {
 } );
 
 add_action( 'woocommerce_review_before_comment_text', function ( $comment ) {
-	if ( ! is_product() || (int) $comment->comment_post_ID === (int) get_queried_object_id() ) {
+	if ( ! is_product() ) {
 		return;
 	}
-	printf(
-		'<p class="p3d-review-from">Recenzie lăsată la produsul <a href="%s">%s</a></p>',
-		esc_url( get_permalink( $comment->comment_post_ID ) ),
-		esc_html( get_the_title( $comment->comment_post_ID ) )
-	);
+	$sursa = (string) get_comment_meta( $comment->comment_ID, 'p3d_sursa', true );
+	$other = (int) $comment->comment_post_ID !== (int) get_queried_object_id();
+	if ( ! $sursa && ! $other ) {
+		return;
+	}
+	$link = sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $comment->comment_post_ID ) ), esc_html( get_the_title( $comment->comment_post_ID ) ) );
+	if ( $sursa ) {
+		printf( '<p class="p3d-review-from">Recenzie preluată de pe %s · produs cumpărat: %s</p>', esc_html( $sursa ), $link ); // phpcs:ignore
+	} else {
+		printf( '<p class="p3d-review-from">Recenzie lăsată la produsul %s</p>', $link ); // phpcs:ignore
+	}
 } );
 
 // Numărul și media recenziilor din tab și de sub titlu țin cont de tot grupul.
