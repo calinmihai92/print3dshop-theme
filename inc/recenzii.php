@@ -195,3 +195,15 @@ add_filter( 'woocommerce_product_get_average_rating', function ( $avg, $product 
 	$g = p3d_group_rating( $product );
 	return $g ? $g[1] : $avg;
 }, 10, 2 );
+
+// Sursa recenziei (ex. eMAG) și fotografiile pot fi setate și prin API (doar de administratori).
+add_action( 'init', function () {
+	foreach ( array( 'p3d_sursa', 'p3d_review_photos' ) as $key ) {
+		register_meta( 'comment', $key, array(
+			'type'          => 'string',
+			'single'        => true,
+			'show_in_rest'  => true,
+			'auth_callback' => function () { return current_user_can( 'moderate_comments' ); },
+		) );
+	}
+} );
