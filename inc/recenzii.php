@@ -168,16 +168,18 @@ function p3d_group_rating( $product ) {
 	if ( count( $ids ) < 2 ) {
 		return $cache[ $id ] = null;
 	}
-	$count = 0;
-	$sum   = 0;
+	$count  = 0;
+	$sum    = 0;
+	$counts = array();
 	foreach ( get_comments( array( 'post__in' => $ids, 'status' => 'approve', 'type' => 'review', 'parent' => 0 ) ) as $c ) {
 		$r = (int) get_comment_meta( $c->comment_ID, 'rating', true );
 		if ( $r ) {
 			$sum += $r;
 			$count++;
+			$counts[ $r ] = ( $counts[ $r ] ?? 0 ) + 1;
 		}
 	}
-	return $cache[ $id ] = array( $count, $count ? round( $sum / $count, 2 ) : 0 );
+	return $cache[ $id ] = array( $count, $count ? round( $sum / $count, 2 ) : 0, $counts );
 }
 
 add_filter( 'woocommerce_product_get_review_count', function ( $count, $product ) {
@@ -207,3 +209,11 @@ add_action( 'init', function () {
 		) );
 	}
 } );
+
+add_filter( 'woocommerce_product_get_rating_counts', function ( $counts, $product ) {
+	if ( ! is_product() ) {
+		return $counts;
+	}
+	$g = p3d_group_rating( $product );
+	return $g ? $g[2] : $counts;
+}, 10, 2 );
