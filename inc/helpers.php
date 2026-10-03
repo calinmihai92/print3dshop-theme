@@ -15,6 +15,7 @@ function p3d_opt( $key ) {
 		'email'    => 'office@print3dshop.ro',
 		'address'  => 'Șoseaua Iancului nr. 53, București',
 		'maps'     => 'https://www.google.com/maps/search/?api=1&query=%C8%98oseaua+Iancului+53+Bucure%C8%99ti',
+		'hours'    => 'Luni–Vineri: 09:00–18:00 · Sâmbătă–Duminică: închis',
 	);
 	$val = get_theme_mod( 'p3d_' . $key, '' );
 	return '' !== $val ? $val : ( $defaults[ $key ] ?? '' );
@@ -37,6 +38,7 @@ add_action( 'customize_register', function ( $wp ) {
 		'email'    => 'Email',
 		'address'  => 'Adresă',
 		'maps'     => 'Link Google Maps',
+		'hours'    => 'Program (ex. Luni–Vineri: 09:00–18:00 · Sâmbătă–Duminică: închis)',
 	);
 	foreach ( $fields as $k => $label ) {
 		$wp->add_setting( 'p3d_' . $k, array( 'sanitize_callback' => 'sanitize_text_field' ) );

@@ -25,6 +25,7 @@
 			<a href="<?php echo esc_attr( p3d_tel() ); ?>"><?php echo esc_html( p3d_opt( 'phone' ) ); ?></a>
 			<a href="mailto:<?php echo esc_attr( p3d_opt( 'email' ) ); ?>"><?php echo esc_html( p3d_opt( 'email' ) ); ?></a>
 			<a href="<?php echo esc_url( p3d_opt( 'maps' ) ); ?>" rel="noopener"><?php echo esc_html( p3d_opt( 'address' ) ); ?></a>
+			<span class="foot-hours"><?php echo esc_html( p3d_opt( 'hours' ) ); ?></span>
 		</div>
 	</div>
 	<div class="foot-bottom">

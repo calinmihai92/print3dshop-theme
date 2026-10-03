@@ -20,6 +20,7 @@ $form    = p3d_callback_form( $args['preset'] ?? '' );
 					<li><a class="contact-item" href="<?php echo esc_url( p3d_wa( $wa_text ) ); ?>" rel="noopener"><span class="icon-tile"><?php echo p3d_icon( 'whatsapp', 22 ); // phpcs:ignore ?></span><span><small>WhatsApp</small><strong>Scrie-ne un mesaj</strong></span></a></li>
 					<li><a class="contact-item" href="mailto:<?php echo esc_attr( p3d_opt( 'email' ) ); ?>"><span class="icon-tile"><?php echo p3d_icon( 'mail', 22 ); // phpcs:ignore ?></span><span><small>Email</small><strong><?php echo esc_html( p3d_opt( 'email' ) ); ?></strong></span></a></li>
 					<li><a class="contact-item" href="<?php echo esc_url( p3d_opt( 'maps' ) ); ?>" rel="noopener"><span class="icon-tile"><?php echo p3d_icon( 'pin', 22 ); // phpcs:ignore ?></span><span><small>Adresă</small><strong><?php echo esc_html( p3d_opt( 'address' ) ); ?></strong></span></a></li>
+					<li><div class="contact-item"><span class="icon-tile"><?php echo p3d_icon( 'clock', 22 ); // phpcs:ignore ?></span><span><small>Program service</small><strong><?php echo esc_html( p3d_opt( 'hours' ) ); ?></strong></span></div></li>
 				</ul>
 			</div>
 			<?php if ( $form ) : ?>

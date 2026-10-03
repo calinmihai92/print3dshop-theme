@@ -468,3 +468,5 @@ a.contact-item:hover { background: var(--tint); color: var(--ink); }
   .hero .lead, .lead { font-size: 17.5px; }
   .ctas .btn { width: 100%; }
 }
+
+.foot-hours { color: var(--muted); font-size: 14.5px; }

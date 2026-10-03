@@ -160,6 +160,41 @@ add_action( 'template_redirect', function () {
 } );
 
 /**
+ * Date structurate LocalBusiness (adresă, telefon, program) pe prima pagină și la Contact.
+ */
+add_action( 'wp_head', function () {
+	if ( ! is_front_page() && ! is_page( 'contacts' ) ) {
+		return;
+	}
+	$data = array(
+		'@context'                  => 'https://schema.org',
+		'@type'                     => 'LocalBusiness',
+		'@id'                       => home_url( '/#business' ),
+		'name'                      => 'Print3D Shop',
+		'description'               => 'Service și reparații imprimante 3D, printare 3D la comandă și proiectare 3D în București.',
+		'url'                       => home_url( '/' ),
+		'telephone'                 => '+' . preg_replace( '/\D/', '', p3d_opt( 'whatsapp' ) ),
+		'email'                     => p3d_opt( 'email' ),
+		'image'                     => P3D_URI . '/assets/img/icon-512.png',
+		'address'                   => array(
+			'@type'           => 'PostalAddress',
+			'streetAddress'   => 'Șoseaua Iancului nr. 53',
+			'addressLocality' => 'București',
+			'addressCountry'  => 'RO',
+		),
+		'openingHoursSpecification' => array(
+			array(
+				'@type'     => 'OpeningHoursSpecification',
+				'dayOfWeek' => array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday' ),
+				'opens'     => '09:00',
+				'closes'    => '18:00',
+			),
+		),
+	);
+	echo '<script type="application/ld+json">' . wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>' . "\n";
+}, 31 );
+
+/**
  * FAQ ca date structurate pe paginile de servicii și pe prima pagină.
  */
 add_action( 'wp_head', function () {

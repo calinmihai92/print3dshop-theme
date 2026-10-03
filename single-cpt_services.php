@@ -35,6 +35,9 @@ get_header();
 			<?php foreach ( $s['points'] as $pt ) : ?>
 				<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> <?php echo esc_html( $pt ); ?></li>
 			<?php endforeach; ?>
+			<?php if ( $is_service ) : ?>
+				<li><?php echo p3d_icon( 'clock', 16 ); // phpcs:ignore ?> <?php echo esc_html( p3d_opt( 'hours' ) ); ?></li>
+			<?php endif; ?>
 		</ul>
 	</div>
 </section>
