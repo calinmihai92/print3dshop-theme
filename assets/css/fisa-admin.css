@@ -1,0 +1,33 @@
+/* Editorul fișei de service (wp-admin) */
+.p3d-fisa h3 { margin: 22px 0 10px; font-size: 15px; }
+.p3d-fisa h3:first-child { margin-top: 4px; }
+.p3d-fisa label { display: block; font-weight: 600; margin-bottom: 10px; }
+.p3d-fisa label input, .p3d-fisa label textarea, .p3d-fisa label select { display: block; width: 100%; margin-top: 4px; font-weight: 400; }
+.p3d-row2, .p3d-row3 { display: grid; gap: 12px; }
+.p3d-row2 { grid-template-columns: 1fr 1fr; }
+.p3d-row3 { grid-template-columns: 1fr 1fr 1fr; }
+@media (max-width: 782px) { .p3d-row2, .p3d-row3 { grid-template-columns: 1fr; } }
+.p3d-device { border: 1px solid #dcdcde; border-radius: 8px; padding: 14px; margin-bottom: 12px; background: #fcfcfc; }
+.p3d-device-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.p3d-del-device { color: #b32d2e; }
+.p3d-photo-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.p3d-ph { position: relative; display: inline-block; }
+.p3d-ph img { width: 84px; height: 84px; object-fit: cover; border-radius: 6px; display: block; }
+.p3d-ph button { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 11px; border: 0; background: #b32d2e; color: #fff; cursor: pointer; line-height: 1; }
+.p3d-items input, .p3d-items select { width: 100%; }
+.p3d-items td.r, .p3d-items tfoot td.r { text-align: right; }
+.p3d-items .p3d-line { white-space: nowrap; }
+.p3d-del-item { color: #b32d2e; font-size: 18px; text-decoration: none; }
+.p3d-alert { padding: 10px 12px; border-radius: 6px; margin: 0 0 12px; border-left: 4px solid; }
+.p3d-alert.ok { background: #edfaef; border-color: #00a32a; }
+.p3d-alert.warn { background: #fcf9e8; border-color: #dba617; }
+.p3d-pass { font-size: 16px; font-weight: 700; user-select: all; }
+.p3d-copy { width: 100%; font-size: 12px; }
+.p3d-log { margin: 0; }
+.p3d-log li { border-bottom: 1px solid #f0f0f1; padding: 4px 0; margin: 0; }
+@media (max-width: 782px) {
+  .p3d-items thead { display: none; }
+  .p3d-items tr.p3d-item { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px 0; border-bottom: 1px solid #dcdcde; }
+  .p3d-items tr.p3d-item td { display: block; padding: 0; }
+  .p3d-items tr.p3d-item td:nth-child(3) { grid-column: 1 / -1; }
+}
