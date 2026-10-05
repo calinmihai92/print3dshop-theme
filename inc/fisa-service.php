@@ -464,9 +464,16 @@ add_action( 'save_post_' . P3D_FISA_CPT, function ( $id, $post ) {
 
 	// Număr, cod de acces.
 	if ( ! get_post_meta( $id, '_p3d_number', true ) ) {
-		$seq = (int) get_option( 'p3d_fisa_seq_' . gmdate( 'Y' ), 0 ) + 1;
-		update_option( 'p3d_fisa_seq_' . gmdate( 'Y' ), $seq, false );
-		update_post_meta( $id, '_p3d_number', gmdate( 'Y' ) . '-' . str_pad( (string) $seq, 3, '0', STR_PAD_LEFT ) );
+		// Următorul număr din anul curent, după fișele existente (cele din coș nu contează).
+		global $wpdb;
+		$year = gmdate( 'Y' );
+		$max  = (int) $wpdb->get_var( $wpdb->prepare(
+			"SELECT MAX(CAST(SUBSTRING(pm.meta_value, 6) AS UNSIGNED)) FROM {$wpdb->postmeta} pm JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+			 WHERE pm.meta_key = '_p3d_number' AND pm.meta_value LIKE %s AND p.post_type = %s AND p.post_status <> 'trash'",
+			$wpdb->esc_like( $year . '-' ) . '%',
+			P3D_FISA_CPT
+		) );
+		update_post_meta( $id, '_p3d_number', $year . '-' . str_pad( (string) ( $max + 1 ), 3, '0', STR_PAD_LEFT ) );
 		p3d_fisa_log( $id, 'creata' );
 	}
 	if ( ! get_post_meta( $id, '_p3d_token', true ) ) {
