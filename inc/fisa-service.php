@@ -101,6 +101,7 @@ function p3d_fisa_defaults() {
 		'warranty'   => '3 luni pentru manoperă; piesele noi au garanția producătorului.',
 		'notes'      => '',
 		'price_note' => 'Prețuri în lei.',
+		'demo'       => 0,
 	);
 }
 
@@ -258,6 +259,8 @@ function p3d_fisa_box_main( $post ) {
 		</table>
 		<template id="p3d-item-tpl"><?php p3d_fisa_item_row( '__i__', array( 'type' => 'piesa', 'qty' => 1 ), $d['devices'] ); ?></template>
 		<p><button type="button" class="button" id="p3d-add-item">+ Adaugă rând</button></p>
+
+		<label class="p3d-demo"><input type="checkbox" name="p3d[demo]" value="1" <?php checked( ! empty( $d['demo'] ) ); ?>> <strong>Fișă demonstrativă — PREȚURI FICTIVE</strong> <span class="description">(afișează pe fișă un banner mare „Exemplu — prețurile sunt fictive”; clientul nu o poate confirma)</span></label>
 
 		<h3>Condiții</h3>
 		<div class="p3d-row2">
@@ -428,6 +431,7 @@ add_action( 'save_post_' . P3D_FISA_CPT, function ( $id, $post ) {
 		'warranty'   => sanitize_text_field( $in['warranty'] ?? '' ),
 		'notes'      => sanitize_textarea_field( $in['notes'] ?? '' ),
 		'price_note' => sanitize_text_field( $in['price_note'] ?? '' ),
+		'demo'       => empty( $in['demo'] ) ? 0 : 1,
 	);
 
 	// Aparatele: reindexare 0..n și harta indexului vechi → nou (pentru rândurile de piese).
@@ -548,6 +552,9 @@ function p3d_fisa_summary_text( $id ) {
 		$out .= '- ' . ( 'manopera' === $it['type'] ? '[Manoperă] ' : '[Piesă] ' ) . $it['desc'] . ' — ' . rtrim( rtrim( number_format( $it['qty'], 2, ',', '' ), '0' ), ',' ) . ' × ' . p3d_money( $it['price'] ) . "\n";
 	}
 	$out .= "\nTOTAL: " . p3d_money( p3d_fisa_totals( $d )['total'] ) . ' (' . $d['price_note'] . ")\n";
+	if ( ! empty( $d['demo'] ) ) {
+		$out = "*** FIȘĂ DEMONSTRATIVĂ — PREȚURI FICTIVE ***\n\n" . $out . "\n*** Prețurile de mai sus sunt fictive, doar pentru exemplificare. ***\n";
+	}
 	return $out;
 }
 
@@ -649,7 +656,7 @@ add_action( 'template_redirect', function () {
 		$name  = sanitize_text_field( wp_unslash( $_POST['nume'] ?? '' ) ); // phpcs:ignore
 		$agree = ! empty( $_POST['acord'] ); // phpcs:ignore
 		$d     = p3d_fisa_get( $id );
-		if ( ! in_array( $st, array( 'trimisa', 'modificata', 'intrebari' ), true ) ) {
+		if ( ! empty( $d['demo'] ) || ! in_array( $st, array( 'trimisa', 'modificata', 'intrebari' ), true ) ) {
 			wp_safe_redirect( $self );
 			exit;
 		}
@@ -754,9 +761,13 @@ function p3d_fisa_render_view( $id, $error ) {
 	$st   = p3d_fisa_status( $id );
 	$tot  = p3d_fisa_totals( $d );
 	$conf = get_post_meta( $id, '_p3d_confirm', true );
-	$can  = in_array( $st, array( 'trimisa', 'modificata', 'intrebari' ), true );
+	$demo = ! empty( $d['demo'] );
+	$can  = ! $demo && in_array( $st, array( 'trimisa', 'modificata', 'intrebari' ), true );
 	$self = p3d_fisa_url( $id );
 	?>
+	<?php if ( $demo ) : ?>
+		<div class="fisa-demo" role="note"><strong>Exemplu — prețuri fictive</strong><span>Aceasta este o fișă demonstrativă. Toate prețurile de pe ea sunt fictive, doar pentru exemplificare, și nu reprezintă o ofertă.</span></div>
+	<?php endif; ?>
 	<div class="fisa-head">
 		<div>
 			<span class="pill"><?php echo p3d_icon( 'wrench', 13 ); // phpcs:ignore ?> Fișa de service nr. <?php echo esc_html( $nr ); ?></span>
@@ -804,6 +815,7 @@ function p3d_fisa_render_view( $id, $error ) {
 		<h2 class="h3">Piese și <em>manoperă</em></h2>
 		<div class="fisa-table-wrap">
 			<table class="fisa-table">
+				<?php if ( $demo ) : ?><caption class="fisa-demo-tag">Prețuri fictive</caption><?php endif; ?>
 				<thead><tr><th>Descriere</th><th>Tip</th><th class="r">Cant.</th><th class="r">Preț unitar</th><th class="r">Valoare</th></tr></thead>
 				<tbody>
 					<?php foreach ( $d['items'] as $it ) : $dev = '' !== $it['device'] && isset( $d['devices'][ $it['device'] ] ) ? $d['devices'][ $it['device'] ]['model'] : ''; ?>
@@ -821,7 +833,7 @@ function p3d_fisa_render_view( $id, $error ) {
 						<tr><td colspan="4" class="r">Piese</td><td class="r"><?php echo esc_html( p3d_money( $tot['piesa'] ) ); ?></td></tr>
 						<tr><td colspan="4" class="r">Manoperă</td><td class="r"><?php echo esc_html( p3d_money( $tot['manopera'] ) ); ?></td></tr>
 					<?php endif; ?>
-					<tr class="fisa-total"><td colspan="4" class="r">Total</td><td class="r"><?php echo esc_html( p3d_money( $tot['total'] ) ); ?></td></tr>
+					<tr class="fisa-total"><td colspan="4" class="r">Total<?php echo $demo ? ' <span class="fisa-demo-tag">fictiv</span>' : ''; ?></td><td class="r"><?php echo esc_html( p3d_money( $tot['total'] ) ); ?></td></tr>
 				</tfoot>
 			</table>
 		</div>

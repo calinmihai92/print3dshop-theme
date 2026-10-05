@@ -31,3 +31,4 @@
   .p3d-items tr.p3d-item td { display: block; padding: 0; }
   .p3d-items tr.p3d-item td:nth-child(3) { grid-column: 1 / -1; }
 }
+.p3d-demo{display:block;margin:1rem 0;padding:.6rem .8rem;border:2px dashed #b91c1c;border-radius:8px;background:#fef2f2;color:#7f1d1d}

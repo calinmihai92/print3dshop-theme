@@ -519,3 +519,11 @@ a.contact-item:hover { background: var(--tint); color: var(--ink); }
   .card { border: 1px solid #ccc; break-inside: avoid; }
   .fisa-photos { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* Fișă demonstrativă — prețuri fictive */
+.fisa-demo{display:flex;flex-direction:column;gap:.25rem;margin:0 0 1.25rem;padding:1rem 1.25rem;border:2px dashed #b91c1c;border-radius:14px;background:#fef2f2;color:#7f1d1d}
+.fisa-demo strong{font-family:"JetBrains Mono",monospace;font-size:1.05rem;letter-spacing:.08em;text-transform:uppercase;color:#b91c1c}
+.fisa-demo-tag{display:inline-block;margin-left:.4rem;padding:.1rem .5rem;border-radius:6px;background:#b91c1c;color:#fff;font:600 .72rem/1.4 "JetBrains Mono",monospace;letter-spacing:.06em;text-transform:uppercase;vertical-align:middle}
+caption.fisa-demo-tag{caption-side:top;margin:0 0 .5rem;text-align:left;display:table-caption;width:max-content}
+.fisa-wrap:has(.fisa-demo) .fisa-table tbody td.r:nth-child(n+4){text-decoration:underline wavy rgba(185,28,28,.45);text-underline-offset:3px}
+@media print{.fisa-demo,.fisa-demo-tag{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
