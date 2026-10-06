@@ -135,7 +135,7 @@ table { border-collapse: collapse; width: 100%; }
 .demo { border: 2px dashed #b91c1c; background: #fef2f2; color: #7f1d1d; padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; }
 .demo strong { color: #b91c1c; font-size: 11pt; }
 .tag { background: #b91c1c; color: #fff; font-size: 7pt; padding: 1px 4px; border-radius: 3px; }
-.conf { border: 1.5px solid #15803d; background: #f0fdf4; }
+.conf { border: 1.5px solid #15803d; background: #f0fdf4; page-break-inside: avoid; }
 .conf h2 { color: #15803d; }
 .small { font-size: 7.5pt; }
 .sign { page-break-inside: avoid; }
