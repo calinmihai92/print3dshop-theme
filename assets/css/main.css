@@ -240,7 +240,7 @@ a.contact-item:hover { background: var(--tint); color: var(--ink); }
 /* ---------- Formular „Te sun eu” ---------- */
 .p3d-form { display: flex; flex-direction: column; gap: 14px; }
 .p3d-form label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 15px; }
-.p3d-form input[type=text], .p3d-form input[type=tel], .p3d-form select, .p3d-form textarea {
+.p3d-form input[type=text], .p3d-form input[type=email], .p3d-form input[type=tel], .p3d-form select, .p3d-form textarea {
   width: 100%; font: inherit; font-weight: 400; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink);
 }
 .p3d-form textarea { min-height: 110px; resize: vertical; }
