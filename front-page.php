@@ -72,7 +72,20 @@ get_header();
 </section>
 
 <?php
-$p3d_shop_items = function_exists( 'wc_get_products' ) ? wc_get_products( array( 'status' => 'publish', 'limit' => 3, 'orderby' => 'menu_order', 'order' => 'ASC' ) ) : array();
+// Prima pagină: produsele marcate cu stea (Recomandate) în Produse; dacă sunt mai puțin de 3, completăm în ordinea din magazin.
+$p3d_shop_items = array();
+if ( function_exists( 'wc_get_products' ) ) {
+	$p3d_shop_items = wc_get_products( array( 'status' => 'publish', 'limit' => 3, 'featured' => true, 'orderby' => 'menu_order', 'order' => 'ASC' ) );
+	if ( count( $p3d_shop_items ) < 3 ) {
+		$p3d_shop_items = array_merge( $p3d_shop_items, wc_get_products( array(
+			'status'  => 'publish',
+			'limit'   => 3 - count( $p3d_shop_items ),
+			'exclude' => array_map( function ( $p ) { return $p->get_id(); }, $p3d_shop_items ),
+			'orderby' => 'menu_order',
+			'order'   => 'ASC',
+		) ) );
+	}
+}
 if ( $p3d_shop_items ) :
 	?>
 <section class="section">
