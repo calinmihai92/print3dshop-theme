@@ -19,6 +19,7 @@ get_header();
 			<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Service și reparații imprimante 3D</li>
 			<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Printare 3D la comandă</li>
 			<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Proiectare 3D</li>
+			<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Scanare 3D</li>
 			<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Prelucrare CNC și matrițe</li>
 		</ul>
 	</div>

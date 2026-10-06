@@ -1,11 +1,16 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
-$p3d_nav = array(
-	array( p3d_service_url( 'support' ), 'Service imprimante 3D', p3d_is( 'support' ), true, 'wrench' ),
+$p3d_svc_more = array(
 	array( p3d_service_url( 'printare-3d-personalizata' ), 'Printare 3D', p3d_is( 'printare-3d-personalizata' ), false, 'layers' ),
 	array( p3d_service_url( 'prototyping' ), 'Proiectare 3D', p3d_is( 'prototyping' ), false, 'pen' ),
-	array( p3d_service_url( 'prelucrare-cnc-matrite' ), 'CNC și matrițe', p3d_is( 'prelucrare-cnc-matrite' ), false, 'gear' ),
+	array( p3d_service_url( 'scanare-3d' ), 'Scanare 3D', p3d_is( 'scanare-3d' ), false, 'scan' ),
+	array( p3d_service_url( 'prelucrare-cnc-matrite' ), 'Prelucrare CNC și matrițe', p3d_is( 'prelucrare-cnc-matrite' ), false, 'gear' ),
+);
+$p3d_svc_on = is_page( 'our-services' ) || in_array( true, wp_list_pluck( $p3d_svc_more, 2 ), true );
+$p3d_nav = array(
+	array( p3d_service_url( 'support' ), 'Service imprimante 3D', p3d_is( 'support' ), true, 'wrench' ),
+	'servicii',
 	array( home_url( '/preturi/' ), 'Prețuri', is_page( 'preturi' ), false, 'doc' ),
 	array( home_url( '/magazin/' ), 'Magazin', is_page( 'magazin' ) || ( function_exists( 'is_woocommerce' ) && is_woocommerce() ), false, 'cart' ),
 	array( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/blog-standard/' ), 'Blog', is_home() || is_singular( 'post' ) || is_category(), false, 'doc' ),
@@ -31,6 +36,18 @@ $p3d_nav = array(
 
 		<div class="nav-links">
 			<?php foreach ( $p3d_nav as $n ) : ?>
+				<?php if ( 'servicii' === $n ) : ?>
+					<div class="nav-drop">
+						<a href="<?php echo esc_url( home_url( '/our-services/' ) ); ?>" class="nav-drop-btn<?php echo $p3d_svc_on ? ' is-on' : ''; ?>" aria-haspopup="true">Alte servicii <?php echo p3d_icon( 'chevron', 14 ); // phpcs:ignore ?></a>
+						<div class="nav-drop-menu">
+							<?php foreach ( $p3d_svc_more as $m ) : ?>
+								<a href="<?php echo esc_url( $m[0] ); ?>"<?php echo $m[2] ? ' aria-current="page"' : ''; ?>><span class="icon-tile sm"><?php echo p3d_icon( $m[4], 16 ); // phpcs:ignore ?></span><?php echo esc_html( $m[1] ); ?></a>
+							<?php endforeach; ?>
+							<a href="<?php echo esc_url( home_url( '/our-services/' ) ); ?>" class="nav-drop-all">Toate serviciile <?php echo p3d_icon( 'arrow', 14 ); // phpcs:ignore ?></a>
+						</div>
+					</div>
+					<?php continue; ?>
+				<?php endif; ?>
 				<a href="<?php echo esc_url( $n[0] ); ?>"<?php echo $n[2] ? ' aria-current="page"' : ''; ?><?php echo $n[3] ? ' class="nav-strong"' : ''; ?>><?php echo esc_html( $n[1] ); ?></a>
 			<?php endforeach; ?>
 			<a href="<?php echo esc_attr( p3d_tel() ); ?>" class="btn btn-primary nav-cta"><?php echo p3d_icon( 'phone', 17 ); // phpcs:ignore ?> <?php echo esc_html( p3d_opt( 'phone' ) ); ?></a>
@@ -41,6 +58,10 @@ $p3d_nav = array(
 			<div class="nav-mobile-panel">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Acasă</a>
 				<?php foreach ( $p3d_nav as $n ) : ?>
+					<?php if ( 'servicii' === $n ) : ?>
+						<?php foreach ( $p3d_svc_more as $m ) : ?><a href="<?php echo esc_url( $m[0] ); ?>"><?php echo esc_html( $m[1] ); ?></a><?php endforeach; ?>
+						<?php continue; ?>
+					<?php endif; ?>
 					<a href="<?php echo esc_url( $n[0] ); ?>"<?php echo $n[3] ? ' class="is-service"' : ''; ?>><?php echo esc_html( $n[1] ); ?></a>
 				<?php endforeach; ?>
 				<span class="sep" aria-hidden="true"></span>

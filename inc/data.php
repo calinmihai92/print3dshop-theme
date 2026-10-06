@@ -87,7 +87,7 @@ function p3d_services() {
 				array( 'Printați și piese tehnice sau doar decorative?', 'Printăm atât prototipuri și piese funcționale, cât și obiecte decorative sau personalizate.' ),
 			),
 			'wa'       => 'Bună ziua! Aș vrea o printare 3D: ',
-			'related'  => array( 'prototyping', 'prelucrare-cnc-matrite', 'support' ),
+			'related'  => array( 'prototyping', 'scanare-3d', 'support' ),
 		),
 
 		'prototyping' => array(
@@ -122,7 +122,7 @@ function p3d_services() {
 				array( 'Pot cere modificări?', 'Da. Înainte de finalizare revizuiești modelul și facem ajustările necesare.' ),
 			),
 			'wa'       => 'Bună ziua! Am nevoie de proiectare 3D pentru: ',
-			'related'  => array( 'printare-3d-personalizata', 'prelucrare-cnc-matrite', 'support' ),
+			'related'  => array( 'printare-3d-personalizata', 'scanare-3d', 'prelucrare-cnc-matrite' ),
 		),
 
 		'prelucrare-cnc-matrite' => array(
@@ -160,7 +160,43 @@ function p3d_services() {
 			),
 			'wa'       => 'Bună ziua! Aș vrea o ofertă pentru prelucrare CNC / matrițe: ',
 			'preset'   => 'Prelucrare CNC / matrițe',
-			'related'  => array( 'prototyping', 'printare-3d-personalizata', 'support' ),
+			'related'  => array( 'prototyping', 'scanare-3d', 'printare-3d-personalizata' ),
+		),
+
+		'scanare-3d' => array(
+			'label'    => 'Scanare 3D',
+			'icon'     => 'scan',
+			'eyebrow'  => 'Scanare 3D · la comandă',
+			'h1a'      => 'Scanare 3D',
+			'h1b'      => 'din obiect real în model 3D',
+			'lead'     => 'Ai o piesă pe care vrei să o copiezi, să o modifici sau să o reproduci? O transformăm în model 3D digital. Lucrăm prin consultanță și la comandă: stabilim împreună ce ai nevoie, iar scanarea se face cu parteneri specializați, cu echipamente profesionale.',
+			'card'     => 'Obiectul tău devine model 3D, pentru copii, piese de schimb sau modificări. Prin consultanță și la comandă.',
+			'points'   => array( 'Consultanță tehnică', 'Scanare cu parteneri specializați', 'Model gata de printat sau de editat' ),
+			'quote'    => true,
+			'whatTitle' => array( 'La ce ', 'folosește' ),
+			'what'     => array(
+				array( 'gear', 'Piese de schimb', 'Copiem piese rupte sau care nu se mai găsesc, ca să le putem reproduce.' ),
+				array( 'pen', 'Reverse engineering', 'Din scanare facem un model CAD editabil (STEP), pe care îl poți modifica.' ),
+				array( 'cube', 'Copii și reproduceri', 'Obiecte, figurine sau componente reproduse prin printare 3D.' ),
+				array( 'search', 'Control dimensional', 'Compari piesa reală cu modelul sau verifici forma și dimensiunile.' ),
+			),
+			'stepsTitle' => array( 'Cum ', 'lucrăm' ),
+			'steps'    => array(
+				array( 'Ne spui ce ai', 'Ne trimiți poze cu obiectul, dimensiunile aproximative și ce vrei să faci cu modelul.' ),
+				array( 'Consultanță', 'Stabilim tipul de scanare și formatul de care ai nevoie: STL pentru printare sau STEP pentru modificări.' ),
+				array( 'Ofertă', 'Îți trimitem prețul și termenul, după ce verificăm cu partenerul de scanare.' ),
+				array( 'Scanare și procesare', 'Obiectul se scanează, iar modelul se curăță și se pregătește.' ),
+				array( 'Predare', 'Primești modelul 3D, iar dacă vrei, îți printăm și piesa.' ),
+			),
+			'faq'      => array(
+				array( 'Faceți voi scanarea?', 'Scanarea se face cu parteneri specializați, cu echipamente profesionale. Noi ne ocupăm de consultanță, de pregătirea modelului și, dacă vrei, de printare, iar tu ai un singur interlocutor.' ),
+				array( 'Cât costă o scanare 3D?', 'Depinde de mărimea obiectului, de detalii și de formatul de care ai nevoie, de aceea facem ofertă pentru fiecare proiect. Trimite-ne câteva poze și revenim cu prețul.' ),
+				array( 'Ce primesc după scanare?', 'Un model 3D (STL), gata de printat. Dacă vrei să modifici piesa, putem face și un model CAD editabil (STEP).' ),
+				array( 'Puteți și printa piesa după scanare?', 'Da. După scanare putem printa piesa sau o putem modifica înainte de printare.' ),
+			),
+			'wa'       => 'Bună ziua! Aș vrea o ofertă pentru scanare 3D: ',
+			'preset'   => 'Scanare 3D',
+			'related'  => array( 'prototyping', 'printare-3d-personalizata', 'prelucrare-cnc-matrite' ),
 		),
 	);
 }
@@ -228,13 +264,13 @@ function p3d_prices() {
 			),
 		),
 		'scanare' => array(
-			'icon'    => 'search',
+			'icon'    => 'scan',
 			'title'   => array( 'Scanare ', '3D' ),
-			'intro'   => 'Transformăm un obiect real într-un model 3D, pentru copii, piese de schimb sau modificări.',
-			'service' => '',
+			'intro'   => 'Prin consultanță și la comandă. Scanarea se face cu parteneri specializați, iar prețul depinde de mărimea obiectului și de formatul dorit.',
+			'service' => 'scanare-3d',
 			'rows'    => array(
-				array( 'Scanare obiect mic sau mediu', 'Primești modelul 3D (STL)', 'de la 250 lei' ),
-				array( 'Model CAD editabil (STEP), după scanare', 'Pentru reverse engineering și modificări', '150 lei/oră' ),
+				array( 'Scanare 3D', 'Primești modelul 3D (STL), gata de printat', 'Cere ofertă' ),
+				array( 'Model CAD editabil (STEP), după scanare', 'Pentru reverse engineering și modificări', 'Cere ofertă' ),
 			),
 		),
 		'cnc' => array(

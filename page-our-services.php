@@ -10,7 +10,7 @@ get_header();
 	<div class="wrap hero-in">
 		<span class="eyebrow">Servicii</span>
 		<h1 class="h1">Servicii de <em>printare 3D</em></h1>
-		<p class="lead">Service și reparații imprimante 3D, printare 3D personalizată, proiectare 3D și prelucrare CNC sau matrițe la comandă, în București. Alege de ce ai nevoie sau sună-ne și te îndrumăm.</p>
+		<p class="lead">Service și reparații imprimante 3D, printare 3D personalizată, proiectare 3D, plus scanare 3D, prelucrare CNC și matrițe la comandă, în București. Alege de ce ai nevoie sau sună-ne și te îndrumăm.</p>
 		<div class="ctas">
 			<a href="<?php echo esc_attr( p3d_tel() ); ?>" class="btn btn-primary"><?php echo p3d_icon( 'phone', 18 ); // phpcs:ignore ?> Sună: <?php echo esc_html( p3d_opt( 'phone' ) ); ?></a>
 		</div>

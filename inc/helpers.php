@@ -52,6 +52,7 @@ add_action( 'customize_register', function ( $wp ) {
 function p3d_icon( $name, $size = 20 ) {
 	static $paths = array(
 		'arrow'    => '<path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>',
+		'chevron'  => '<path d="M6 9l6 6 6-6"/>',
 		'check'    => '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
 		'phone'    => '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
 		'whatsapp' => '<path d="M3.5 20.5l1.3-4A8.5 8.5 0 1 1 8 19.6z"/><path d="M9 9.5c.3 2.2 2.3 4.3 4.5 4.8l1.2-1.2 2 .9c-.3 1.3-1.4 2-2.7 1.8-3.4-.5-6-3.2-6.4-6.5-.1-1.2.6-2.3 1.8-2.6l.9 2z"/>',
@@ -63,6 +64,7 @@ function p3d_icon( $name, $size = 20 ) {
 		'cube'     => '<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/>',
 		'pen'      => '<path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/>',
 		'search'   => '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
+		'scan'     => '<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M12 7.5l4 2.2v4.6l-4 2.2-4-2.2V9.7z"/><path d="M8 9.7l4 2.2 4-2.2M12 11.9v4.6"/>',
 		'shield'   => '<path d="M12 3l7.5 3v5.5c0 4.5-3.2 8.3-7.5 9.5-4.3-1.2-7.5-5-7.5-9.5V6z"/><path d="M8.8 12l2.2 2.2 4.2-4.4"/>',
 		'gear'     => '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
 		'clock'    => '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
