@@ -90,6 +90,26 @@ get_header();
 	</div>
 </section>
 
+<?php
+$p3d_price_key = array_search( $slug, wp_list_pluck( p3d_prices(), 'service' ), true );
+if ( $p3d_price_key ) :
+	$pc = p3d_prices()[ $p3d_price_key ];
+	?>
+	<section class="section">
+		<div class="wrap" style="max-width:900px">
+			<div class="card price-band">
+				<div class="head" style="margin-bottom:18px"><h2 class="h2">Prețuri <em>orientative</em></h2><p class="lead"><?php echo esc_html( $pc['intro'] ); ?></p></div>
+				<?php p3d_price_rows( $pc['rows'] ); ?>
+				<?php if ( ! empty( $pc['note'] ) ) : ?><p class="price-note"><?php echo esc_html( $pc['note'] ); ?></p><?php endif; ?>
+				<div class="price-foot" style="justify-content:center">
+					<a href="<?php echo esc_url( p3d_prices_url( $p3d_price_key ) ); ?>" class="btn btn-ghost">Toate prețurile <?php echo p3d_icon( 'arrow', 16 ); // phpcs:ignore ?></a>
+				</div>
+				<p class="price-legal" style="margin-top:14px">Prețuri cu TVA. Prețul final îl confirmăm înainte de începerea lucrului.</p>
+			</div>
+		</div>
+	</section>
+<?php endif; ?>
+
 <section class="section">
 	<div class="wrap">
 		<div class="cta-band">

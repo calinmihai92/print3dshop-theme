@@ -203,6 +203,8 @@ add_action( 'wp_head', function () {
 	$faq = null;
 	if ( is_front_page() ) {
 		$faq = p3d_home_faq();
+	} elseif ( is_page( 'preturi' ) ) {
+		$faq = p3d_prices_faq();
 	} elseif ( is_singular( 'cpt_services' ) ) {
 		$s   = p3d_service( get_post_field( 'post_name', get_queried_object_id() ) );
 		$faq = $s['faq'] ?? null;
@@ -253,3 +255,28 @@ function p3d_contact_form() {
  */
 add_filter( 'excerpt_length', function () { return 24; } );
 add_filter( 'excerpt_more', function () { return '…'; } );
+
+/**
+ * Pagina „Prețuri” (/preturi/) — o creăm automat o singură dată; conținutul vine din page-preturi.php.
+ */
+add_action( 'admin_init', function () {
+	if ( get_option( 'p3d_page_preturi' ) ) {
+		return;
+	}
+	$page = get_page_by_path( 'preturi' );
+	if ( ! $page ) {
+		$id = wp_insert_post( array(
+			'post_type'   => 'page',
+			'post_status' => 'publish',
+			'post_title'  => 'Prețuri',
+			'post_name'   => 'preturi',
+			'post_excerpt' => 'Prețuri orientative pentru service imprimante 3D, printare 3D, proiectare și scanare 3D în București. Toate prețurile includ TVA.',
+		) );
+		if ( is_wp_error( $id ) || ! $id ) {
+			return;
+		}
+		update_post_meta( $id, 'rank_math_title', 'Prețuri service imprimante 3D, printare și proiectare 3D | Print3D Shop' );
+		update_post_meta( $id, 'rank_math_description', 'Prețuri orientative, cu TVA: diagnostic gratuit, calibrare de la 150 lei, printare 3D PLA 1 leu/g + 15 lei/oră, proiectare de la 150 lei/oră, scanare 3D de la 250 lei.' );
+	}
+	update_option( 'p3d_page_preturi', 1, false );
+} );

@@ -12,6 +12,7 @@
 			<?php foreach ( p3d_services() as $slug => $s ) : ?>
 				<a href="<?php echo esc_url( p3d_service_url( $slug ) ); ?>"><?php echo esc_html( $s['label'] ); ?></a>
 			<?php endforeach; ?>
+			<a href="<?php echo esc_url( home_url( '/preturi/' ) ); ?>">Prețuri</a>
 			<a href="<?php echo esc_url( home_url( '/magazin/' ) ); ?>">Magazin</a>
 		</div>
 		<div class="foot-col">

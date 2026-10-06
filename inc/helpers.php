@@ -115,3 +115,23 @@ function p3d_is( $slug ) {
 	}
 	return is_page( $slug );
 }
+
+/**
+ * Lista de prețuri (rânduri din p3d_prices()).
+ */
+function p3d_price_rows( $rows ) {
+	echo '<ul class="price-list">';
+	foreach ( $rows as $r ) {
+		echo '<li><span class="price-name">' . esc_html( $r[0] );
+		if ( ! empty( $r[1] ) ) {
+			echo '<small>' . esc_html( $r[1] ) . '</small>';
+		}
+		$free = in_array( $r[2], array( 'Gratuit', 'Ofertă personalizată' ), true );
+		echo '</span><strong class="price-val' . ( $free ? ' is-text' : '' ) . '">' . esc_html( $r[2] ) . '</strong></li>';
+	}
+	echo '</ul>';
+}
+
+function p3d_prices_url( $anchor = '' ) {
+	return home_url( '/preturi/' ) . ( $anchor ? '#' . $anchor : '' );
+}

@@ -147,3 +147,77 @@ function p3d_home_faq() {
 		array( 'Cum primesc piesele printate?', 'Poți alege ridicarea personală sau livrarea la domiciliu.' ),
 	);
 }
+
+/**
+ * Prețuri orientative (cu TVA) — pagina /preturi/ și blocul „Prețuri” de pe paginile de servicii.
+ * Fiecare rând: array( denumire, detaliu (opțional), preț ).
+ */
+function p3d_prices() {
+	return array(
+		'service' => array(
+			'icon'    => 'wrench',
+			'title'   => array( 'Service ', 'imprimante 3D' ),
+			'intro'   => 'Pentru Bambu Lab, Prusa, Creality, Anycubic, Elegoo, Voron și alte mărci. Îți spunem costul înainte să începem lucrul.',
+			'service' => 'support',
+			'rows'    => array(
+				array( 'Diagnostic', 'Verificăm imprimanta și îți spunem ce are', 'Gratuit' ),
+				array( 'Curățare sau schimbare duză / hotend desfundat', '', 'de la 100 lei + prețul piesei' ),
+				array( 'Calibrare completă', 'Nivelare, flow, retracție, profil slicer', 'de la 150 lei' ),
+				array( 'Revizie generală', 'Curățare, ungere, curele, calibrare', 'de la 200 lei + prețul pieselor, dacă e cazul' ),
+				array( 'Asamblare și calibrare imprimantă nouă', '', 'de la 150 lei' ),
+				array( 'Manoperă reparații', 'Pentru defecte care nu intră în operațiile de mai sus', '125 lei/oră + prețul piesei' ),
+			),
+		),
+		'printare' => array(
+			'icon'    => 'layers',
+			'title'   => array( 'Printare ', '3D' ),
+			'intro'   => 'Prețul = materialul folosit + timpul de printare. Fără comandă minimă.',
+			'service' => 'printare-3d-personalizata',
+			'rows'    => array(
+				array( 'PLA', 'Material', '1 leu/g' ),
+				array( 'ABS / ASA / TPU', 'Material', '1,5 lei/g' ),
+				array( 'Timp de printare', 'Se adaugă la material', '15 lei/oră' ),
+			),
+			'note'    => 'Exemplu: o piesă din PLA de 50 g, printată în 3 ore, costă 50 lei + 45 lei = 95 lei.',
+		),
+		'proiectare' => array(
+			'icon'    => 'pen',
+			'title'   => array( 'Proiectare ', '3D' ),
+			'intro'   => 'Pornim de la o idee, o schiță sau o piesă ruptă și facem modelul 3D, gata de printat.',
+			'service' => 'prototyping',
+			'rows'    => array(
+				array( 'Proiectare și modelare 3D', 'Primești fișierul; printarea e opțională', 'de la 150 lei/oră' ),
+			),
+		),
+		'scanare' => array(
+			'icon'    => 'search',
+			'title'   => array( 'Scanare ', '3D' ),
+			'intro'   => 'Transformăm un obiect real într-un model 3D, pentru copii, piese de schimb sau modificări.',
+			'service' => '',
+			'rows'    => array(
+				array( 'Scanare obiect mic sau mediu', 'Primești modelul 3D (STL)', 'de la 250 lei' ),
+				array( 'Model CAD editabil (STEP), după scanare', 'Pentru reverse engineering și modificări', '150 lei/oră' ),
+			),
+		),
+		'cnc' => array(
+			'icon'    => 'gear',
+			'title'   => array( 'Mașinare CNC ', 'și matrițare' ),
+			'intro'   => 'Piese prelucrate CNC și matrițe, după desenul sau modelul tău.',
+			'service' => '',
+			'rows'    => array(
+				array( 'Mașinare CNC', '', 'Ofertă personalizată' ),
+				array( 'Matrițare', '', 'Ofertă personalizată' ),
+			),
+		),
+	);
+}
+
+function p3d_prices_faq() {
+	return array(
+		array( 'Prețurile includ TVA?', 'Da, toate prețurile afișate includ TVA.' ),
+		array( 'Prețul final poate fi diferit?', 'Prețurile sunt orientative. Prețul final depinde de piesă, de model și de ce trebuie făcut, iar ți-l confirmăm înainte să începem lucrul.' ),
+		array( 'Diagnosticul imprimantei chiar e gratuit?', 'Da. Verificăm imprimanta, îți spunem ce are și cât costă reparația. Decizi apoi dacă mergem mai departe.' ),
+		array( 'Există o comandă minimă la printare?', 'Nu. Plătești doar materialul folosit și timpul de printare.' ),
+		array( 'Cum aflu prețul exact pentru piesa mea?', 'Trimite-ne pe WhatsApp modelul 3D, o poză sau o descriere și îți spunem prețul.' ),
+	);
+}
