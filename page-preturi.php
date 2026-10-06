@@ -12,7 +12,7 @@ $wa     = 'Bună ziua! Aș vrea o ofertă pentru: ';
 	<div class="wrap hero-in">
 		<span class="eyebrow">Prețuri</span>
 		<h1 class="h1">Prețuri <em>transparente</em></h1>
-		<p class="lead">Prețuri orientative pentru service imprimante 3D, printare, proiectare și scanare 3D. Toate includ TVA, iar prețul final ți-l confirmăm înainte să începem.</p>
+		<p class="lead">Prețuri orientative pentru service imprimante 3D, printare, proiectare și scanare 3D, plus prelucrare CNC și matrițe la cerere. Toate includ TVA, iar prețul final ți-l confirmăm înainte să începem.</p>
 		<nav class="price-jump" aria-label="Categorii de prețuri">
 			<?php foreach ( $prices as $key => $cat ) : ?>
 				<a href="#<?php echo esc_attr( $key ); ?>" class="pill outline"><?php echo esc_html( $cat['title'][0] . $cat['title'][1] ); ?></a>

@@ -27,6 +27,7 @@ get_header();
 				<li><?php echo p3d_icon( 'check', 18 ); // phpcs:ignore ?><span><a href="<?php echo esc_url( p3d_service_url( 'support' ) ); ?>">Service și reparații imprimante 3D</a></span></li>
 				<li><?php echo p3d_icon( 'check', 18 ); // phpcs:ignore ?><span><a href="<?php echo esc_url( p3d_service_url( 'printare-3d-personalizata' ) ); ?>">Printare 3D personalizată</a>, de la prototipuri la obiecte decorative</span></li>
 				<li><?php echo p3d_icon( 'check', 18 ); // phpcs:ignore ?><span><a href="<?php echo esc_url( p3d_service_url( 'prototyping' ) ); ?>">Proiectare și modelare 3D</a></span></li>
+				<li><?php echo p3d_icon( 'check', 18 ); // phpcs:ignore ?><span><a href="<?php echo esc_url( p3d_service_url( 'prelucrare-cnc-matrite' ) ); ?>">Prelucrare CNC și matrițe</a>, prin consultanță și la comandă, cu ateliere partenere</span></li>
 			</ul>
 		</div>
 	</div>

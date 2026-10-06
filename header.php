@@ -5,6 +5,7 @@ $p3d_nav = array(
 	array( p3d_service_url( 'support' ), 'Service imprimante 3D', p3d_is( 'support' ), true, 'wrench' ),
 	array( p3d_service_url( 'printare-3d-personalizata' ), 'Printare 3D', p3d_is( 'printare-3d-personalizata' ), false, 'layers' ),
 	array( p3d_service_url( 'prototyping' ), 'Proiectare 3D', p3d_is( 'prototyping' ), false, 'pen' ),
+	array( p3d_service_url( 'prelucrare-cnc-matrite' ), 'CNC și matrițe', p3d_is( 'prelucrare-cnc-matrite' ), false, 'gear' ),
 	array( home_url( '/preturi/' ), 'Prețuri', is_page( 'preturi' ), false, 'doc' ),
 	array( home_url( '/magazin/' ), 'Magazin', is_page( 'magazin' ) || ( function_exists( 'is_woocommerce' ) && is_woocommerce() ), false, 'cart' ),
 	array( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/blog-standard/' ), 'Blog', is_home() || is_singular( 'post' ) || is_category(), false, 'doc' ),

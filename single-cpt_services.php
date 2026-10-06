@@ -14,6 +14,7 @@ if ( ! $s ) {
 }
 
 $is_service = ( 'support' === $slug );
+$is_quote   = ! empty( $s['quote'] );
 get_header();
 ?>
 
@@ -28,8 +29,13 @@ get_header();
 		<h1 class="h1"><?php echo esc_html( $s['h1a'] ); ?><br><em><?php echo esc_html( $s['h1b'] ); ?></em></h1>
 		<p class="lead"><?php echo esc_html( $s['lead'] ); ?></p>
 		<div class="ctas">
-			<a href="<?php echo esc_attr( p3d_tel() ); ?>" class="btn btn-primary"><?php echo p3d_icon( 'phone', 18 ); // phpcs:ignore ?> Sună: <?php echo esc_html( p3d_opt( 'phone' ) ); ?></a>
-			<a href="<?php echo esc_url( p3d_wa( $s['wa'] ) ); ?>" class="btn btn-ghost" rel="noopener"><?php echo p3d_icon( 'whatsapp', 18 ); // phpcs:ignore ?> Scrie pe WhatsApp</a>
+			<?php if ( $is_quote ) : ?>
+				<a href="#contact" class="btn btn-primary"><?php echo p3d_icon( 'doc', 18 ); // phpcs:ignore ?> Cere ofertă</a>
+				<a href="<?php echo esc_url( p3d_wa( $s['wa'] ) ); ?>" class="btn btn-ghost" rel="noopener"><?php echo p3d_icon( 'whatsapp', 18 ); // phpcs:ignore ?> Trimite desenul pe WhatsApp</a>
+			<?php else : ?>
+				<a href="<?php echo esc_attr( p3d_tel() ); ?>" class="btn btn-primary"><?php echo p3d_icon( 'phone', 18 ); // phpcs:ignore ?> Sună: <?php echo esc_html( p3d_opt( 'phone' ) ); ?></a>
+				<a href="<?php echo esc_url( p3d_wa( $s['wa'] ) ); ?>" class="btn btn-ghost" rel="noopener"><?php echo p3d_icon( 'whatsapp', 18 ); // phpcs:ignore ?> Scrie pe WhatsApp</a>
+			<?php endif; ?>
 		</div>
 		<ul class="hero-points">
 			<?php foreach ( $s['points'] as $pt ) : ?>
@@ -114,10 +120,11 @@ if ( $p3d_price_key ) :
 	<div class="wrap">
 		<div class="cta-band">
 			<div>
-				<h2 class="h2"><?php echo $is_service ? 'Imprimanta ta are nevoie de service?' : 'Ai un proiect în minte?'; ?></h2>
-				<p><?php echo $is_service ? 'Sună-ne sau scrie-ne ce face imprimanta.' : 'Spune-ne ideea ta și îți spunem cum o realizăm.'; ?></p>
+				<h2 class="h2"><?php echo $is_service ? 'Imprimanta ta are nevoie de service?' : ( $is_quote ? 'Ai o piesă de executat?' : 'Ai un proiect în minte?' ); ?></h2>
+				<p><?php echo $is_service ? 'Sună-ne sau scrie-ne ce face imprimanta.' : ( $is_quote ? 'Trimite-ne desenul sau modelul și cantitatea, iar noi revenim cu oferta.' : 'Spune-ne ideea ta și îți spunem cum o realizăm.' ); ?></p>
 			</div>
 			<div class="ctas">
+				<?php if ( $is_quote ) : ?><a href="#contact" class="btn btn-dark"><?php echo p3d_icon( 'doc', 18 ); // phpcs:ignore ?> Cere ofertă</a><?php endif; ?>
 				<a href="<?php echo esc_attr( p3d_tel() ); ?>" class="btn btn-dark"><?php echo p3d_icon( 'phone', 18 ); // phpcs:ignore ?> <?php echo esc_html( p3d_opt( 'phone' ) ); ?></a>
 				<a href="<?php echo esc_url( p3d_wa( $s['wa'] ) ); ?>" class="btn btn-light" rel="noopener"><?php echo p3d_icon( 'whatsapp', 18 ); // phpcs:ignore ?> WhatsApp</a>
 			</div>
@@ -130,7 +137,7 @@ if ( $p3d_price_key ) :
 <section class="section">
 	<div class="wrap">
 		<div class="head"><h2 class="h2">Alte <em>servicii</em></h2></div>
-		<div class="grid grid-2">
+		<div class="grid grid-<?php echo count( $s['related'] ) >= 3 ? '3' : '2'; ?>">
 			<?php foreach ( $s['related'] as $r ) : $rs = p3d_service( $r ); if ( ! $rs ) { continue; } ?>
 				<a href="<?php echo esc_url( p3d_service_url( $r ) ); ?>" class="card path">
 					<span class="icon-tile"><?php echo p3d_icon( $rs['icon'], 22 ); // phpcs:ignore ?></span>
@@ -143,7 +150,7 @@ if ( $p3d_price_key ) :
 	</div>
 </section>
 
-<?php get_template_part( 'template-parts/contact', null, array( 'wa' => $s['wa'], 'preset' => array( 'support' => 'Service imprimantă 3D', 'printare-3d-personalizata' => 'Printare 3D', 'prototyping' => 'Proiectare 3D' )[ $slug ] ?? '' ) ); ?>
+<?php get_template_part( 'template-parts/contact', null, array( 'wa' => $s['wa'], 'preset' => $s['preset'] ?? ( array( 'support' => 'Service imprimantă 3D', 'printare-3d-personalizata' => 'Printare 3D', 'prototyping' => 'Proiectare 3D' )[ $slug ] ?? '' ) ) ); ?>
 
 <?php
 get_footer();

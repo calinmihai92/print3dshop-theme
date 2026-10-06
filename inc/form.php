@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 function p3d_callback_form( $preset = '' ) {
 	$status = isset( $_GET['trimis'] ) ? sanitize_key( wp_unslash( $_GET['trimis'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
-	$opts   = array( 'Service imprimantă 3D', 'Printare 3D', 'Proiectare 3D', 'Scanare 3D', 'Mașinare CNC / matrițare', 'Altceva' );
+	$opts   = array( 'Service imprimantă 3D', 'Printare 3D', 'Proiectare 3D', 'Scanare 3D', 'Prelucrare CNC / matrițe', 'Altceva' );
 	ob_start();
 	?>
 	<form class="p3d-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">

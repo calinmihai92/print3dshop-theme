@@ -53,7 +53,7 @@ function p3d_services() {
 				array( 'Puteți actualiza sau optimiza imprimanta?', 'Da, facem actualizări și optimizări, ca imprimanta să profite de funcții noi și să printeze mai bine.' ),
 			),
 			'wa'       => 'Bună ziua! Am o problemă cu imprimanta 3D: ',
-			'related'  => array( 'printare-3d-personalizata', 'prototyping' ),
+			'related'  => array( 'printare-3d-personalizata', 'prototyping', 'prelucrare-cnc-matrite' ),
 		),
 
 		'printare-3d-personalizata' => array(
@@ -87,7 +87,7 @@ function p3d_services() {
 				array( 'Printați și piese tehnice sau doar decorative?', 'Printăm atât prototipuri și piese funcționale, cât și obiecte decorative sau personalizate.' ),
 			),
 			'wa'       => 'Bună ziua! Aș vrea o printare 3D: ',
-			'related'  => array( 'prototyping', 'support' ),
+			'related'  => array( 'prototyping', 'prelucrare-cnc-matrite', 'support' ),
 		),
 
 		'prototyping' => array(
@@ -122,7 +122,45 @@ function p3d_services() {
 				array( 'Pot cere modificări?', 'Da. Înainte de finalizare revizuiești modelul și facem ajustările necesare.' ),
 			),
 			'wa'       => 'Bună ziua! Am nevoie de proiectare 3D pentru: ',
-			'related'  => array( 'printare-3d-personalizata', 'support' ),
+			'related'  => array( 'printare-3d-personalizata', 'prelucrare-cnc-matrite', 'support' ),
+		),
+
+		'prelucrare-cnc-matrite' => array(
+			'label'    => 'Prelucrare CNC și matrițe',
+			'short'    => 'CNC și matrițe',
+			'icon'     => 'gear',
+			'eyebrow'  => 'Prelucrare CNC și matrițe · la comandă',
+			'h1a'      => 'Prelucrare CNC',
+			'h1b'      => 'și matrițe la comandă',
+			'lead'     => 'Ai nevoie de piese din metal sau plastic tehnic, de o serie mai mare sau de o matriță? Te ajutăm de la idee până la piesa finită: analizăm proiectul împreună, alegem soluția potrivită și coordonăm execuția în ateliere CNC partenere, specializate.',
+			'card'     => 'Piese prelucrate CNC și matrițe, prin consultanță și la comandă. Execuția se face în ateliere partenere.',
+			'points'   => array( 'Consultanță tehnică', 'Execuție în ateliere partenere', 'Un singur interlocutor' ),
+			'quote'    => true,
+			'whatTitle' => array( 'Ce ', 'putem realiza' ),
+			'what'     => array(
+				array( 'gear', 'Piese prelucrate CNC', 'Frezare și strunjire CNC pentru piese din aluminiu, oțel, alamă sau plastice tehnice.' ),
+				array( 'cube', 'Matrițe și serii de producție', 'Matrițe pentru turnare sau injecție, când piesa trebuie produsă în serie.' ),
+				array( 'layers', 'De la prototip la serie', 'Testezi forma prin printare 3D, apoi trecem la CNC sau matriță pentru producție.' ),
+				array( 'pen', 'Desen tehnic și model 3D', 'Dacă nu ai desen sau model, îl realizăm noi, pregătit pentru execuție.' ),
+				array( 'chat', 'Consultanță', 'Te ajutăm să alegi materialul, toleranțele și procedeul potrivit, ca să nu plătești mai mult decât e nevoie.' ),
+			),
+			'stepsTitle' => array( 'Cum ', 'lucrăm' ),
+			'steps'    => array(
+				array( 'Ne trimiți proiectul', 'Desen, model 3D, o piesă existentă sau doar ideea, plus cantitatea de care ai nevoie.' ),
+				array( 'Consultanță', 'Analizăm piesa împreună și stabilim materialul, procedeul și toleranțele.' ),
+				array( 'Ofertă', 'Cerem oferte de la atelierele partenere și îți trimitem prețul și termenul.' ),
+				array( 'Execuție', 'După confirmare, piesele sau matrița se execută la partenerul potrivit.' ),
+				array( 'Verificare și predare', 'Verificăm piesele și ți le predăm la atelier sau prin curier.' ),
+			),
+			'faq'      => array(
+				array( 'Executați voi piesele CNC?', 'Prelucrarea CNC și matrițele se execută în ateliere partenere, specializate. Noi ne ocupăm de consultanță, de proiect și de coordonare, iar tu ai un singur interlocutor de la cerere până la predare.' ),
+				array( 'Cât costă o piesă CNC sau o matriță?', 'Prețul depinde de material, dimensiuni, complexitate și cantitate, de aceea facem ofertă pentru fiecare proiect. Trimite-ne desenul sau modelul și revenim cu prețul și termenul.' ),
+				array( 'Ce trebuie să trimit pentru ofertă?', 'Ideal, un desen tehnic sau un model 3D (STEP), materialul dorit și cantitatea. Dacă nu ai desen, pornim de la o piesă existentă sau de la o schiță.' ),
+				array( 'Faceți și bucăți unicat?', 'Da, de la o singură piesă până la serii de producție. Pentru o singură piesă îți spunem sincer dacă printarea 3D e o variantă mai avantajoasă.' ),
+			),
+			'wa'       => 'Bună ziua! Aș vrea o ofertă pentru prelucrare CNC / matrițe: ',
+			'preset'   => 'Prelucrare CNC / matrițe',
+			'related'  => array( 'prototyping', 'printare-3d-personalizata', 'support' ),
 		),
 	);
 }
@@ -201,12 +239,12 @@ function p3d_prices() {
 		),
 		'cnc' => array(
 			'icon'    => 'gear',
-			'title'   => array( 'Mașinare CNC ', 'și matrițare' ),
-			'intro'   => 'Piese prelucrate CNC și matrițe, după desenul sau modelul tău.',
-			'service' => '',
+			'title'   => array( 'Prelucrare CNC ', 'și matrițe' ),
+			'intro'   => 'Prin consultanță și la comandă. Execuția se face în ateliere CNC partenere, iar prețul depinde de material, complexitate și cantitate.',
+			'service' => 'prelucrare-cnc-matrite',
 			'rows'    => array(
-				array( 'Mașinare CNC', '', 'Ofertă personalizată' ),
-				array( 'Matrițare', '', 'Ofertă personalizată' ),
+				array( 'Prelucrare CNC', 'Frezare, strunjire; metal sau plastice tehnice', 'Cere ofertă' ),
+				array( 'Matrițe', 'Pentru turnare sau injecție, serii de producție', 'Cere ofertă' ),
 			),
 		),
 	);

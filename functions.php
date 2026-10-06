@@ -174,7 +174,7 @@ add_action( 'wp_head', function () {
 		'@type'                     => 'LocalBusiness',
 		'@id'                       => home_url( '/#business' ),
 		'name'                      => 'Print3D Shop',
-		'description'               => 'Service și reparații imprimante 3D, printare 3D la comandă și proiectare 3D în București.',
+		'description'               => 'Service și reparații imprimante 3D, printare 3D la comandă, proiectare 3D, prelucrare CNC și matrițe în București.',
 		'url'                       => home_url( '/' ),
 		'telephone'                 => '+' . preg_replace( '/\D/', '', p3d_opt( 'whatsapp' ) ),
 		'email'                     => p3d_opt( 'email' ),

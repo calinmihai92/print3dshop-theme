@@ -19,6 +19,7 @@ get_header();
 			<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Service și reparații imprimante 3D</li>
 			<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Printare 3D la comandă</li>
 			<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Proiectare 3D</li>
+			<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Prelucrare CNC și matrițe</li>
 		</ul>
 	</div>
 </section>
@@ -27,7 +28,7 @@ get_header();
 	<div class="wrap">
 		<div class="head">
 			<span class="eyebrow">Ce facem</span>
-			<h2 class="h2">Trei servicii, <em>un singur loc</em></h2>
+			<h2 class="h2">Tot ce ai nevoie, <em>într-un singur loc</em></h2>
 		</div>
 		<?php get_template_part( 'template-parts/paths' ); ?>
 	</div>
