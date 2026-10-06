@@ -105,7 +105,7 @@ if ( $p3d_price_key ) :
 		<div class="wrap" style="max-width:900px">
 			<div class="card price-band">
 				<div class="head" style="margin-bottom:18px"><h2 class="h2">Prețuri <em>orientative</em></h2><p class="lead"><?php echo esc_html( $pc['intro'] ); ?></p></div>
-				<?php p3d_price_rows( $pc['rows'] ); ?>
+				<?php p3d_price_rows( $pc['rows'], $s['preset'] ?? '' ); ?>
 				<?php if ( ! empty( $pc['note'] ) ) : ?><p class="price-note"><?php echo esc_html( $pc['note'] ); ?></p><?php endif; ?>
 				<div class="price-foot" style="justify-content:center">
 					<a href="<?php echo esc_url( p3d_prices_url( $p3d_price_key ) ); ?>" class="btn btn-ghost">Toate prețurile <?php echo p3d_icon( 'arrow', 16 ); // phpcs:ignore ?></a>

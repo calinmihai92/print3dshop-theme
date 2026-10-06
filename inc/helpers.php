@@ -121,7 +121,7 @@ function p3d_is( $slug ) {
 /**
  * Lista de prețuri (rânduri din p3d_prices()).
  */
-function p3d_price_rows( $rows ) {
+function p3d_price_rows( $rows, $preset = '' ) {
 	echo '<ul class="price-list">';
 	foreach ( $rows as $r ) {
 		echo '<li><span class="price-name">' . esc_html( $r[0] );
@@ -129,9 +129,18 @@ function p3d_price_rows( $rows ) {
 			echo '<small>' . esc_html( $r[1] ) . '</small>';
 		}
 		$free = in_array( $r[2], array( 'Gratuit', 'Ofertă personalizată' ), true );
+		if ( 'Cere ofertă' === $r[2] ) {
+			echo '</span><a class="price-val is-link" href="' . esc_url( p3d_quote_url( $preset ) ) . '">' . esc_html( $r[2] ) . ' &rarr;</a></li>';
+			continue;
+		}
 		echo '</span><strong class="price-val' . ( $free ? ' is-text' : '' ) . '">' . esc_html( $r[2] ) . '</strong></li>';
 	}
 	echo '</ul>';
+}
+
+/** Link spre formularul de pe pagina Contact, cu serviciul deja ales. */
+function p3d_quote_url( $preset = '' ) {
+	return home_url( '/contacts/' ) . ( $preset ? '?serviciu=' . rawurlencode( $preset ) : '' ) . '#contact';
 }
 
 function p3d_prices_url( $anchor = '' ) {

@@ -11,7 +11,7 @@ get_header();
 		<div class="head">
 			<span class="eyebrow">Contact</span>
 			<h1 class="h1">Ai întrebări? <em>Contactează-ne</em></h1>
-			<p class="lead">Pentru service imprimante 3D, printare la comandă sau proiectare 3D, suntem la un telefon distanță.</p>
+			<p class="lead">Pentru service imprimante 3D, printare la comandă, proiectare sau scanare 3D, prelucrare CNC și matrițe, suntem la un telefon distanță. Pentru o ofertă, completează formularul de mai jos.</p>
 		</div>
 	</div>
 </section>

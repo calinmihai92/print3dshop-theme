@@ -32,12 +32,20 @@ $wa     = 'Bună ziua! Aș vrea o ofertă pentru: ';
 						<p><?php echo esc_html( $cat['intro'] ); ?></p>
 					</div>
 				</header>
-				<?php p3d_price_rows( $cat['rows'] ); ?>
+				<?php
+				$p3d_svc   = $cat['service'] ? p3d_service( $cat['service'] ) : null;
+				$p3d_quote = ! empty( $p3d_svc['quote'] );
+				p3d_price_rows( $cat['rows'], $p3d_svc['preset'] ?? '' );
+				?>
 				<?php if ( ! empty( $cat['note'] ) ) : ?>
 					<p class="price-note"><?php echo esc_html( $cat['note'] ); ?></p>
 				<?php endif; ?>
 				<div class="price-foot">
-					<a href="<?php echo esc_url( p3d_wa( $wa . strtolower( $cat['title'][0] . $cat['title'][1] ) . '. ' ) ); ?>" class="btn btn-primary" rel="noopener"><?php echo p3d_icon( 'whatsapp', 17 ); // phpcs:ignore ?> <?php echo 'cnc' === $key ? 'Cere ofertă' : 'Cere prețul exact'; ?></a>
+					<?php if ( $p3d_quote ) : ?>
+						<a href="<?php echo esc_url( p3d_quote_url( $p3d_svc['preset'] ?? '' ) ); ?>" class="btn btn-primary"><?php echo p3d_icon( 'doc', 17 ); // phpcs:ignore ?> Cere ofertă</a>
+					<?php else : ?>
+						<a href="<?php echo esc_url( p3d_wa( $wa . strtolower( $cat['title'][0] . $cat['title'][1] ) . '. ' ) ); ?>" class="btn btn-primary" rel="noopener"><?php echo p3d_icon( 'whatsapp', 17 ); // phpcs:ignore ?> Cere prețul exact</a>
+					<?php endif; ?>
 					<?php if ( $cat['service'] ) : ?>
 						<a href="<?php echo esc_url( p3d_service_url( $cat['service'] ) ); ?>" class="btn btn-ghost">Despre serviciu <?php echo p3d_icon( 'arrow', 16 ); // phpcs:ignore ?></a>
 					<?php endif; ?>

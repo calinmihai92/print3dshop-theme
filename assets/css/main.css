@@ -579,3 +579,6 @@ caption.fisa-demo-tag{caption-side:top;margin:0 0 .5rem;text-align:left;display:
 .nav-drop-menu a:hover, .nav-drop-menu a[aria-current="page"] { background: var(--bg); color: var(--accent-text); }
 .nav-drop-menu .icon-tile.sm { width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0; }
 .nav-drop-menu .nav-drop-all { justify-content: space-between; margin-top: 4px; border-top: 1px solid var(--line, #e7e2db); border-radius: 0 0 10px 10px; color: var(--accent-text); font-weight: 600; font-size: 14px; }
+
+a.price-val.is-link { text-decoration: none; color: var(--accent-text); white-space: nowrap; }
+a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3px; }
