@@ -553,3 +553,13 @@ caption.fisa-demo-tag{caption-side:top;margin:0 0 .5rem;text-align:left;display:
   .price-list li { flex-direction: column; gap: 4px; }
   .price-val { text-align: left; white-space: normal; }
 }
+/* Modele (produse variabile cu poze) */
+.p3d-models { margin: 0 0 16px; }
+.p3d-models .p3d-field-label { display: block; font-weight: 600; margin-bottom: 10px; }
+.p3d-model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; }
+.p3d-model { position: relative; padding: 0; border: 2px solid transparent; border-radius: 10px; background: #fff; cursor: pointer; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.p3d-model img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+.p3d-model span { position: absolute; left: 4px; bottom: 4px; font-size: 11px; font-weight: 700; line-height: 1; padding: 3px 5px; border-radius: 6px; background: rgba(255,255,255,.92); color: #17181b; }
+.p3d-model:hover { border-color: rgba(0,0,0,.25); }
+.p3d-model.is-on { border-color: var(--accent, #f26a1b); box-shadow: 0 0 0 2px var(--accent, #f26a1b); }
+.p3d-has-models table.variations { display: none; }

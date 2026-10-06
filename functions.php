@@ -16,6 +16,7 @@ require_once __DIR__ . '/inc/personalizare.php';
 require_once __DIR__ . '/inc/recenzii.php';
 require_once __DIR__ . '/inc/fisa-service.php';
 require_once __DIR__ . '/inc/fisa-pdf.php';
+require_once __DIR__ . '/inc/modele.php';
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
