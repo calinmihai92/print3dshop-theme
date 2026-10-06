@@ -27,6 +27,7 @@
 			<a href="mailto:<?php echo esc_attr( p3d_opt( 'email' ) ); ?>"><?php echo esc_html( p3d_opt( 'email' ) ); ?></a>
 			<a href="<?php echo esc_url( p3d_opt( 'maps' ) ); ?>" rel="noopener"><?php echo esc_html( p3d_opt( 'address' ) ); ?></a>
 			<span class="foot-hours"><?php echo esc_html( p3d_opt( 'hours' ) ); ?></span>
+			<span class="foot-company">MIRIEXPERT DESIGN CONCEPT S.R.L.<br>CUI: RO46735434<br>Reg. Com.: J40/16901/29.08.2022</span>
 		</div>
 	</div>
 	<div class="foot-bottom">

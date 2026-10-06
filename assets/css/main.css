@@ -472,6 +472,7 @@ a.contact-item:hover { background: var(--tint); color: var(--ink); }
 }
 
 .foot-hours { color: var(--muted); font-size: 14.5px; }
+.foot-company { color: var(--muted); font-size: 13px; line-height: 1.5; margin-top: 6px; padding-top: 10px; border-top: 1px solid var(--line); }
 
 /* ---------- Fișa de service (pagina clientului) ---------- */
 .fisa-wrap { padding-top: 40px; }
