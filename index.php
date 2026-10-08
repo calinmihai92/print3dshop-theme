@@ -6,8 +6,8 @@ defined( 'ABSPATH' ) || exit;
 get_header();
 
 if ( is_home() ) {
-	$title = 'Blog <em>Print 3D</em>';
-	$lead  = 'Inspirație, idei de proiecte și sfaturi despre printarea 3D.';
+	$title = 'Ghiduri <em>printare 3D</em>';
+	$lead  = 'Ghiduri practice despre imprimante 3D, materiale, service și proiecte: ce să alegi, cum să repari și ce merită printat.';
 } elseif ( is_search() ) {
 	$title = 'Rezultate pentru <em>„' . esc_html( get_search_query() ) . '”</em>';
 	$lead  = '';
@@ -20,7 +20,7 @@ if ( is_home() ) {
 <section class="page-head">
 	<div class="wrap">
 		<div class="head">
-			<span class="eyebrow">Blog</span>
+			<span class="eyebrow">Ghiduri</span>
 			<h1 class="h1"><?php echo wp_kses( $title, array( 'em' => array() ) ); ?></h1>
 			<?php if ( $lead ) : ?><p class="lead"><?php echo esc_html( $lead ); ?></p><?php endif; ?>
 		</div>

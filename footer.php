@@ -18,7 +18,7 @@
 		<div class="foot-col">
 			<span class="foot-title">Print3D Shop</span>
 			<a href="<?php echo esc_url( home_url( '/despre-noi/' ) ); ?>">Despre noi</a>
-			<a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/blog-standard/' ) ); ?>">Blog</a>
+			<a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/blog-standard/' ) ); ?>">Ghiduri</a>
 			<a href="<?php echo esc_url( home_url( '/contacts/' ) ); ?>">Contact</a>
 		</div>
 		<div class="foot-col">

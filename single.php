@@ -14,7 +14,7 @@ while ( have_posts() ) :
 				<div class="head">
 					<nav class="crumbs" aria-label="Breadcrumb">
 						<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Acasă</a><span aria-hidden="true">/</span>
-						<a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ); ?>">Blog</a>
+						<a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ); ?>">Ghiduri</a>
 					</nav>
 					<?php the_title( '<h1 class="h2">', '</h1>' ); ?>
 					<span class="mono-sub"><?php echo esc_html( get_the_date() ); ?></span>

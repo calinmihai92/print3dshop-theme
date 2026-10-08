@@ -13,7 +13,7 @@ $p3d_nav = array(
 	'servicii',
 	array( home_url( '/preturi/' ), 'Prețuri', is_page( 'preturi' ), false, 'doc' ),
 	array( home_url( '/magazin/' ), 'Magazin', is_page( 'magazin' ) || ( function_exists( 'is_woocommerce' ) && is_woocommerce() ), false, 'cart' ),
-	array( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/blog-standard/' ), 'Blog', is_home() || is_singular( 'post' ) || is_category(), false, 'doc' ),
+	array( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/blog-standard/' ), 'Ghiduri', is_home() || is_singular( 'post' ) || is_category(), false, 'doc' ),
 	array( home_url( '/despre-noi/' ), 'Despre noi', is_page( 'despre-noi' ), false, 'users' ),
 	array( home_url( '/contacts/' ), 'Contact', is_page( 'contacts' ), false, 'pin' ),
 );
