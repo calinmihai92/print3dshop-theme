@@ -281,3 +281,12 @@ add_action( 'admin_init', function () {
 	}
 	update_option( 'p3d_page_preturi', 1, false );
 } );
+
+/**
+ * Ghiduri (pagina de articole, categorii, căutare): 9 articole pe pagină — grilă de 3×3.
+ */
+add_action( 'pre_get_posts', function ( $q ) {
+	if ( ! is_admin() && $q->is_main_query() && ( $q->is_home() || $q->is_category() || $q->is_tag() || $q->is_search() ) && ! ( function_exists( 'is_woocommerce' ) && is_woocommerce() ) ) {
+		$q->set( 'posts_per_page', 9 );
+	}
+} );
