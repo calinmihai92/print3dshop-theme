@@ -583,3 +583,26 @@ caption.fisa-demo-tag{caption-side:top;margin:0 0 .5rem;text-align:left;display:
 
 a.price-val.is-link { text-decoration: none; color: var(--accent-text); white-space: nowrap; }
 a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Oferta de printare 3D (pagina clientului) */
+.of-parts { display: flex; flex-direction: column; }
+.of-part { display: grid; grid-template-columns: 120px 1fr auto; gap: 18px; align-items: start; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.of-part:first-child { padding-top: 4px; }
+.of-ph img, .of-ph.empty { width: 120px; height: 120px; object-fit: cover; border-radius: 12px; border: 1px solid var(--line); display: block; }
+.of-ph.empty { display: grid; place-items: center; background: var(--surface-2); color: var(--muted); }
+.of-info h3 { font-size: 18px; margin: 2px 0 8px; }
+.of-specs { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; font-size: 15px; }
+.of-specs span { display: inline-block; min-width: 140px; color: var(--muted); }
+.of-price { text-align: right; white-space: nowrap; display: flex; flex-direction: column; gap: 2px; }
+.of-price small { color: var(--muted); }
+.of-price strong { font-size: 18px; }
+.of-sum { margin-top: 10px; }
+.of-sum td:first-child { width: 100%; }
+.of-pay .btn { margin-top: 6px; }
+@media (max-width: 640px) {
+  .of-part { grid-template-columns: 84px 1fr; }
+  .of-ph img, .of-ph.empty { width: 84px; height: 84px; }
+  .of-price { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: baseline; }
+  .of-specs span { min-width: 120px; }
+}
+@media print { .of-pay { display: none !important; } }

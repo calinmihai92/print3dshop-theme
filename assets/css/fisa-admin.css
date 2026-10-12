@@ -33,3 +33,14 @@
 }
 .p3d-demo{display:block;margin:1rem 0;padding:.6rem .8rem;border:2px dashed #b91c1c;border-radius:8px;background:#fef2f2;color:#7f1d1d}
 .p3d-demo input[type=checkbox]{width:auto!important;height:auto;margin:0 .4rem 0 0;display:inline-block;vertical-align:middle}
+/* Configurator printare 3D */
+.p3d-of-type label { display: inline-flex !important; align-items: center; gap: 6px; margin-right: 18px; font-weight: 600; }
+.p3d-of-type input { width: auto !important; margin: 0 !important; display: inline-block !important; }
+.p3d-part-grid { display: grid; grid-template-columns: 120px 1fr; gap: 16px; }
+@media (max-width: 782px) { .p3d-part-grid { grid-template-columns: 1fr; } }
+.p3d-part-photo .p3d-ph img { width: 110px; height: 110px; }
+.p3d-of output { display: block; margin-top: 4px; padding: 6px 0; font-weight: 400; font-size: 14px; }
+.p3d-of output strong { font-size: 15px; }
+.p3d-of-sum { border: 1px solid #dcdcde; border-radius: 8px; padding: 10px 12px; background: #fcfcfc; font-size: 13.5px; }
+.p3d-of-sum div { display: flex; justify-content: space-between; padding: 2px 0; }
+.p3d-of-sum .tot { border-top: 1px solid #dcdcde; margin-top: 6px; padding-top: 6px; font-size: 16px; font-weight: 700; }
