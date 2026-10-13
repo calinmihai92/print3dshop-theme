@@ -31,7 +31,7 @@ get_header();
 		<div class="ctas">
 			<?php if ( $is_quote ) : ?>
 				<a href="#contact" class="btn btn-primary"><?php echo p3d_icon( 'doc', 18 ); // phpcs:ignore ?> Cere ofertă</a>
-				<a href="<?php echo esc_url( p3d_wa( $s['wa'] ) ); ?>" class="btn btn-ghost" rel="noopener"><?php echo p3d_icon( 'whatsapp', 18 ); // phpcs:ignore ?> Trimite desenul pe WhatsApp</a>
+				<a href="<?php echo esc_url( p3d_wa( $s['wa'] ) ); ?>" class="btn btn-ghost" rel="noopener"><?php echo p3d_icon( 'whatsapp', 18 ); // phpcs:ignore ?> <?php echo esc_html( $s['waBtn'] ?? 'Scrie pe WhatsApp' ); ?></a>
 			<?php else : ?>
 				<a href="<?php echo esc_attr( p3d_tel() ); ?>" class="btn btn-primary"><?php echo p3d_icon( 'phone', 18 ); // phpcs:ignore ?> Sună: <?php echo esc_html( p3d_opt( 'phone' ) ); ?></a>
 				<a href="<?php echo esc_url( p3d_wa( $s['wa'] ) ); ?>" class="btn btn-ghost" rel="noopener"><?php echo p3d_icon( 'whatsapp', 18 ); // phpcs:ignore ?> Scrie pe WhatsApp</a>
@@ -71,6 +71,19 @@ get_header();
 		</div>
 	</div>
 </section>
+
+<?php if ( ! empty( $s['also'] ) ) : ?>
+	<section class="section">
+		<div class="wrap">
+			<div class="head"><h2 class="h2"><?php echo esc_html( $s['also']['title'][0] ); ?><em><?php echo esc_html( $s['also']['title'][1] ); ?></em></h2><?php if ( ! empty( $s['also']['lead'] ) ) : ?><p class="lead"><?php echo esc_html( $s['also']['lead'] ); ?></p><?php endif; ?></div>
+			<div class="grid grid-3">
+				<?php foreach ( $s['also']['items'] as $w ) : ?>
+					<article class="card feat"><span class="icon-tile"><?php echo p3d_icon( $w[0], 22 ); // phpcs:ignore ?></span><h3><?php echo esc_html( $w[1] ); ?></h3><p><?php echo esc_html( $w[2] ); ?></p></article>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</section>
+<?php endif; ?>
 
 <?php if ( ! empty( $s['brands'] ) ) : ?>
 	<section class="section">
@@ -120,8 +133,8 @@ if ( $p3d_price_key ) :
 	<div class="wrap">
 		<div class="cta-band">
 			<div>
-				<h2 class="h2"><?php echo $is_service ? 'Imprimanta ta are nevoie de service?' : ( $is_quote ? 'Ai o piesă de executat?' : 'Ai un proiect în minte?' ); ?></h2>
-				<p><?php echo $is_service ? 'Sună-ne sau scrie-ne ce face imprimanta.' : ( $is_quote ? 'Trimite-ne desenul sau modelul și cantitatea, iar noi revenim cu oferta.' : 'Spune-ne ideea ta și îți spunem cum o realizăm.' ); ?></p>
+				<h2 class="h2"><?php echo $is_service ? 'Imprimanta ta are nevoie de service?' : ( $is_quote ? ( $s['ctaTitle'] ?? 'Ai un proiect în minte?' ) : 'Ai un proiect în minte?' ); ?></h2>
+				<p><?php echo $is_service ? 'Sună-ne sau scrie-ne ce face imprimanta.' : ( $is_quote ? ( $s['ctaText'] ?? 'Spune-ne ce ai nevoie și revenim cu oferta.' ) : 'Spune-ne ideea ta și îți spunem cum o realizăm.' ); ?></p>
 			</div>
 			<div class="ctas">
 				<?php if ( $is_quote ) : ?><a href="#contact" class="btn btn-dark"><?php echo p3d_icon( 'doc', 18 ); // phpcs:ignore ?> Cere ofertă</a><?php endif; ?>

@@ -96,9 +96,18 @@ function p3d_services() {
 			'eyebrow'  => 'Proiectare și modelare 3D',
 			'h1a'      => 'Proiectare 3D:',
 			'h1b'      => 'dă formă ideilor tale',
-			'lead'     => 'Pornim de la ideea sau schița ta și creăm modelul 3D, gata de printat. Dezvoltăm concepte inovatoare, pas cu pas, cu software specializat.',
+			'lead'     => 'Pornim de la ideea sau schița ta și creăm modelul 3D, gata de printat. Facem și desene tehnice 2D (CAD) cu cote, pentru producție, CNC sau documentație.',
 			'card'     => 'De la schiță la model 3D gata de printat. Ideal când nu ai încă fișierul piesei.',
-			'points'   => array( 'De la schiță la model', 'Optimizat pentru printare', 'Printare opțională' ),
+			'points'   => array( 'De la schiță la model', 'Desen tehnic 2D (CAD)', 'Printare opțională' ),
+			'also'     => array(
+				'title' => array( 'Și ', 'desen tehnic 2D' ),
+				'lead'  => 'Când piesa trebuie executată în alt atelier (CNC, strunjire, tăiere) sau ai nevoie de documentație, îți facem desenul tehnic.',
+				'items' => array(
+					array( 'doc', 'Desen tehnic cu cote', 'Vederi, secțiuni, cote și toleranțe, după piesa ta, după o schiță sau după modelul 3D.' ),
+					array( 'gear', 'Pentru producție și CNC', 'Desene pregătite pentru atelierele de prelucrare, inclusiv pentru serviciul nostru de CNC și matrițe.' ),
+					array( 'layers', 'Fișier CAD și PDF', 'Primești desenul în format CAD, editabil, și în PDF, gata de printat sau de trimis.' ),
+				),
+			),
 			'whatTitle' => array( 'De ce ', 'să lucrezi cu noi' ),
 			'what'     => array(
 				array( 'zap', 'Expertiză tehnică', 'Folosim tehnologii și software actuale pentru modelare 3D.' ),
@@ -120,9 +129,10 @@ function p3d_services() {
 				array( 'Pot porni doar de la o idee sau o schiță?', 'Da. Pornim de la ideea sau schița ta, iar modelul 3D îl creăm noi.' ),
 				array( 'Primesc fișierul 3D?', 'Da, modelul îți poate fi livrat pe email. Dacă vrei, îl și printăm.' ),
 				array( 'Pot cere modificări?', 'Da. Înainte de finalizare revizuiești modelul și facem ajustările necesare.' ),
+				array( 'Faceți și desene tehnice 2D?', 'Da. Facem desene tehnice 2D (CAD) cu cote, vederi și secțiuni, după piesa ta, după o schiță sau după modelul 3D. Primești fișierul CAD și PDF.' ),
 			),
-			'wa'       => 'Bună ziua! Am nevoie de proiectare 3D pentru: ',
-			'related'  => array( 'printare-3d-personalizata', 'scanare-3d', 'prelucrare-cnc-matrite' ),
+			'wa'       => 'Bună ziua! Am nevoie de proiectare 3D / desen tehnic pentru: ',
+			'related'  => array( 'printare-3d-personalizata', 'prelucrare-cnc-matrite', 'design-grafic-tipar' ),
 		),
 
 		'prelucrare-cnc-matrite' => array(
@@ -160,7 +170,51 @@ function p3d_services() {
 			),
 			'wa'       => 'Bună ziua! Aș vrea o ofertă pentru prelucrare CNC / matrițe: ',
 			'preset'   => 'Prelucrare CNC / matrițe',
+			'waBtn'    => 'Trimite desenul pe WhatsApp',
+			'ctaTitle' => 'Ai o piesă de executat?',
+			'ctaText'  => 'Trimite-ne desenul sau modelul și cantitatea, iar noi revenim cu oferta.',
 			'related'  => array( 'prototyping', 'scanare-3d', 'printare-3d-personalizata' ),
+		),
+
+		'design-grafic-tipar' => array(
+			'label'    => 'Design grafic și tipar',
+			'icon'     => 'palette',
+			'eyebrow'  => 'Design grafic și tipar · la comandă',
+			'h1a'      => 'Design grafic',
+			'h1b'      => 'și tipar pentru firma ta',
+			'lead'     => 'Logo, flyere, broșuri, cataloage și prezentări de firmă: le gândim, le desenăm și, dacă vrei, le tipărim prin tipografia noastră parteneră. Ai un singur interlocutor, de la idee până la materialele tipărite.',
+			'card'     => 'Logo, flyere, broșuri, cataloage și prezentări de firmă. Design la comandă și tipar prin tipografie parteneră.',
+			'points'   => array( 'Design la comandă', 'Tipar prin tipografie parteneră', 'Fișiere gata de tipar' ),
+			'quote'    => true,
+			'whatTitle' => array( 'Ce ', 'realizăm' ),
+			'what'     => array(
+				array( 'pen', 'Logo și identitate', 'Logo nou sau vectorizarea logo-ului existent, în fișiere pentru print, web și piese 3D.' ),
+				array( 'doc', 'Flyere și broșuri', 'Materiale de prezentare clare, pe formatul și hârtia potrivite, gata de tipar.' ),
+				array( 'layers', 'Cataloage', 'Cataloage de produse și liste de prețuri, cu paginare și fotografii.' ),
+				array( 'chart', 'Prezentări de firmă', 'Prezentări pentru clienți, parteneri sau finanțări, pe ecran sau tipărite.' ),
+				array( 'cube', 'Logo 3D și semnalistică', 'Logo-ul tău transformat în litere 3D, plăcuțe sau obiecte printate 3D.' ),
+				array( 'box', 'Tipar', 'Tipărim prin tipografia noastră parteneră: flyere, broșuri, cataloage, cărți de vizită.' ),
+			),
+			'stepsTitle' => array( 'Cum ', 'lucrăm' ),
+			'steps'    => array(
+				array( 'Ne spui ce ai nevoie', 'Ce material, pentru ce, în ce cantitate. Ne trimiți logo-ul, textele și pozele pe care le ai.' ),
+				array( 'Ofertă', 'Îți trimitem prețul pentru design și, dacă vrei, pentru tipar.' ),
+				array( 'Propunere de design', 'Vezi prima variantă și cerem ajustările până e cum o vrei.' ),
+				array( 'Fișiere finale', 'Primești fișierele gata de tipar și pentru online (PDF, PNG, vectorial).' ),
+				array( 'Tipar și livrare', 'Opțional: tipărim prin tipografia parteneră și îți livrăm materialele.' ),
+			),
+			'faq'      => array(
+				array( 'Tipăriți voi materialele?', 'Tiparul se face prin tipografia noastră parteneră. Noi ne ocupăm de design, de pregătirea fișierelor și de comandă, iar tu ai un singur interlocutor.' ),
+				array( 'Cât costă un logo sau un flyer?', 'Depinde de complexitate, de numărul de variante și de cantitatea tipărită, de aceea facem ofertă pentru fiecare proiect. Spune-ne ce ai nevoie și revenim cu prețul.' ),
+				array( 'Pot comanda doar designul, fără tipar?', 'Da. Primești fișierele gata de tipar și le poți tipări unde vrei.' ),
+				array( 'Puteți vectoriza logo-ul meu existent?', 'Da. Refacem logo-ul în format vectorial, ca să poată fi folosit la orice dimensiune, la tipar, pe web sau la piese printate 3D.' ),
+			),
+			'wa'       => 'Bună ziua! Aș vrea o ofertă pentru design grafic / tipar: ',
+			'preset'   => 'Design grafic și tipar',
+			'waBtn'    => 'Scrie-ne pe WhatsApp',
+			'ctaTitle' => 'Ai nevoie de materiale pentru firmă?',
+			'ctaText'  => 'Spune-ne ce materiale vrei și în ce cantitate, iar noi revenim cu oferta pentru design și tipar.',
+			'related'  => array( 'prototyping', 'printare-3d-personalizata', 'scanare-3d' ),
 		),
 
 		'scanare-3d' => array(
@@ -196,6 +250,9 @@ function p3d_services() {
 			),
 			'wa'       => 'Bună ziua! Aș vrea o ofertă pentru scanare 3D: ',
 			'preset'   => 'Scanare 3D',
+			'waBtn'    => 'Trimite poze pe WhatsApp',
+			'ctaTitle' => 'Ai un obiect de scanat?',
+			'ctaText'  => 'Trimite-ne câteva poze și dimensiunile aproximative, iar noi revenim cu oferta.',
 			'related'  => array( 'prototyping', 'printare-3d-personalizata', 'prelucrare-cnc-matrite' ),
 		),
 	);
@@ -261,6 +318,7 @@ function p3d_prices() {
 			'service' => 'prototyping',
 			'rows'    => array(
 				array( 'Proiectare și modelare 3D', 'Primești fișierul; printarea e opțională', 'de la 150 lei/oră' ),
+				array( 'Desen tehnic 2D (CAD)', 'Cote, vederi, secțiuni; fișier CAD și PDF', 'Cere ofertă' ),
 			),
 		),
 		'scanare' => array(
@@ -281,6 +339,19 @@ function p3d_prices() {
 			'rows'    => array(
 				array( 'Prelucrare CNC', 'Frezare, strunjire; metal sau plastice tehnice', 'Cere ofertă' ),
 				array( 'Matrițe', 'Pentru turnare sau injecție, serii de producție', 'Cere ofertă' ),
+			),
+		),
+		'grafica' => array(
+			'icon'    => 'palette',
+			'title'   => array( 'Design grafic ', 'și tipar' ),
+			'intro'   => 'Design la comandă și tipar prin tipografia noastră parteneră. Prețul depinde de complexitate și de cantitate.',
+			'service' => 'design-grafic-tipar',
+			'rows'    => array(
+				array( 'Logo / vectorizare logo', 'Fișiere pentru print, web și piese 3D', 'Cere ofertă' ),
+				array( 'Flyere și broșuri', 'Design gata de tipar', 'Cere ofertă' ),
+				array( 'Cataloage', 'Cataloage de produse, liste de prețuri', 'Cere ofertă' ),
+				array( 'Prezentări de firmă', 'Pe ecran sau tipărite', 'Cere ofertă' ),
+				array( 'Tipar', 'Prin tipografia parteneră', 'Cere ofertă' ),
 			),
 		),
 	);

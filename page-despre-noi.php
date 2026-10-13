@@ -29,6 +29,7 @@ get_header();
 				<li><?php echo p3d_icon( 'check', 18 ); // phpcs:ignore ?><span><a href="<?php echo esc_url( p3d_service_url( 'prototyping' ) ); ?>">Proiectare și modelare 3D</a></span></li>
 				<li><?php echo p3d_icon( 'check', 18 ); // phpcs:ignore ?><span><a href="<?php echo esc_url( p3d_service_url( 'scanare-3d' ) ); ?>">Scanare 3D</a>, prin consultanță și la comandă, cu parteneri specializați</span></li>
 				<li><?php echo p3d_icon( 'check', 18 ); // phpcs:ignore ?><span><a href="<?php echo esc_url( p3d_service_url( 'prelucrare-cnc-matrite' ) ); ?>">Prelucrare CNC și matrițe</a>, prin consultanță și la comandă, cu ateliere partenere</span></li>
+				<li><?php echo p3d_icon( 'check', 18 ); // phpcs:ignore ?><span><a href="<?php echo esc_url( p3d_service_url( 'design-grafic-tipar' ) ); ?>">Design grafic și tipar</a>: logo, flyere, broșuri, cataloage și prezentări de firmă, tipărite prin tipografia parteneră</span></li>
 			</ul>
 		</div>
 	</div>

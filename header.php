@@ -6,6 +6,7 @@ $p3d_svc_more = array(
 	array( p3d_service_url( 'prototyping' ), 'Proiectare 3D', p3d_is( 'prototyping' ), false, 'pen' ),
 	array( p3d_service_url( 'scanare-3d' ), 'Scanare 3D', p3d_is( 'scanare-3d' ), false, 'scan' ),
 	array( p3d_service_url( 'prelucrare-cnc-matrite' ), 'Prelucrare CNC și matrițe', p3d_is( 'prelucrare-cnc-matrite' ), false, 'gear' ),
+	array( p3d_service_url( 'design-grafic-tipar' ), 'Design grafic și tipar', p3d_is( 'design-grafic-tipar' ), false, 'palette' ),
 );
 $p3d_svc_on = is_page( 'our-services' ) || in_array( true, wp_list_pluck( $p3d_svc_more, 2 ), true );
 $p3d_nav = array(

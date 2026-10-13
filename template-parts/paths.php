@@ -5,8 +5,15 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <div class="paths">
-	<?php foreach ( p3d_services() as $slug => $s ) : $featured = ( 'support' === $slug ); ?>
-		<a href="<?php echo esc_url( p3d_service_url( $slug ) ); ?>" class="card path<?php echo $featured ? ' featured' : ''; ?>">
+	<?php
+	$p3d_others = count( p3d_services() ) - 1;
+	$p3d_rows   = (int) ceil( $p3d_others / 2 );
+	$p3d_n      = 0;
+	foreach ( p3d_services() as $slug => $s ) :
+		$featured = ( 'support' === $slug );
+		$wide     = ! $featured && ( ++$p3d_n === $p3d_others ) && ( $p3d_others % 2 );
+		?>
+		<a href="<?php echo esc_url( p3d_service_url( $slug ) ); ?>" class="card path<?php echo $featured ? ' featured' : ''; ?><?php echo $wide ? ' wide' : ''; ?>"<?php echo $featured ? ' style="--rows:' . (int) $p3d_rows . '"' : ''; ?>>
 			<span class="path-top">
 				<span class="icon-tile"><?php echo p3d_icon( $s['icon'], 22 ); // phpcs:ignore ?></span>
 				<?php if ( $featured ) : ?><span class="pill dark">Cel mai cerut</span><?php endif; ?>
