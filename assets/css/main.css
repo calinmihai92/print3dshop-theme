@@ -607,3 +607,5 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
   .of-specs span { min-width: 120px; }
 }
 @media print { .of-pay { display: none !important; } }
+
+.price-badge { font-size: 11px; vertical-align: middle; margin-left: 6px; white-space: nowrap; }

@@ -318,7 +318,7 @@ function p3d_prices() {
 			'service' => 'prototyping',
 			'rows'    => array(
 				array( 'Proiectare și modelare 3D', 'Primești fișierul; printarea e opțională', 'de la 150 lei/oră' ),
-				array( 'Desen tehnic 2D (CAD)', 'Cote, vederi, secțiuni; fișier CAD și PDF', 'Cere ofertă' ),
+				array( 'Desen tehnic 2D (CAD)', 'Cote, vederi, secțiuni; fișier CAD și PDF', 'de la 150 lei/oră' ),
 			),
 		),
 		'scanare' => array(
@@ -344,15 +344,19 @@ function p3d_prices() {
 		'grafica' => array(
 			'icon'    => 'palette',
 			'title'   => array( 'Design grafic ', 'și tipar' ),
-			'intro'   => 'Design la comandă și tipar prin tipografia noastră parteneră. Prețul depinde de complexitate și de cantitate.',
+			'badge'   => 'Prețuri orientative',
+			'intro'   => 'Design la comandă și tipar prin tipografia noastră parteneră. Prețurile de mai jos sunt orientative, de pornire: prețul final depinde de complexitate, de numărul de pagini și de cantitate, iar ți-l confirmăm în ofertă, înainte de începerea lucrului.',
 			'service' => 'design-grafic-tipar',
 			'rows'    => array(
-				array( 'Logo / vectorizare logo', 'Fișiere pentru print, web și piese 3D', 'Cere ofertă' ),
-				array( 'Flyere și broșuri', 'Design gata de tipar', 'Cere ofertă' ),
-				array( 'Cataloage', 'Cataloage de produse, liste de prețuri', 'Cere ofertă' ),
-				array( 'Prezentări de firmă', 'Pe ecran sau tipărite', 'Cere ofertă' ),
-				array( 'Tipar', 'Prin tipografia parteneră', 'Cere ofertă' ),
+				array( 'Logo', 'Logo nou, cu fișiere pentru print, web și piese 3D', 'de la 400 lei' ),
+				array( 'Vectorizare logo existent', 'Refacem logo-ul în format vectorial', 'de la 100 lei' ),
+				array( 'Flyer', 'Design gata de tipar', 'de la 150 lei' ),
+				array( 'Broșură / pliant', 'Design gata de tipar', 'de la 300 lei' ),
+				array( 'Catalog', 'Cataloage de produse, liste de prețuri', 'de la 50 lei/pagină' ),
+				array( 'Prezentare de firmă', 'Pe ecran sau tipărită', 'de la 300 lei' ),
+				array( 'Tipar', 'Prin tipografia parteneră; depinde de format, hârtie și cantitate', 'Cere ofertă' ),
 			),
+			'note'    => 'Prețuri orientative, cu TVA, pentru design. Tiparul se ofertează separat, în funcție de cantitate.',
 		),
 	);
 }

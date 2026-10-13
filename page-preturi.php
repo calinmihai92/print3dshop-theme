@@ -12,7 +12,7 @@ $wa     = 'Bună ziua! Aș vrea o ofertă pentru: ';
 	<div class="wrap hero-in">
 		<span class="eyebrow">Prețuri</span>
 		<h1 class="h1">Prețuri <em>transparente</em></h1>
-		<p class="lead">Prețuri orientative pentru service imprimante 3D, printare și proiectare 3D, plus scanare 3D, prelucrare CNC și matrițe la cerere. Toate includ TVA, iar prețul final ți-l confirmăm înainte să începem.</p>
+		<p class="lead">Prețuri orientative pentru service imprimante 3D, printare și proiectare 3D, plus scanare 3D, prelucrare CNC, matrițe, design grafic și tipar. Toate includ TVA, iar prețul final ți-l confirmăm înainte să începem.</p>
 		<nav class="price-jump" aria-label="Categorii de prețuri">
 			<?php foreach ( $prices as $key => $cat ) : ?>
 				<a href="#<?php echo esc_attr( $key ); ?>" class="pill outline"><?php echo esc_html( $cat['title'][0] . $cat['title'][1] ); ?></a>
@@ -28,7 +28,7 @@ $wa     = 'Bună ziua! Aș vrea o ofertă pentru: ';
 				<header class="price-head">
 					<span class="icon-tile"><?php echo p3d_icon( $cat['icon'], 22 ); // phpcs:ignore ?></span>
 					<div>
-						<h2 class="h3"><?php echo esc_html( $cat['title'][0] ); ?><em><?php echo esc_html( $cat['title'][1] ); ?></em></h2>
+						<h2 class="h3"><?php echo esc_html( $cat['title'][0] ); ?><em><?php echo esc_html( $cat['title'][1] ); ?></em><?php if ( ! empty( $cat['badge'] ) ) : ?> <span class="pill price-badge"><?php echo esc_html( $cat['badge'] ); ?></span><?php endif; ?></h2>
 						<p><?php echo esc_html( $cat['intro'] ); ?></p>
 					</div>
 				</header>
