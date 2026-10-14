@@ -34,7 +34,10 @@ add_action( 'after_setup_theme', function () {
  */
 add_action( 'wp_enqueue_scripts', function () {
 	// Fonturile se scriu direct în pagină (inc/perf.php).
-	wp_enqueue_style( 'p3d-main', P3D_URI . '/assets/css/main.css', array(), P3D_VER );
+	// Stilul temei se scrie direct în pagină: fără cerere separată care să blocheze afișarea pe mobil.
+	wp_register_style( 'p3d-main', false, array(), P3D_VER );
+	wp_enqueue_style( 'p3d-main' );
+	wp_add_inline_style( 'p3d-main', (string) file_get_contents( get_template_directory() . '/assets/css/main.css' ) ); // phpcs:ignore
 	wp_enqueue_script( 'p3d-main', P3D_URI . '/assets/js/main.js', array(), P3D_VER, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 }, 20 );
 
