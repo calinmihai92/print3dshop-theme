@@ -110,3 +110,11 @@ add_filter( 'rank_math/json_ld', function ( $data ) {
 	} );
 	return $data;
 }, 99 );
+
+// Stilul pluginului GDPR nu e necesar la prima afișare: îl încărcăm fără să blocheze pagina.
+add_filter( 'style_loader_tag', function ( $tag, $handle ) {
+	if ( 'wpgdprc-front-css' === $handle && ! is_admin() ) {
+		$tag = str_replace( "media='all'", "media='print' onload=\"this.media='all'\"", $tag );
+	}
+	return $tag;
+}, 10, 2 );

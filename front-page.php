@@ -97,7 +97,7 @@ if ( $p3d_shop_items ) :
 		<div class="grid grid-3 home-products">
 			<?php foreach ( $p3d_shop_items as $p3d_p ) : ?>
 				<a class="card home-product" href="<?php echo esc_url( $p3d_p->get_permalink() ); ?>">
-					<?php echo $p3d_p->get_image( 'woocommerce_thumbnail' ); // phpcs:ignore ?>
+					<?php echo $p3d_p->get_image( 'woocommerce_thumbnail', array( 'loading' => 'lazy', 'fetchpriority' => 'low', 'decoding' => 'async', 'sizes' => '(max-width: 640px) 92vw, (max-width: 1000px) 45vw, 380px' ) ); // phpcs:ignore ?>
 					<span class="home-product-name"><?php echo esc_html( $p3d_p->get_name() ); ?></span>
 					<span class="home-product-price"><?php echo wp_kses_post( $p3d_p->get_price_html() ); ?></span>
 				</a>
