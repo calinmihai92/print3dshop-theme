@@ -17,6 +17,7 @@ require_once __DIR__ . '/inc/recenzii.php';
 require_once __DIR__ . '/inc/fisa-service.php';
 require_once __DIR__ . '/inc/fisa-pdf.php';
 require_once __DIR__ . '/inc/oferta-printare.php';
+require_once __DIR__ . '/inc/perf.php';
 require_once __DIR__ . '/inc/modele.php';
 
 add_action( 'after_setup_theme', function () {
@@ -32,8 +33,8 @@ add_action( 'after_setup_theme', function () {
  * Stiluri și scripturi proprii; scoatem ce lasă în urmă tema veche.
  */
 add_action( 'wp_enqueue_scripts', function () {
-	wp_enqueue_style( 'p3d-fonts', P3D_URI . '/assets/css/fonts.css', array(), P3D_VER );
-	wp_enqueue_style( 'p3d-main', P3D_URI . '/assets/css/main.css', array( 'p3d-fonts' ), P3D_VER );
+	// Fonturile se scriu direct în pagină (inc/perf.php).
+	wp_enqueue_style( 'p3d-main', P3D_URI . '/assets/css/main.css', array(), P3D_VER );
 	wp_enqueue_script( 'p3d-main', P3D_URI . '/assets/js/main.js', array(), P3D_VER, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 }, 20 );
 
