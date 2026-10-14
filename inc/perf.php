@@ -87,3 +87,26 @@ function p3d_force_https_src( $src ) {
 	}
 	return $src;
 }
+
+// Fonturile Elementor (Roboto) se adaugă târziu; le scoatem și de aici, unde nu e nevoie de ele.
+add_action( 'wp_print_styles', function () {
+	if ( is_admin() || p3d_page_uses_elementor() ) {
+		return;
+	}
+	foreach ( (array) wp_styles()->queue as $h ) {
+		if ( 0 === strpos( $h, 'elementor' ) ) {
+			wp_dequeue_style( $h );
+		}
+	}
+}, 1 );
+
+// Datele structurate Rank Math: adresele vechi pe http → https.
+add_filter( 'rank_math/json_ld', function ( $data ) {
+	$host = wp_parse_url( home_url(), PHP_URL_HOST );
+	array_walk_recursive( $data, function ( &$v ) use ( $host ) {
+		if ( is_string( $v ) && 0 === strpos( $v, 'http://' . $host ) ) {
+			$v = 'https://' . substr( $v, 7 );
+		}
+	} );
+	return $data;
+}, 99 );
