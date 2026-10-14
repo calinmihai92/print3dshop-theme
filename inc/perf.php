@@ -59,9 +59,10 @@ add_action( 'wp_enqueue_scripts', function () {
 
 	// jQuery și ce depinde de el: la finalul paginii, ca să nu blocheze afișarea.
 	if ( ! p3d_is_shop_page() && ! p3d_page_uses_elementor() ) {
-		foreach ( array( 'jquery', 'jquery-core', 'jquery-migrate', 'wpgdprc-front-js' ) as $h ) {
+		foreach ( array( 'jquery', 'jquery-core', 'jquery-migrate', 'wpgdprc-front-js', 'sourcebuster-js', 'wc-order-attribution' ) as $h ) {
 			if ( isset( $wp_scripts->registered[ $h ] ) ) {
 				$wp_scripts->add_data( $h, 'group', 1 );
+				$wp_scripts->add_data( $h, 'strategy', 'defer' );
 			}
 		}
 	}
