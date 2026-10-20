@@ -6,6 +6,13 @@
 		<div class="foot-col">
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="brand" aria-label="Print3D Shop"><?php echo p3d_logo(); // phpcs:ignore ?></a>
 			<p class="foot-about">Service imprimante 3D, printare 3D la comandă și proiectare 3D, în București.</p>
+			<div class="foot-pay" aria-label="Metode de plată acceptate">
+				<span class="foot-pay-head"><?php echo p3d_icon( 'lock', 16 ); // phpcs:ignore ?> Plată securizată cu cardul prin Viva</span>
+				<span class="foot-pay-list">
+					<span>Visa</span><span>Mastercard</span><span>Apple Pay</span><span>Google Pay</span>
+				</span>
+				<span class="foot-pay-note">sau ramburs la livrare</span>
+			</div>
 		</div>
 		<div class="foot-col">
 			<span class="foot-title">Servicii</span>

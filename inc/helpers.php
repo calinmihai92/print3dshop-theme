@@ -82,6 +82,8 @@ function p3d_icon( $name, $size = 20 ) {
 		'doc'      => '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
 		'users'    => '<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5a3 3 0 0 1 0 6"/><path d="M18 14.3c1.8.8 3 2.6 3 5.7"/>',
 		'menu'     => '<path d="M4 7h16M4 12h16M4 17h16"/>',
+		'card'     => '<rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><path d="M7 15h4"/>',
+		'lock'     => '<rect x="5" y="10.5" width="14" height="10" rx="2.2"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/>',
 	);
 	$d = $paths[ $name ] ?? '';
 	return sprintf(
