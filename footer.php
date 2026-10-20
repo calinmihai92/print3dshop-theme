@@ -8,9 +8,7 @@
 			<p class="foot-about">Service imprimante 3D, printare 3D la comandă și proiectare 3D, în București.</p>
 			<div class="foot-pay" aria-label="Metode de plată acceptate">
 				<span class="foot-pay-head"><?php echo p3d_icon( 'lock', 16 ); // phpcs:ignore ?> Plată securizată cu cardul prin Viva</span>
-				<span class="foot-pay-list">
-					<span>Visa</span><span>Mastercard</span><span>Apple Pay</span><span>Google Pay</span>
-				</span>
+				<img class="foot-pay-badge" src="<?php echo esc_url( P3D_URI . '/assets/img/viva-plati.svg?v=' . P3D_VER ); ?>" width="276" height="94" loading="lazy" decoding="async" alt="Viva.com — Mastercard, Visa, American Express, Diners Club, Discover, Apple Pay, Google Pay, Klarna, Alipay+, JCB, Maestro, UnionPay">
 				<span class="foot-pay-note">sau ramburs la livrare</span>
 			</div>
 		</div>
