@@ -46,6 +46,13 @@ add_action( 'admin_post_p3d_fisa_pdf', function () {
 	}
 	check_admin_referer( 'p3d_fisa_pdf_' . $id );
 
+	$d    = p3d_fisa_get( $id );
+	$file = 'Fisa-service-' . get_post_meta( $id, '_p3d_number', true ) . '-' . sanitize_title( remove_accents( $d['client']['name'] ) ) . '.pdf';
+	p3d_pdf_send( p3d_fisa_pdf_html( $id ), $file );
+} );
+
+/** Transformă HTML-ul în PDF (A4, cu „Pagina X / Y” jos) și îl trimite ca descărcare. */
+function p3d_pdf_send( $html, $file ) {
 	require_once __DIR__ . '/vendor/autoload.php';
 
 	$tmp = trailingslashit( get_temp_dir() ) . 'p3d-dompdf';
@@ -62,7 +69,7 @@ add_action( 'admin_post_p3d_fisa_pdf', function () {
 	$opts->setDpi( 96 );
 
 	$pdf = new \Dompdf\Dompdf( $opts );
-	$pdf->loadHtml( p3d_fisa_pdf_html( $id ), 'UTF-8' );
+	$pdf->loadHtml( $html, 'UTF-8' );
 	$pdf->setPaper( 'A4' );
 	$pdf->render();
 
@@ -70,16 +77,13 @@ add_action( 'admin_post_p3d_fisa_pdf', function () {
 	$font   = $pdf->getFontMetrics()->getFont( 'DejaVu Sans' );
 	$canvas->page_text( 510, 812, 'Pagina {PAGE_NUM} / {PAGE_COUNT}', $font, 7, array( 0.45, 0.45, 0.45 ) );
 
-	$d    = p3d_fisa_get( $id );
-	$file = 'Fisa-service-' . get_post_meta( $id, '_p3d_number', true ) . '-' . sanitize_title( remove_accents( $d['client']['name'] ) ) . '.pdf';
-
 	nocache_headers();
 	header( 'Content-Type: application/pdf' );
 	header( 'Content-Disposition: attachment; filename="' . $file . '"' );
 	header( 'X-Robots-Tag: noindex, nofollow' );
 	echo $pdf->output(); // phpcs:ignore
 	exit;
-} );
+}
 
 /** Calea locală a unei poze (mărime medie), ca Dompdf s-o citească direct de pe disc. */
 function p3d_fisa_pdf_img_path( $att_id ) {

@@ -328,7 +328,7 @@ function p3d_of_box_main( $post ) {
 		</p>
 		<div class="p3d-row3">
 			<label>Nume și prenume<input type="text" name="p3d_of[client][name]" value="<?php echo esc_attr( $c['name'] ); ?>" required></label>
-			<label>Email<input type="email" name="p3d_of[client][email]" value="<?php echo esc_attr( $c['email'] ); ?>" required></label>
+			<label>Email <small class="description">(opțional)</small><input type="email" name="p3d_of[client][email]" value="<?php echo esc_attr( $c['email'] ); ?>"></label>
 			<label>Telefon<input type="tel" name="p3d_of[client][phone]" value="<?php echo esc_attr( $c['phone'] ); ?>"></label>
 		</div>
 		<div class="p3d-row3 p3d-pj">
