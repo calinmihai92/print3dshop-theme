@@ -689,3 +689,8 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 .p3d-fanbox-field .description a { color: var(--accent-text); font-weight: 600; }
 
 .p3d-preview-note { margin: 0 0 18px; padding: 10px 16px; border-radius: 12px; background: #fff4d6; border: 1px solid #f1d78a; color: #6b4e00; font-size: 14.5px; }
+
+/* Header: iconițele nu se mai turtesc când spațiul e strâns */
+.nav-links svg, .nav-cta svg, .nav-icon svg, .nav-drop-btn svg { flex: none; }
+.nav-cta, .nav-icon, .nav-drop-btn { flex: none; }
+.nav-links > a { flex: none; }
