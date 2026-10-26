@@ -695,3 +695,6 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 .nav-cta, .nav-icon, .nav-drop-btn { flex: none; }
 .nav-links > a { flex: none; }
 .site-header .wrap.nav { max-width: 1300px; }
+
+.p3d-fil-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,.15); flex: none; }
+.p3d-fil-chip.is-on .p3d-fil-dot { border-color: rgba(255,255,255,.6); }

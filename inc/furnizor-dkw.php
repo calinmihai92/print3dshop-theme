@@ -244,6 +244,8 @@ function p3d_dkw_apply( WC_Product $p, $item, $opts, $is_new ) {
 	$specs = p3d_dkw_specs( $item );
 	$p->set_short_description( p3d_dkw_specs_html( $specs ) );
 	$p->update_meta_data( '_dkw_material', $specs['Material'] );
+	$p->update_meta_data( '_dkw_color_family', p3d_dkw_color_family( $specs['Culoare'] ?? '', $specs['Cod culoare'] ?? '', $specs['Material'] ) );
+	$p->update_meta_data( '_dkw_variant', isset( $specs['Variantă'] ) ? ( 0 === strpos( $specs['Variantă'], 'Refill' ) ? 'Refill' : 'Rolă întreagă' ) : '' );
 	if ( isset( $specs['Culoare'] ) ) {
 		$p->update_meta_data( '_p3d_culoare', $specs['Culoare'] );
 	}
@@ -790,9 +792,16 @@ add_action( 'pre_get_posts', function ( $q ) {
 	if ( $q->is_tax( 'product_cat' ) && current_user_can( 'manage_woocommerce' ) && p3d_dkw_preview_archive( $q ) ) {
 		$q->set( 'post_status', array( 'publish', 'draft', 'private' ) );
 	}
-	if ( $q->is_tax( 'product_cat' ) && ! empty( $_GET['material'] ) ) { // phpcs:ignore
-		$meta   = (array) $q->get( 'meta_query' );
-		$meta[] = array( 'key' => '_dkw_material', 'value' => sanitize_text_field( wp_unslash( $_GET['material'] ) ) ); // phpcs:ignore
+	if ( $q->is_tax( 'product_cat' ) ) {
+		$meta = (array) $q->get( 'meta_query' );
+		foreach ( p3d_dkw_filter_keys() as $param => $key ) {
+			if ( ! empty( $_GET[ $param ] ) ) { // phpcs:ignore
+				$meta[] = array( 'key' => $key, 'value' => sanitize_text_field( wp_unslash( $_GET[ $param ] ) ) ); // phpcs:ignore
+			}
+		}
+		if ( p3d_dkw_preview_archive( $q ) ) {
+			$meta[] = array( 'key' => '_stock_status', 'value' => 'instock' );
+		}
 		$q->set( 'meta_query', $meta );
 	}
 } );
@@ -829,35 +838,175 @@ add_action( 'the_post', function ( $post, $query ) {
 	echo '</a><a href="' . esc_url( $url ) . '" class="button">Vezi toate filamentele</a></li>';
 }, 10, 2 );
 
-/** Filtrele de pe pagina filamentelor: brand (subcategorii) și material. */
+/** Parametrii din URL pentru filtre => cheia meta. */
+function p3d_dkw_filter_keys() {
+	return array( 'material' => '_dkw_material', 'culoare' => '_dkw_color_family', 'varianta' => '_dkw_variant' );
+}
+
+/** Familiile de culori (pentru filtru), cu bulina lor. */
+function p3d_dkw_color_families() {
+	return array(
+		'Negru'       => '#17181b',
+		'Alb'         => '#f4f2ee',
+		'Gri'         => '#8a8f98',
+		'Bej'         => '#d9c7a3',
+		'Maro'        => '#7a4b2a',
+		'Roșu'        => '#d62828',
+		'Portocaliu'  => '#f26a1b',
+		'Galben'      => '#f5c518',
+		'Verde'       => '#2fa84f',
+		'Albastru'    => '#1f6fd1',
+		'Mov'         => '#8e44ad',
+		'Roz'         => '#f48fb1',
+		'Auriu'       => '#c9a23a',
+		'Transparent' => 'linear-gradient(135deg,#e8eef2 0 45%,#fff 45% 55%,#e8eef2 55%)',
+		'Multicolor'  => 'conic-gradient(#f26a1b,#f5c518,#2fa84f,#1f6fd1,#8e44ad,#d62828,#f26a1b)',
+	);
+}
+
+/** Familia de culoare după numele culorii (EN/RO), materialul și, la nevoie, codul hex. */
+function p3d_dkw_color_family( $color, $code = '', $material = '' ) {
+	$c = ' ' . strtolower( remove_accents( $color . ' ' ) ) . ' ';
+	if ( preg_match( '/rainbow|multicolor|multi-color|gradient|dual|tri-?color|tricolor/i', $material . ' ' . $color ) ) {
+		return 'Multicolor';
+	}
+	$map = array(
+		'Transparent' => 'transparent|clear|translucent|natural',
+		'Negru'       => 'black|negru|jet|onyx|obsidian',
+		'Alb'         => 'white|alb|snow|milk',
+		'Gri'         => 'gray|grey|gri|silver|argintiu|ash|charcoal|titan|titanium|slate|graphite|stone|cement',
+		'Bej'         => 'beige|bej|ivory|cream|crem|bone|sand|khaki|latte|nude|vanilla|champagne|wheat',
+		'Maro'        => 'brown|maro|wood|walnut|wallnut|chocolate|coffee|cocoa|caramel|terracotta|mahogany|cinnamon|tan|bronze brown',
+		'Roșu'        => 'red|rosu|cherry|scarlet|crimson|burgundy|wine|maroon|ruby|brick',
+		'Portocaliu'  => 'orange|portocaliu|coral|tangerine|pumpkin|peach|apricot|amber',
+		'Galben'      => 'yellow|galben|lemon|mustard|sunflower|canary|banana',
+		'Verde'       => 'green|verde|lime|mint|olive|jade|emerald|avocado|teal|grass|forest|matcha|sage|pistachio',
+		'Albastru'    => 'blue|albastru|cyan|navy|cobalt|sky|ice|turquoise|turcoaz|aqua|azure|ocean|sapphire|indigo|denim',
+		'Mov'         => 'purple|violet|mov|lilac|lavender|plum|grape|amethyst|iris',
+		'Roz'         => 'pink|roz|magenta|fuchsia|rose|sakura|blush|salmon|flamingo|raspberry',
+		'Auriu'       => 'gold|golden|auriu|bronze|copper|brass|champagne gold',
+	);
+	$best = '';
+	$pos  = -1;
+	foreach ( $map as $fam => $re ) {
+		if ( preg_match_all( '/\b(' . $re . ')\b/', $c, $m, PREG_OFFSET_CAPTURE ) ) {
+			$last = end( $m[1] );
+			if ( $last[1] > $pos ) {
+				$pos  = $last[1];
+				$best = $fam;
+			}
+		}
+	}
+	if ( '' !== $best ) {
+		return $best;
+	}
+	if ( preg_match( '/^#?([0-9a-f]{6})$/i', trim( $code ), $h ) ) {
+		$r = hexdec( substr( $h[1], 0, 2 ) ) / 255; $g = hexdec( substr( $h[1], 2, 2 ) ) / 255; $b = hexdec( substr( $h[1], 4, 2 ) ) / 255;
+		$mx = max( $r, $g, $b ); $mn = min( $r, $g, $b ); $l = ( $mx + $mn ) / 2; $d = $mx - $mn;
+		if ( $d < 0.08 ) {
+			return $l > 0.85 ? 'Alb' : ( $l < 0.18 ? 'Negru' : 'Gri' );
+		}
+		$hue = $mx === $r ? 60 * fmod( ( $g - $b ) / $d, 6 ) : ( $mx === $g ? 60 * ( ( $b - $r ) / $d + 2 ) : 60 * ( ( $r - $g ) / $d + 4 ) );
+		$hue = $hue < 0 ? $hue + 360 : $hue;
+		if ( $hue < 15 || $hue >= 340 ) { return 'Roșu'; }
+		if ( $hue < 40 ) { return $l < 0.45 ? 'Maro' : 'Portocaliu'; }
+		if ( $hue < 65 ) { return 'Galben'; }
+		if ( $hue < 170 ) { return 'Verde'; }
+		if ( $hue < 255 ) { return 'Albastru'; }
+		if ( $hue < 300 ) { return 'Mov'; }
+		return 'Roz';
+	}
+	return '';
+}
+
+/** Valorile disponibile (cu numărul de produse) pentru o cheie meta, în categoria curentă, ținând cont de celelalte filtre. */
+function p3d_dkw_facet( $key, $term_id, $skip_param ) {
+	global $wpdb;
+	$ids   = array_merge( array( (int) $term_id ), array_map( 'intval', get_term_children( $term_id, 'product_cat' ) ) );
+	$in    = implode( ',', $ids );
+	$st    = current_user_can( 'manage_woocommerce' ) ? "'publish','draft','private'" : "'publish'";
+	$joins = '';
+	$n     = 0;
+	foreach ( p3d_dkw_filter_keys() as $param => $k ) {
+		if ( $param === $skip_param || empty( $_GET[ $param ] ) ) { // phpcs:ignore
+			continue;
+		}
+		$n++;
+		$joins .= $wpdb->prepare( " JOIN {$wpdb->postmeta} f{$n} ON f{$n}.post_id = p.ID AND f{$n}.meta_key = %s AND f{$n}.meta_value = %s", $k, sanitize_text_field( wp_unslash( $_GET[ $param ] ) ) ); // phpcs:ignore
+	}
+	$sql = $wpdb->prepare(
+		"SELECT pm.meta_value v, COUNT(DISTINCT p.ID) n FROM {$wpdb->posts} p
+		JOIN {$wpdb->postmeta} pm ON pm.post_id = p.ID AND pm.meta_key = %s AND pm.meta_value <> ''
+		JOIN {$wpdb->postmeta} ss ON ss.post_id = p.ID AND ss.meta_key = '_stock_status' AND ss.meta_value = 'instock'
+		JOIN {$wpdb->term_relationships} tr ON tr.object_id = p.ID
+		JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id AND tt.term_id IN ($in)
+		$joins
+		WHERE p.post_type = 'product' AND p.post_status IN ($st)
+		GROUP BY pm.meta_value ORDER BY pm.meta_value",
+		$key
+	); // phpcs:ignore
+	$out = array();
+	foreach ( $wpdb->get_results( $sql ) as $r ) { // phpcs:ignore
+		$out[ $r->v ] = (int) $r->n;
+	}
+	return $out;
+}
+
+function p3d_dkw_chip_url( $base, $param, $value ) {
+	$args = array();
+	foreach ( array_keys( p3d_dkw_filter_keys() ) as $p ) {
+		if ( ! empty( $_GET[ $p ] ) && $p !== $param ) { // phpcs:ignore
+			$args[ $p ] = rawurlencode( sanitize_text_field( wp_unslash( $_GET[ $p ] ) ) ); // phpcs:ignore
+		}
+	}
+	if ( '' !== $value ) {
+		$args[ $param ] = rawurlencode( $value );
+	}
+	return add_query_arg( $args, $base );
+}
+
+/** Filtrele de pe pagina filamentelor: brand (subcategorii), material, culoare, variantă. */
 function p3d_dkw_filters_html() {
 	$root = p3d_dkw_root_term();
 	if ( ! $root ) {
 		return '';
 	}
 	$cur  = get_queried_object();
-	$mat  = isset( $_GET['material'] ) ? sanitize_text_field( wp_unslash( $_GET['material'] ) ) : ''; // phpcs:ignore
+	$base = get_term_link( $cur );
 	$out  = '<div class="p3d-fil-filters"><div class="p3d-fil-row"><span class="p3d-fil-label">Brand</span><div class="p3d-fil-chips">';
 	$out .= '<a class="p3d-fil-chip' . ( (int) $cur->term_id === (int) $root->term_id ? ' is-on' : '' ) . '" href="' . esc_url( get_term_link( $root ) ) . '">Toate</a>';
 	$only = (array) get_option( 'p3d_dkw_brand_terms', array() );
 	foreach ( get_terms( array( 'taxonomy' => 'product_cat', 'parent' => $root->term_id, 'hide_empty' => false, 'orderby' => 'name', 'include' => $only ? $only : array() ) ) as $t ) {
-		$out .= '<a class="p3d-fil-chip' . ( (int) $cur->term_id === (int) $t->term_id ? ' is-on' : '' ) . '" href="' . esc_url( get_term_link( $t ) ) . '">' . esc_html( preg_replace( '/^Filament\s+/', '', $t->name ) ) . ( $t->count ? ' <small>' . (int) $t->count . '</small>' : '' ) . '</a>';
+		$out .= '<a class="p3d-fil-chip' . ( (int) $cur->term_id === (int) $t->term_id ? ' is-on' : '' ) . '" href="' . esc_url( get_term_link( $t ) ) . '">' . esc_html( preg_replace( '/^Filament\s+/', '', $t->name ) ) . '</a>';
 	}
 	$out .= '</div></div>';
-	// Materialele disponibile în categoria curentă (doar produse publicate).
-	global $wpdb;
-	$ids  = array_merge( array( (int) $cur->term_id ), array_map( 'intval', get_term_children( $cur->term_id, 'product_cat' ) ) );
-	$in   = implode( ',', $ids );
-	$st   = current_user_can( 'manage_woocommerce' ) ? "'publish','draft','private'" : "'publish'";
-	$mats = $wpdb->get_col( "SELECT pm.meta_value FROM {$wpdb->postmeta} pm JOIN {$wpdb->posts} p ON p.ID = pm.post_id AND p.post_status IN ($st)
-		JOIN {$wpdb->term_relationships} tr ON tr.object_id = p.ID JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id AND tt.term_id IN ($in)
-		WHERE pm.meta_key = '_dkw_material' AND pm.meta_value <> '' GROUP BY pm.meta_value ORDER BY pm.meta_value" ); // phpcs:ignore
-	if ( $mats ) {
-		$base = get_term_link( $cur );
-		$out .= '<div class="p3d-fil-row"><span class="p3d-fil-label">Material</span><div class="p3d-fil-chips">';
-		$out .= '<a class="p3d-fil-chip' . ( '' === $mat ? ' is-on' : '' ) . '" href="' . esc_url( $base ) . '">Toate</a>';
-		foreach ( $mats as $m ) {
-			$out .= '<a class="p3d-fil-chip' . ( $m === $mat ? ' is-on' : '' ) . '" href="' . esc_url( add_query_arg( 'material', rawurlencode( $m ), $base ) ) . '">' . esc_html( $m ) . '</a>';
+
+	$rows = array(
+		'material' => array( 'Material', '_dkw_material', 1 ),
+		'culoare'  => array( 'Culoare', '_dkw_color_family', 1 ),
+		'varianta' => array( 'Variantă', '_dkw_variant', 2 ),
+	);
+	$fam  = p3d_dkw_color_families();
+	foreach ( $rows as $param => $row ) {
+		$vals = p3d_dkw_facet( $row[1], $cur->term_id, $param );
+		$sel  = isset( $_GET[ $param ] ) ? sanitize_text_field( wp_unslash( $_GET[ $param ] ) ) : ''; // phpcs:ignore
+		if ( count( $vals ) < $row[2] && '' === $sel ) {
+			continue;
+		}
+		if ( 'culoare' === $param ) {
+			$sorted = array();
+			foreach ( array_keys( $fam ) as $f ) {
+				if ( isset( $vals[ $f ] ) ) {
+					$sorted[ $f ] = $vals[ $f ];
+				}
+			}
+			$vals = $sorted;
+		}
+		$out .= '<div class="p3d-fil-row"><span class="p3d-fil-label">' . esc_html( $row[0] ) . '</span><div class="p3d-fil-chips">';
+		$out .= '<a class="p3d-fil-chip' . ( '' === $sel ? ' is-on' : '' ) . '" href="' . esc_url( p3d_dkw_chip_url( $base, $param, '' ) ) . '">Toate</a>';
+		foreach ( $vals as $v => $n ) {
+			$dot  = 'culoare' === $param && isset( $fam[ $v ] ) ? '<span class="p3d-fil-dot" style="background:' . esc_attr( $fam[ $v ] ) . '"></span>' : '';
+			$out .= '<a class="p3d-fil-chip' . ( (string) $v === $sel ? ' is-on' : '' ) . '" href="' . esc_url( p3d_dkw_chip_url( $base, $param, (string) $v ) ) . '">' . $dot . esc_html( $v ) . ' <small>' . (int) $n . '</small></a>';
 		}
 		$out .= '</div></div>';
 	}
