@@ -9,12 +9,9 @@ define( 'P3D_VER', wp_get_theme()->get( 'Version' ) );
 define( 'P3D_URI', get_template_directory_uri() );
 
 if ( isset( $_GET['p3d_debug'] ) ) { // phpcs:ignore
-	register_shutdown_function( function () {
-		$e = error_get_last();
-		if ( $e && in_array( $e['type'], array( E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR ), true ) ) {
-			echo '<pre id="p3d-fatal">' . htmlspecialchars( $e['message'] . ' @ ' . basename( $e['file'] ) . ':' . $e['line'] ) . '</pre>'; // phpcs:ignore
-		}
-	} );
+	add_filter( 'wp_php_error_message', function ( $message, $error ) {
+		return $message . '<pre id="p3d-fatal">' . htmlspecialchars( $error['message'] . ' @ ' . basename( $error['file'] ) . ':' . $error['line'] ) . '</pre>';
+	}, 10, 2 );
 }
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/data.php';
