@@ -18,7 +18,7 @@ add_filter( 'woocommerce_account_menu_items', function ( $items ) {
 		'customer-logout' => 'Ieșire',
 	);
 	foreach ( $items as $k => $v ) {
-		if ( ! isset( $out[ $k ] ) && 'downloads' !== $k && 'payment-methods' !== $k ) {
+		if ( ! isset( $out[ $k ] ) && ! in_array( $k, array( 'downloads', 'payment-methods', 'wishlist' ), true ) ) {
 			$out = array_slice( $out, 0, -1, true ) + array( $k => $v ) + array_slice( $out, -1, 1, true );
 		}
 	}

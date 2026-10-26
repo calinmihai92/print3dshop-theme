@@ -677,3 +677,5 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 @media (max-width: 860px) {
 	#customer_login.col2-set, .woocommerce-account .woocommerce:has(.woocommerce-MyAccount-navigation), .woocommerce-Addresses.col2-set, .p3d-acc-cards { grid-template-columns: 1fr; }
 }
+.woocommerce-account .woocommerce:has(.woocommerce-MyAccount-navigation) > .woocommerce-notices-wrapper { grid-column: 1 / -1; }
+.woocommerce-account .woocommerce:has(.woocommerce-MyAccount-navigation) > .woocommerce-notices-wrapper:empty { display: none; }
