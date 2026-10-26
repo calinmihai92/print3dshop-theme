@@ -176,4 +176,4 @@ add_action( 'woocommerce_before_shop_loop', function () {
 	})();
 	</script>
 	<?php
-}, 20 );
+}, 6 );

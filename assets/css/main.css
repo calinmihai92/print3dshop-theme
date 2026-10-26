@@ -728,3 +728,4 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 .p3d-qadd.is-added { background: #1d8a47 !important; }
 .p3d-qadd[disabled] { opacity: .5; cursor: not-allowed; }
 @media (max-width: 640px) { .p3d-qline { grid-template-columns: 96px minmax(0,1fr); gap: 14px; } .p3d-qtitle { font-size: 18px; } }
+.p3d-quick { clear: both; width: 100%; }
