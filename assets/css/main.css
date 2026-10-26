@@ -694,3 +694,4 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 .nav-links svg, .nav-cta svg, .nav-icon svg, .nav-drop-btn svg { flex: none; }
 .nav-cta, .nav-icon, .nav-drop-btn { flex: none; }
 .nav-links > a { flex: none; }
+.site-header .wrap.nav { max-width: 1300px; }
