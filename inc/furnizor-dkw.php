@@ -250,13 +250,18 @@ function p3d_dkw_apply( WC_Product $p, $item, $opts, $is_new ) {
 	if ( isset( $specs['Cod culoare'] ) && preg_match( '/^#[0-9a-f]{6}$/i', $specs['Cod culoare'] ) ) {
 		$p->update_meta_data( '_p3d_culoare_hex', $specs['Cod culoare'] );
 	}
+	if ( ! $is_new && 'draft' === $p->get_status() ) {
+		// Ciornele se refac complet (titlu, categorii), ca să preia îmbunătățirile importului.
+		$is_new = true;
+		$keep   = $p->get_status();
+	}
 	if ( $is_new ) {
 		$brand              = p3d_dkw_brand( $item );
 		list( $mat, $color ) = p3d_dkw_split( $item['titleRo'] ?? '' );
-		$title              = 'Filament ' . $brand . ' ' . $mat . ( '' !== $color ? ' – ' . $color : '' );
+		$title              = 'Filament ' . $brand . ' ' . $specs['Material'] . ( isset( $specs['Culoare'] ) ? ' – ' . $specs['Culoare'] : '' ) . ( isset( $specs['Variantă'] ) && 0 === strpos( $specs['Variantă'], 'Refill' ) ? ' (refill)' : '' );
 		$p->set_name( $title );
 		$p->set_slug( sanitize_title( 'filament-' . ( $item['slug'] ?? $title ) ) );
-		$p->set_status( $opts['status'] );
+		$p->set_status( isset( $keep ) ? $keep : $opts['status'] );
 		$p->set_menu_order( (int) $opts['order'] );
 		$p->set_catalog_visibility( 'visible' );
 		$p->set_sku( 'DKW-' . strtoupper( substr( sanitize_title( $item['slug'] ?? $item['id'] ), 0, 40 ) ) );
@@ -272,7 +277,7 @@ function p3d_dkw_apply( WC_Product $p, $item, $opts, $is_new ) {
 		$p->set_category_ids( array_values( array_filter( array( $parent, $child ) ) ) );
 		$p->update_meta_data( '_dkw_id', (string) $item['id'] );
 		$p->update_meta_data( '_p3d_producator_url', p3d_dkw_maker_url( $brand ) );
-		$p->update_meta_data( '_p3d_grup', 'dkw-' . sanitize_title( $brand . '-' . $mat ) );
+		$p->update_meta_data( '_p3d_grup', 'dkw-' . sanitize_title( $brand . '-' . $specs['Material'] ) );
 		if ( '' !== $color ) {
 			$p->update_meta_data( '_p3d_culoare_hex', p3d_dkw_hex( $color ) );
 		}
@@ -377,12 +382,14 @@ function p3d_dkw_run( $manual = false ) {
 		}
 	}
 	// Câte o subcategorie pentru fiecare brand (apar toate în filtrul de pe pagina filamentelor).
-	$parent = p3d_dkw_term( 'Filamente' );
+	$parent    = p3d_dkw_term( 'Filamente' );
+	$brand_ids = array();
 	foreach ( array_keys( $brands ) as $b ) {
 		if ( $parent ) {
-			p3d_dkw_term( $b, $parent );
+			$brand_ids[] = p3d_dkw_term( $b, $parent );
 		}
 	}
+	update_option( 'p3d_dkw_brand_terms', array_values( array_filter( $brand_ids ) ), false );
 	// Produse care nu mai apar la furnizor: stoc epuizat.
 	foreach ( $existing as $dkw_id => $pid ) {
 		if ( ! isset( $seen[ $dkw_id ] ) ) {
@@ -818,7 +825,8 @@ function p3d_dkw_filters_html() {
 	$mat  = isset( $_GET['material'] ) ? sanitize_text_field( wp_unslash( $_GET['material'] ) ) : ''; // phpcs:ignore
 	$out  = '<div class="p3d-fil-filters"><div class="p3d-fil-row"><span class="p3d-fil-label">Brand</span><div class="p3d-fil-chips">';
 	$out .= '<a class="p3d-fil-chip' . ( (int) $cur->term_id === (int) $root->term_id ? ' is-on' : '' ) . '" href="' . esc_url( get_term_link( $root ) ) . '">Toate</a>';
-	foreach ( get_terms( array( 'taxonomy' => 'product_cat', 'parent' => $root->term_id, 'hide_empty' => false, 'orderby' => 'name' ) ) as $t ) {
+	$only = (array) get_option( 'p3d_dkw_brand_terms', array() );
+	foreach ( get_terms( array( 'taxonomy' => 'product_cat', 'parent' => $root->term_id, 'hide_empty' => false, 'orderby' => 'name', 'include' => $only ? $only : array() ) ) as $t ) {
 		$out .= '<a class="p3d-fil-chip' . ( (int) $cur->term_id === (int) $t->term_id ? ' is-on' : '' ) . '" href="' . esc_url( get_term_link( $t ) ) . '">' . esc_html( preg_replace( '/^Filament\s+/', '', $t->name ) ) . ( $t->count ? ' <small>' . (int) $t->count . '</small>' : '' ) . '</a>';
 	}
 	$out .= '</div></div>';
