@@ -740,3 +740,5 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 	.p3d-fil-chips::-webkit-scrollbar { display: none; }
 	.p3d-fil-chip { flex: none; }
 }
+.p3d-fil-filters { grid-template-columns: minmax(0, 1fr); }
+.p3d-fil-row, .p3d-fil-chips { min-width: 0; max-width: 100%; }
