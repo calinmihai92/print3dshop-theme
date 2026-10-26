@@ -619,3 +619,15 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 .p3d-short-specs { list-style: none; margin: 0 0 6px; padding: 0; display: grid; gap: 6px; }
 .p3d-short-specs li { display: flex; gap: 8px; font-size: 15.5px; }
 .p3d-short-specs span { color: var(--muted); min-width: 110px; }
+
+/* Filamente: filtre și cardul din magazin */
+.p3d-fil-filters { display: grid; gap: 14px; margin: 0 0 28px; padding: 18px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+.p3d-fil-row { display: flex; gap: 14px; align-items: flex-start; }
+.p3d-fil-label { flex: 0 0 72px; padding-top: 7px; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.p3d-fil-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.p3d-fil-chip { display: inline-flex; gap: 6px; align-items: center; padding: 7px 14px; border: 1px solid var(--line-2); border-radius: 999px; background: #fff; font-size: 14.5px; color: var(--ink); text-decoration: none; }
+.p3d-fil-chip small { color: var(--muted); font-size: 12px; }
+.p3d-fil-chip:hover { border-color: var(--ink); }
+.p3d-fil-chip.is-on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.p3d-fil-chip.is-on small { color: rgba(255,255,255,.7); }
+@media (max-width: 640px) { .p3d-fil-row { flex-direction: column; gap: 8px; } .p3d-fil-label { padding-top: 0; } }

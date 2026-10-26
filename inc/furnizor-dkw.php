@@ -189,6 +189,9 @@ function p3d_dkw_specs( $item ) {
 	list( $mat, $color ) = p3d_dkw_split( $item['titleRo'] ?? '' );
 	$material            = trim( (string) ( $item['material'] ?? '' ) );
 	$material            = '' !== $material ? $material : $mat;
+	if ( $material === strtolower( $material ) ) {
+		$material = strtoupper( $material );
+	}
 	$code                = '';
 	if ( preg_match( '/\(([^)]+)\)/', $color, $m ) ) {
 		$code  = trim( $m[1] );
@@ -704,3 +707,124 @@ add_action( 'admin_footer-product_page_p3d-dkw', function () {
 	submit_button( 'Salvează setările pentru comenzi' );
 	echo '</form></div>';
 } );
+
+
+/* =====================================================================
+ * Magazin: filamentele au pagina lor; în /magazin/ apare un singur card „Filamente 3D”
+ * ===================================================================== */
+
+function p3d_dkw_root_term() {
+	$t = get_term_by( 'slug', 'filamente', 'product_cat' );
+	return $t ? $t : null;
+}
+
+/** Suntem pe pagina „Filamente” sau pe o subcategorie a ei? */
+function p3d_dkw_is_fil_archive() {
+	if ( ! is_product_category() ) {
+		return false;
+	}
+	$root = p3d_dkw_root_term();
+	$cur  = get_queried_object();
+	if ( ! $root || ! $cur || empty( $cur->term_id ) ) {
+		return false;
+	}
+	return (int) $cur->term_id === (int) $root->term_id || term_is_ancestor_of( $root->term_id, $cur->term_id, 'product_cat' );
+}
+
+function p3d_dkw_published_stats() {
+	$root = p3d_dkw_root_term();
+	if ( ! $root ) {
+		return array( 0, 0 );
+	}
+	global $wpdb;
+	$ids = array_merge( array( (int) $root->term_id ), array_map( 'intval', get_term_children( $root->term_id, 'product_cat' ) ) );
+	$in  = implode( ',', $ids );
+	$row = $wpdb->get_row( "SELECT COUNT(DISTINCT p.ID) n, MIN(CAST(pm.meta_value AS DECIMAL(10,2))) mn FROM {$wpdb->posts} p
+		JOIN {$wpdb->term_relationships} tr ON tr.object_id = p.ID
+		JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id AND tt.term_id IN ($in)
+		LEFT JOIN {$wpdb->postmeta} pm ON pm.post_id = p.ID AND pm.meta_key = '_price'
+		WHERE p.post_type = 'product' AND p.post_status = 'publish'" ); // phpcs:ignore
+	return array( (int) ( $row->n ?? 0 ), (float) ( $row->mn ?? 0 ) );
+}
+
+// În /magazin/ nu listăm filamentele una câte una; filtrul de material pe pagina filamentelor.
+add_action( 'pre_get_posts', function ( $q ) {
+	if ( is_admin() || ! $q->is_main_query() ) {
+		return;
+	}
+	if ( $q->is_post_type_archive( 'product' ) && ! $q->is_search() && p3d_dkw_root_term() ) {
+		$tax   = (array) $q->get( 'tax_query' );
+		$tax[] = array( 'taxonomy' => 'product_cat', 'field' => 'slug', 'terms' => array( 'filamente' ), 'operator' => 'NOT IN', 'include_children' => true );
+		$q->set( 'tax_query', $tax );
+	}
+	if ( $q->is_tax( 'product_cat' ) && ! empty( $_GET['material'] ) ) { // phpcs:ignore
+		$meta   = (array) $q->get( 'meta_query' );
+		$meta[] = array( 'key' => '_dkw_material', 'value' => sanitize_text_field( wp_unslash( $_GET['material'] ) ) ); // phpcs:ignore
+		$q->set( 'meta_query', $meta );
+	}
+} );
+
+// Cardul „Filamente 3D”, pe poziția 4 din prima pagină a magazinului.
+add_action( 'woocommerce_shop_loop', function () {
+	static $i = 0;
+	if ( ! is_shop() || is_search() || is_paged() ) {
+		return;
+	}
+	$i++;
+	if ( 4 !== $i ) {
+		return;
+	}
+	list( $n, $min ) = p3d_dkw_published_stats();
+	$admin           = current_user_can( 'manage_woocommerce' );
+	$root            = p3d_dkw_root_term();
+	if ( ! $root || ( ! $n && ! $admin ) ) {
+		return;
+	}
+	$img = get_term_meta( $root->term_id, 'thumbnail_id', true );
+	$url = get_term_link( $root );
+	echo '<li class="product type-product p3d-cat-card">';
+	echo '<a href="' . esc_url( $url ) . '" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">';
+	echo $img ? wp_get_attachment_image( (int) $img, 'woocommerce_thumbnail', false, array( 'alt' => 'Filamente 3D' ) ) : ''; // phpcs:ignore
+	echo '<h2 class="woocommerce-loop-product__title">Filamente 3D – PLA, PETG, ABS, ASA, TPU</h2>';
+	if ( $min > 0 ) {
+		echo '<span class="price">de la ' . wc_price( $min ) . '</span>'; // phpcs:ignore
+	}
+	echo '<span class="p3d-loop-ship">' . p3d_icon( 'palette', 14 ) . ' ' . ( $n ? (int) $n . ' de produse · ' : '' ) . 'Bambu, Sunlu, Eryone și altele</span>'; // phpcs:ignore
+	if ( ! $n && $admin ) {
+		echo '<span class="p3d-loop-ship" style="color:#b32d2e">Vizibil doar pentru administrator – încă nu e niciun filament publicat.</span>';
+	}
+	echo '</a><a href="' . esc_url( $url ) . '" class="button">Vezi toate filamentele</a></li>';
+} );
+
+/** Filtrele de pe pagina filamentelor: brand (subcategorii) și material. */
+function p3d_dkw_filters_html() {
+	$root = p3d_dkw_root_term();
+	if ( ! $root ) {
+		return '';
+	}
+	$cur  = get_queried_object();
+	$mat  = isset( $_GET['material'] ) ? sanitize_text_field( wp_unslash( $_GET['material'] ) ) : ''; // phpcs:ignore
+	$out  = '<div class="p3d-fil-filters"><div class="p3d-fil-row"><span class="p3d-fil-label">Brand</span><div class="p3d-fil-chips">';
+	$out .= '<a class="p3d-fil-chip' . ( (int) $cur->term_id === (int) $root->term_id ? ' is-on' : '' ) . '" href="' . esc_url( get_term_link( $root ) ) . '">Toate</a>';
+	foreach ( get_terms( array( 'taxonomy' => 'product_cat', 'parent' => $root->term_id, 'hide_empty' => true ) ) as $t ) {
+		$out .= '<a class="p3d-fil-chip' . ( (int) $cur->term_id === (int) $t->term_id ? ' is-on' : '' ) . '" href="' . esc_url( get_term_link( $t ) ) . '">' . esc_html( preg_replace( '/^Filament\s+/', '', $t->name ) ) . ' <small>' . (int) $t->count . '</small></a>';
+	}
+	$out .= '</div></div>';
+	// Materialele disponibile în categoria curentă (doar produse publicate).
+	global $wpdb;
+	$ids  = array_merge( array( (int) $cur->term_id ), array_map( 'intval', get_term_children( $cur->term_id, 'product_cat' ) ) );
+	$in   = implode( ',', $ids );
+	$mats = $wpdb->get_col( "SELECT pm.meta_value FROM {$wpdb->postmeta} pm JOIN {$wpdb->posts} p ON p.ID = pm.post_id AND p.post_status = 'publish'
+		JOIN {$wpdb->term_relationships} tr ON tr.object_id = p.ID JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id AND tt.term_id IN ($in)
+		WHERE pm.meta_key = '_dkw_material' AND pm.meta_value <> '' GROUP BY pm.meta_value ORDER BY pm.meta_value" ); // phpcs:ignore
+	if ( $mats ) {
+		$base = get_term_link( $cur );
+		$out .= '<div class="p3d-fil-row"><span class="p3d-fil-label">Material</span><div class="p3d-fil-chips">';
+		$out .= '<a class="p3d-fil-chip' . ( '' === $mat ? ' is-on' : '' ) . '" href="' . esc_url( $base ) . '">Toate</a>';
+		foreach ( $mats as $m ) {
+			$out .= '<a class="p3d-fil-chip' . ( $m === $mat ? ' is-on' : '' ) . '" href="' . esc_url( add_query_arg( 'material', rawurlencode( $m ), $base ) ) . '">' . esc_html( $m ) . '</a>';
+		}
+		$out .= '</div></div>';
+	}
+	return $out . '</div>';
+}

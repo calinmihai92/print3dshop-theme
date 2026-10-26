@@ -5,7 +5,26 @@
 defined( 'ABSPATH' ) || exit;
 get_header();
 
-if ( is_shop() || is_product_taxonomy() ) :
+if ( function_exists( 'p3d_dkw_is_fil_archive' ) && p3d_dkw_is_fil_archive() ) :
+	$p3d_term = get_queried_object();
+	?>
+	<section class="hero shop-hero">
+		<div class="wrap hero-in">
+			<span class="pill"><?php echo p3d_icon( 'layers', 13 ); // phpcs:ignore ?> Filamente 3D</span>
+			<h1 class="h1"><?php echo 'filamente' === $p3d_term->slug ? 'Filamente pentru <em>imprimante 3D</em>' : esc_html( $p3d_term->name ); // phpcs:ignore ?></h1>
+			<p class="lead">PLA, PETG, ABS, ASA, TPU și materiale speciale, de la branduri cunoscute. Stocul se actualizează automat.</p>
+			<ul class="hero-points">
+				<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Stoc actualizat automat</li>
+				<li><?php echo p3d_icon( 'truck', 16 ); // phpcs:ignore ?> Livrare în 2–4 zile lucrătoare</li>
+				<li><?php echo p3d_icon( 'cart', 16 ); // phpcs:ignore ?> Plata la livrare</li>
+			</ul>
+		</div>
+	</section>
+	<section class="section shop-list">
+		<div class="wrap"><?php echo p3d_dkw_filters_html(); // phpcs:ignore ?><?php woocommerce_content(); ?></div>
+	</section>
+	<?php
+elseif ( is_shop() || is_product_taxonomy() ) :
 	?>
 	<section class="hero shop-hero">
 		<div class="wrap hero-in">
