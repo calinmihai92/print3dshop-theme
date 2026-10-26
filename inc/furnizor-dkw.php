@@ -244,6 +244,10 @@ function p3d_dkw_images( $product_id, $item, $opts ) {
 		if ( '' === $url ) {
 			continue;
 		}
+		// API-ul dă „/products/{id}/{fișier}”; pozele se servesc din „/api/images/{id}/{fișier}”.
+		if ( 0 === strpos( $url, '/products/' ) ) {
+			$url = '/api/images/' . substr( $url, strlen( '/products/' ) );
+		}
 		if ( 0 === strpos( $url, '/' ) ) {
 			$url = rtrim( $opts['base'], '/' ) . $url;
 		}
@@ -295,6 +299,11 @@ function p3d_dkw_run( $manual = false ) {
 			if ( $p ) {
 				p3d_dkw_apply( $p, $item, $opts, false )->save();
 				$log['updated']++;
+				// Produse create fără poză (ex. descărcare eșuată): reîncercăm, în limita lotului.
+				if ( ! $p->get_image_id() && $new_left > 0 ) {
+					p3d_dkw_images( $p->get_id(), $item, $opts );
+					$new_left--;
+				}
 			}
 			continue;
 		}
