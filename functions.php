@@ -8,11 +8,6 @@ defined( 'ABSPATH' ) || exit;
 define( 'P3D_VER', wp_get_theme()->get( 'Version' ) );
 define( 'P3D_URI', get_template_directory_uri() );
 
-if ( isset( $_GET['p3d_debug'] ) ) { // phpcs:ignore
-	add_filter( 'wp_php_error_message', function ( $message, $error ) {
-		return $message . '<pre id="p3d-fatal">' . htmlspecialchars( $error['message'] . ' @ ' . basename( $error['file'] ) . ':' . $error['line'] ) . '</pre>';
-	}, 10, 2 );
-}
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/data.php';
 require_once __DIR__ . '/inc/form.php';
