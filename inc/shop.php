@@ -119,7 +119,7 @@ function p3d_group_products( $product ) {
 	}
 	return wc_get_products( array(
 		'status'     => 'publish',
-		'limit'      => 20,
+		'limit'      => 60,
 		'orderby'    => 'menu_order',
 		'order'      => 'ASC',
 		'meta_key'   => '_p3d_grup', // phpcs:ignore
