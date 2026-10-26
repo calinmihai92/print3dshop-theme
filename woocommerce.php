@@ -21,7 +21,10 @@ if ( function_exists( 'p3d_dkw_is_fil_archive' ) && p3d_dkw_is_fil_archive() ) :
 		</div>
 	</section>
 	<section class="section shop-list">
-		<div class="wrap"><?php echo p3d_dkw_filters_html(); // phpcs:ignore ?><?php woocommerce_content(); ?></div>
+		<div class="wrap p3d-fil-layout">
+			<aside class="p3d-fil-side" aria-label="Filtre"><?php echo p3d_dkw_filters_html(); // phpcs:ignore ?></aside>
+			<div class="p3d-fil-main"><?php woocommerce_content(); ?></div>
+		</div>
 	</section>
 	<?php
 elseif ( is_shop() || is_product_taxonomy() ) :

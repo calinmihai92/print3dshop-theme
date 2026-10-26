@@ -743,3 +743,21 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 .p3d-fil-filters { grid-template-columns: minmax(0, 1fr); }
 .p3d-fil-row, .p3d-fil-chips { min-width: 0; max-width: 100%; }
 @media (max-width: 640px) { .p3d-fil-label { flex: none; } }
+
+/* ---------- Filamente: filtrele în stânga pe ecrane mari ---------- */
+@media (min-width: 1024px) {
+	.p3d-fil-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 32px; align-items: start; max-width: 1300px; }
+	.p3d-fil-side { position: sticky; top: 88px; max-height: calc(100vh - 104px); overflow-y: auto; scrollbar-width: thin; }
+	.p3d-fil-side .p3d-fil-filters { margin: 0; padding: 18px 16px; gap: 18px; }
+	.p3d-fil-side .p3d-fil-row { flex-direction: column; gap: 8px; }
+	.p3d-fil-side .p3d-fil-label { flex: none; padding: 0 0 2px; font-weight: 600; color: var(--ink); }
+	.p3d-fil-side .p3d-fil-chips { flex-direction: column; flex-wrap: nowrap; gap: 2px; }
+	.p3d-fil-side .p3d-fil-chip { justify-content: flex-start; border: 0; background: transparent; border-radius: 10px; padding: 7px 10px; font-size: 14.5px; }
+	.p3d-fil-side .p3d-fil-chip small { margin-left: auto; }
+	.p3d-fil-side .p3d-fil-chip:hover { background: var(--tint-2); }
+	.p3d-fil-side .p3d-fil-chip.is-on { background: var(--ink); color: #fff; }
+	.p3d-fil-side .p3d-fil-chip.is-hidden { display: none; }
+	.p3d-fil-more { margin: 2px 0 0; padding: 6px 10px; border: 0; background: none; color: var(--accent-text); font-weight: 600; font-size: 14px; cursor: pointer; text-align: left; }
+	.p3d-fil-main .p3d-quick-head { margin-top: 0; }
+}
+@media (max-width: 1023px) { .p3d-fil-more { display: none; } .p3d-fil-chip.is-hidden { display: inline-flex; } }

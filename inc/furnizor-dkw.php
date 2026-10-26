@@ -186,15 +186,26 @@ function p3d_dkw_split( $title ) {
 	return array( trim( $parts[0] ), isset( $parts[1] ) ? trim( $parts[1] ) : '' );
 }
 
+/** Material scris unitar: „PLA MATTE” / „pla matte” → „PLA Matte”; abrevierile rămân cu majuscule. */
+function p3d_dkw_norm_material( $m ) {
+	$upper = array( 'PLA', 'PLA+', 'PETG', 'ABS', 'ASA', 'TPU', 'PCTG', 'CF', 'GF', 'HS', 'PA', 'PC', '95A', 'HF', 'PETG-HF' );
+	$out   = array();
+	foreach ( preg_split( '/\s+/', trim( (string) $m ) ) as $w ) {
+		if ( '' === $w ) {
+			continue;
+		}
+		$out[] = in_array( strtoupper( $w ), $upper, true ) ? strtoupper( $w ) : mb_strtoupper( mb_substr( $w, 0, 1 ) ) . mb_strtolower( mb_substr( $w, 1 ) );
+	}
+	return implode( ' ', $out );
+}
+
 /** Detaliile afișate în descrierea scurtă: brand, material, culoare, cod culoare, variantă. */
 function p3d_dkw_specs( $item ) {
 	$brand               = p3d_dkw_brand( $item );
 	list( $mat, $color ) = p3d_dkw_split( $item['titleRo'] ?? '' );
 	$material            = trim( (string) ( $item['material'] ?? '' ) );
 	$material            = '' !== $material ? $material : $mat;
-	if ( $material === strtolower( $material ) ) {
-		$material = strtoupper( $material );
-	}
+	$material = p3d_dkw_norm_material( $material );
 	$code                = '';
 	if ( preg_match( '/\(([^)]+)\)/', $color, $m ) ) {
 		$code  = trim( $m[1] );
@@ -1010,7 +1021,9 @@ function p3d_dkw_filters_html() {
 		}
 		$out .= '</div></div>';
 	}
-	return $out . '</div>';
+	$out .= '</div>';
+	$out .= "<script>(function(){document.querySelectorAll('.p3d-fil-side .p3d-fil-chips').forEach(function(box){var c=box.querySelectorAll('.p3d-fil-chip');if(c.length<=11)return;var n=0;c.forEach(function(a,i){if(i>10&&!a.classList.contains('is-on')){a.classList.add('is-hidden');n++;}});if(!n)return;var b=document.createElement('button');b.type='button';b.className='p3d-fil-more';b.textContent='Arată toate ('+c.length+')';b.onclick=function(){box.querySelectorAll('.is-hidden').forEach(function(x){x.classList.remove('is-hidden');});b.remove();};box.after(b);});})();</script>";
+	return $out;
 }
 
 // Pe paginile filamentelor descrierea categoriei e deja în antet.
