@@ -15,7 +15,7 @@ if ( function_exists( 'p3d_dkw_is_fil_archive' ) && p3d_dkw_is_fil_archive() ) :
 			<p class="lead">PLA, PETG, ABS, ASA, TPU și materiale speciale, de la branduri cunoscute. Stocul se actualizează automat.</p>
 			<ul class="hero-points">
 				<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Stoc actualizat automat</li>
-				<li><?php echo p3d_icon( 'truck', 16 ); // phpcs:ignore ?> Livrare în 2–4 zile lucrătoare</li>
+				<li><?php echo p3d_icon( 'truck', 16 ); // phpcs:ignore ?> Livrare gratuită peste 250 lei</li>
 				<li><?php echo p3d_icon( 'lock', 16 ); // phpcs:ignore ?> Plata la livrare sau cu cardul</li>
 			</ul>
 		</div>
@@ -34,6 +34,7 @@ elseif ( is_shop() || is_product_taxonomy() ) :
 			<ul class="hero-points">
 				<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Produse proprii, printate la noi</li>
 				<li><?php echo p3d_icon( 'palette', 16 ); // phpcs:ignore ?> Culori la alegere</li>
+				<li><?php echo p3d_icon( 'truck', 16 ); // phpcs:ignore ?> Livrare gratuită peste 250 lei</li>
 				<li><?php echo p3d_icon( 'lock', 16 ); // phpcs:ignore ?> Plata la livrare sau cu cardul</li>
 			</ul>
 		</div>

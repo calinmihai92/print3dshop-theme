@@ -44,3 +44,35 @@ add_action( 'init', function () {
 add_action( 'wp_footer', function () {
 	echo "<script>if(/(^|; )woocommerce_items_in_cart=1/.test(document.cookie)){document.querySelectorAll('.nav-cart-dot').forEach(function(d){d.hidden=false;});}</script>";
 }, 99 );
+
+/* ---------- Livrare gratuită: cât mai lipsește (coș și finalizare comandă) ---------- */
+
+function p3d_free_shipping_min() {
+	foreach ( WC_Shipping_Zones::get_zones() as $z ) {
+		foreach ( $z['shipping_methods'] as $m ) {
+			if ( 'free_shipping' === $m->id && 'yes' === $m->enabled && in_array( $m->requires, array( 'min_amount', 'either' ), true ) ) {
+				return (float) $m->min_amount;
+			}
+		}
+	}
+	return 0;
+}
+
+function p3d_free_shipping_notice() {
+	if ( ! WC()->cart || WC()->cart->is_empty() ) {
+		return;
+	}
+	$min = p3d_free_shipping_min();
+	if ( $min <= 0 ) {
+		return;
+	}
+	$total = (float) WC()->cart->get_displayed_subtotal() - (float) WC()->cart->get_discount_total();
+	if ( $total >= $min ) {
+		echo '<div class="p3d-freeship is-ok">' . p3d_icon( 'truck', 18 ) . ' <span>Ai livrare <strong>gratuită</strong> prin curier.</span></div>'; // phpcs:ignore
+		return;
+	}
+	$pct = max( 4, min( 100, round( $total / $min * 100 ) ) );
+	echo '<div class="p3d-freeship">' . p3d_icon( 'truck', 18 ) . ' <span>Mai adaugă produse de <strong>' . wc_price( $min - $total ) . '</strong> și ai livrare gratuită (comenzi peste ' . wc_price( $min ) . ').</span><i style="--p:' . (int) $pct . '%"></i></div>'; // phpcs:ignore
+}
+add_action( 'woocommerce_before_cart_table', 'p3d_free_shipping_notice' );
+add_action( 'woocommerce_before_checkout_form', 'p3d_free_shipping_notice', 5 );

@@ -360,7 +360,7 @@ function p3d_of_box_main( $post ) {
 				<option value="ridicare" <?php selected( $d['delivery']['method'], 'ridicare' ); ?>>Ridicare personală (gratuit)</option>
 				<option value="curier" <?php selected( $d['delivery']['method'], 'curier' ); ?>>Curier</option>
 			</select></label>
-			<label class="p3d-curier">Cost livrare (lei)<input type="number" min="0" step="0.01" class="p3d-calc" id="p3d-del-cost" name="p3d_of[delivery][cost]" value="<?php echo esc_attr( $d['delivery']['cost'] ); ?>"><small class="description">Curier 25 lei, gratuit peste 200 lei</small></label>
+			<label class="p3d-curier">Cost livrare (lei)<input type="number" min="0" step="0.01" class="p3d-calc" id="p3d-del-cost" name="p3d_of[delivery][cost]" value="<?php echo esc_attr( $d['delivery']['cost'] ); ?>"><small class="description">Curier 25 lei, gratuit peste 250 lei</small></label>
 			<label class="p3d-curier">Adresă de livrare<input type="text" name="p3d_of[delivery][address]" value="<?php echo esc_attr( $d['delivery']['address'] ); ?>" placeholder="dacă diferă de cea de facturare"></label>
 		</div>
 
