@@ -73,6 +73,9 @@ function p3d_dkw_price( $price, $opts = null ) {
 function p3d_dkw_brand( $item ) {
 	$name = isset( $item['category']['nameRo'] ) ? (string) $item['category']['nameRo'] : '';
 	$name = trim( preg_replace( '/^filamente\s*/i', '', $name ) );
+	if ( 'bambu' === strtolower( $name ) ) {
+		$name = 'Bambu Lab';
+	}
 	return '' !== $name ? $name : 'dkw';
 }
 
@@ -333,12 +336,14 @@ function p3d_dkw_run( $manual = false ) {
 	}
 	$existing = p3d_dkw_existing();
 	$seen     = array();
+	$brands   = array();
 	$new_left = max( 1, (int) $opts['batch'] );
 	foreach ( $items as $item ) {
 		if ( empty( $item['id'] ) || ! p3d_dkw_included( $item, $opts ) ) {
 			continue;
 		}
 		$log['total']++;
+		$brands[ p3d_dkw_brand( $item ) ] = true;
 		$id          = (string) $item['id'];
 		$seen[ $id ] = true;
 		if ( isset( $existing[ $id ] ) ) {
@@ -369,6 +374,13 @@ function p3d_dkw_run( $manual = false ) {
 			$new_left--;
 		} catch ( Exception $e ) {
 			$log['error'] = $e->getMessage();
+		}
+	}
+	// Câte o subcategorie pentru fiecare brand (apar toate în filtrul de pe pagina filamentelor).
+	$parent = p3d_dkw_term( 'Filamente' );
+	foreach ( array_keys( $brands ) as $b ) {
+		if ( $parent ) {
+			p3d_dkw_term( $b, $parent );
 		}
 	}
 	// Produse care nu mai apar la furnizor: stoc epuizat.
@@ -806,8 +818,8 @@ function p3d_dkw_filters_html() {
 	$mat  = isset( $_GET['material'] ) ? sanitize_text_field( wp_unslash( $_GET['material'] ) ) : ''; // phpcs:ignore
 	$out  = '<div class="p3d-fil-filters"><div class="p3d-fil-row"><span class="p3d-fil-label">Brand</span><div class="p3d-fil-chips">';
 	$out .= '<a class="p3d-fil-chip' . ( (int) $cur->term_id === (int) $root->term_id ? ' is-on' : '' ) . '" href="' . esc_url( get_term_link( $root ) ) . '">Toate</a>';
-	foreach ( get_terms( array( 'taxonomy' => 'product_cat', 'parent' => $root->term_id, 'hide_empty' => true ) ) as $t ) {
-		$out .= '<a class="p3d-fil-chip' . ( (int) $cur->term_id === (int) $t->term_id ? ' is-on' : '' ) . '" href="' . esc_url( get_term_link( $t ) ) . '">' . esc_html( preg_replace( '/^Filament\s+/', '', $t->name ) ) . ' <small>' . (int) $t->count . '</small></a>';
+	foreach ( get_terms( array( 'taxonomy' => 'product_cat', 'parent' => $root->term_id, 'hide_empty' => false, 'orderby' => 'name' ) ) as $t ) {
+		$out .= '<a class="p3d-fil-chip' . ( (int) $cur->term_id === (int) $t->term_id ? ' is-on' : '' ) . '" href="' . esc_url( get_term_link( $t ) ) . '">' . esc_html( preg_replace( '/^Filament\s+/', '', $t->name ) ) . ( $t->count ? ' <small>' . (int) $t->count . '</small>' : '' ) . '</a>';
 	}
 	$out .= '</div></div>';
 	// Materialele disponibile în categoria curentă (doar produse publicate).
@@ -828,3 +840,10 @@ function p3d_dkw_filters_html() {
 	}
 	return $out . '</div>';
 }
+
+// Pe paginile filamentelor descrierea categoriei e deja în antet.
+add_action( 'woocommerce_archive_description', function () {
+	if ( p3d_dkw_is_fil_archive() ) {
+		remove_action( 'woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10 );
+	}
+}, 1 );
