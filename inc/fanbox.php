@@ -100,7 +100,7 @@ add_filter( 'woocommerce_cart_shipping_packages', function ( $packages ) {
 } );
 
 add_filter( 'woocommerce_shipping_package_name', function ( $name, $i, $package ) {
-	if ( empty( $package['p3d_type'] ) || count( WC()->cart->get_shipping_packages() ) < 2 ) {
+	if ( empty( $package['p3d_type'] ) || count( WC()->shipping()->get_packages() ) < 2 ) {
 		return 'fil' === ( $package['p3d_type'] ?? '' ) ? 'Livrare filamente' : $name;
 	}
 	return 'fil' === $package['p3d_type'] ? 'Livrare filamente (de la furnizor)' : 'Livrare celelalte produse';
