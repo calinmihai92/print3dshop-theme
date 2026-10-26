@@ -614,3 +614,8 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 @media print { .of-pay { display: none !important; } }
 
 .price-badge { font-size: 11px; vertical-align: middle; margin-left: 6px; white-space: nowrap; }
+
+/* Detalii scurte produs (filamente furnizor) */
+.p3d-short-specs { list-style: none; margin: 0 0 6px; padding: 0; display: grid; gap: 6px; }
+.p3d-short-specs li { display: flex; gap: 8px; font-size: 15.5px; }
+.p3d-short-specs span { color: var(--muted); min-width: 110px; }

@@ -183,6 +183,43 @@ function p3d_dkw_split( $title ) {
 	return array( trim( $parts[0] ), isset( $parts[1] ) ? trim( $parts[1] ) : '' );
 }
 
+/** Detaliile afișate în descrierea scurtă: brand, material, culoare, cod culoare, variantă. */
+function p3d_dkw_specs( $item ) {
+	$brand               = p3d_dkw_brand( $item );
+	list( $mat, $color ) = p3d_dkw_split( $item['titleRo'] ?? '' );
+	$material            = trim( (string) ( $item['material'] ?? '' ) );
+	$material            = '' !== $material ? $material : $mat;
+	$code                = '';
+	if ( preg_match( '/\(([^)]+)\)/', $color, $m ) ) {
+		$code  = trim( $m[1] );
+		$color = trim( str_replace( $m[0], '', $color ) );
+	}
+	$title = strtolower( (string) ( $item['titleRo'] ?? '' ) );
+	$color = trim( preg_replace( '/\b(refill|spool)\b/i', '', $color ) );
+	$color = '' !== $color ? mb_strtoupper( mb_substr( $color, 0, 1 ) ) . mb_substr( $color, 1 ) : '';
+	$rows  = array( 'Brand' => $brand, 'Material' => $material );
+	if ( '' !== $color ) {
+		$rows['Culoare'] = $color;
+	}
+	if ( '' !== $code ) {
+		$rows['Cod culoare'] = $code;
+	}
+	if ( false !== strpos( $title, 'refill' ) ) {
+		$rows['Variantă'] = 'Refill (fără bobină)';
+	} elseif ( false !== strpos( $title, 'spool' ) ) {
+		$rows['Variantă'] = 'Cu bobină';
+	}
+	return $rows;
+}
+
+function p3d_dkw_specs_html( $rows ) {
+	$out = '<ul class="p3d-short-specs">';
+	foreach ( $rows as $k => $v ) {
+		$out .= '<li><span>' . esc_html( $k ) . ':</span> <strong>' . esc_html( $v ) . '</strong></li>';
+	}
+	return $out . '</ul>';
+}
+
 function p3d_dkw_apply( WC_Product $p, $item, $opts, $is_new ) {
 	$stock  = max( 0, (int) ( $item['stock'] ?? 0 ) );
 	$active = ! empty( $item['isActive'] );
@@ -198,6 +235,15 @@ function p3d_dkw_apply( WC_Product $p, $item, $opts, $is_new ) {
 	$p->update_meta_data( '_dkw_synced', time() );
 	$p->update_meta_data( '_p3d_livrare', $opts['livrare'] );
 	$p->update_meta_data( '_p3d_furnizor', 'yes' );
+	$specs = p3d_dkw_specs( $item );
+	$p->set_short_description( p3d_dkw_specs_html( $specs ) );
+	$p->update_meta_data( '_dkw_material', $specs['Material'] );
+	if ( isset( $specs['Culoare'] ) ) {
+		$p->update_meta_data( '_p3d_culoare', $specs['Culoare'] );
+	}
+	if ( isset( $specs['Cod culoare'] ) && preg_match( '/^#[0-9a-f]{6}$/i', $specs['Cod culoare'] ) ) {
+		$p->update_meta_data( '_p3d_culoare_hex', $specs['Cod culoare'] );
+	}
 	if ( $is_new ) {
 		$brand              = p3d_dkw_brand( $item );
 		list( $mat, $color ) = p3d_dkw_split( $item['titleRo'] ?? '' );
@@ -215,7 +261,6 @@ function p3d_dkw_apply( WC_Product $p, $item, $opts, $is_new ) {
 		}
 		$desc .= '<p>Produsul este livrat de partenerul nostru, distribuitor de filamente din România. Stocul se actualizează automat.</p>';
 		$p->set_description( $desc );
-		$p->set_short_description( '<p>Filament ' . esc_html( $brand . ' ' . $mat ) . ( '' !== $color ? ' – ' . esc_html( $color ) : '' ) . '. În stoc la furnizor, livrare în ' . esc_html( $opts['livrare'] ) . '.</p>' );
 		$parent = p3d_dkw_term( 'Filamente' );
 		$child  = $parent ? p3d_dkw_term( $brand, $parent ) : 0;
 		$p->set_category_ids( array_values( array_filter( array( $parent, $child ) ) ) );
@@ -223,7 +268,6 @@ function p3d_dkw_apply( WC_Product $p, $item, $opts, $is_new ) {
 		$p->update_meta_data( '_p3d_producator_url', p3d_dkw_maker_url( $brand ) );
 		$p->update_meta_data( '_p3d_grup', 'dkw-' . sanitize_title( $brand . '-' . $mat ) );
 		if ( '' !== $color ) {
-			$p->update_meta_data( '_p3d_culoare', $color );
 			$p->update_meta_data( '_p3d_culoare_hex', p3d_dkw_hex( $color ) );
 		}
 	}
