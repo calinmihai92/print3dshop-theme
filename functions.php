@@ -23,6 +23,7 @@ require_once __DIR__ . '/inc/perf.php';
 require_once __DIR__ . '/inc/modele.php';
 require_once __DIR__ . '/inc/furnizor-dkw.php';
 require_once __DIR__ . '/inc/cont.php';
+require_once __DIR__ . '/inc/fanbox.php';
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );

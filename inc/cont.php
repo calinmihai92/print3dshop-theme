@@ -62,17 +62,17 @@ function p3d_free_shipping_notice() {
 	if ( ! WC()->cart || WC()->cart->is_empty() ) {
 		return;
 	}
-	$min = p3d_free_shipping_min();
+	$min = function_exists( 'p3d_fanbox_free_min' ) ? p3d_fanbox_free_min() : p3d_free_shipping_min();
 	if ( $min <= 0 ) {
 		return;
 	}
 	$total = (float) WC()->cart->get_displayed_subtotal() - (float) WC()->cart->get_discount_total();
 	if ( $total >= $min ) {
-		echo '<div class="p3d-freeship is-ok">' . p3d_icon( 'truck', 18 ) . ' <span>Ai livrare <strong>gratuită</strong> prin curier.</span></div>'; // phpcs:ignore
+		echo '<div class="p3d-freeship is-ok">' . p3d_icon( 'truck', 18 ) . ' <span>Ai livrare <strong>gratuită la FANbox</strong>.</span></div>'; // phpcs:ignore
 		return;
 	}
 	$pct = max( 4, min( 100, round( $total / $min * 100 ) ) );
-	echo '<div class="p3d-freeship">' . p3d_icon( 'truck', 18 ) . ' <span>Mai adaugă produse de <strong>' . wc_price( $min - $total ) . '</strong> și ai livrare gratuită (comenzi peste ' . wc_price( $min ) . ').</span><i style="--p:' . (int) $pct . '%"></i></div>'; // phpcs:ignore
+	echo '<div class="p3d-freeship">' . p3d_icon( 'truck', 18 ) . ' <span>Mai adaugă produse de <strong>' . wc_price( $min - $total ) . '</strong> și ai livrare gratuită la FANbox (comenzi peste ' . wc_price( $min ) . ').</span><i style="--p:' . (int) $pct . '%"></i></div>'; // phpcs:ignore
 }
 add_action( 'woocommerce_before_cart_table', 'p3d_free_shipping_notice' );
 add_action( 'woocommerce_before_checkout_form', 'p3d_free_shipping_notice', 5 );

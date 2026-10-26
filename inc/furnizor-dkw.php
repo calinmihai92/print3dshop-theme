@@ -577,7 +577,7 @@ function p3d_dkw_payload( WC_Order $order, $items ) {
 			// Suma de încasat la livrare: doar dacă toată comanda e de la dkw (altfel se stabilește manual).
 			'cod_amount'   => ( 'cod' === $order->get_payment_method() && $all_dkw ) ? (float) $order->get_total() : null,
 		),
-		'shipping'  => array( 'method' => $order->get_shipping_method(), 'pickup' => false !== stripos( $order->get_shipping_method(), 'ridicare' ) ),
+		'shipping'  => array( 'method' => $order->get_shipping_method(), 'pickup' => false !== stripos( $order->get_shipping_method(), 'ridicare' ), 'fanbox' => (string) $order->get_meta( '_p3d_fanbox' ) ),
 		'note'      => (string) $order->get_customer_note(),
 		'items'     => $items,
 		'complete'  => $all_dkw,
@@ -632,6 +632,7 @@ function p3d_dkw_forward( $order_id, $attempt = 1 ) {
 		$cod  = null !== $payload['payment']['cod_amount'] ? number_format( $payload['payment']['cod_amount'], 2, ',', '.' ) . ' lei' : ( $payload['payment']['cod'] ? 'de stabilit (comanda conține și alte produse)' : 'nu (plătită)' );
 		$html = '<h2>Comandă nouă de la print3dshop.ro – #' . esc_html( $payload['order'] ) . '</h2>'
 			. '<p><strong>Livrare către:</strong><br>' . esc_html( $c['name'] ) . '<br>' . esc_html( $c['phone'] ) . ' · ' . esc_html( $c['email'] ) . '<br>' . esc_html( $c['address'] ) . ', ' . esc_html( $c['city'] ) . ', ' . esc_html( $c['county'] ) . ' ' . esc_html( $c['postcode'] ) . '</p>'
+			. ( $payload['shipping']['fanbox'] ? '<p><strong>Livrare la FANbox:</strong> ' . esc_html( $payload['shipping']['fanbox'] ) . '</p>' : '' )
 			. '<p><strong>Ramburs de încasat:</strong> ' . esc_html( $cod ) . '</p>'
 			. ( $payload['note'] ? '<p><strong>Notă client:</strong> ' . esc_html( $payload['note'] ) . '</p>' : '' )
 			. '<table border="1" cellpadding="6" cellspacing="0"><tr><th>Cod</th><th>Produs</th><th>Buc.</th></tr>' . $rows . '</table>'
