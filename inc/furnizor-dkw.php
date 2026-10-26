@@ -264,7 +264,16 @@ function p3d_dkw_apply( WC_Product $p, $item, $opts, $is_new ) {
 		$p->set_status( isset( $keep ) ? $keep : $opts['status'] );
 		$p->set_menu_order( (int) $opts['order'] );
 		$p->set_catalog_visibility( 'visible' );
-		$p->set_sku( 'DKW-' . strtoupper( substr( sanitize_title( $item['slug'] ?? $item['id'] ), 0, 40 ) ) );
+		$sku = 'DKW-' . strtoupper( substr( sanitize_title( $item['slug'] ?? $item['id'] ), 0, 40 ) );
+		$own = wc_get_product_id_by_sku( $sku );
+		if ( $own && $own !== $p->get_id() ) {
+			$sku = 'DKW-' . strtoupper( substr( sanitize_title( $item['slug'] ?? '' ), 0, 32 ) . '-' . substr( (string) $item['id'], 0, 6 ) );
+		}
+		try {
+			$p->set_sku( $sku );
+		} catch ( Exception $e ) {
+			$p->set_sku( 'DKW-' . strtoupper( (string) $item['id'] ) );
+		}
 		$desc  = '<p>Filament ' . esc_html( $brand ) . ' ' . esc_html( $mat ) . ( '' !== $color ? ', culoarea ' . esc_html( $color ) : '' ) . ', pentru imprimante 3D FDM.</p>';
 		$orig  = trim( wp_strip_all_tags( (string) ( $item['descRo'] ?? '' ) ) );
 		if ( '' !== $orig && $orig !== trim( (string) ( $item['titleRo'] ?? '' ) ) ) {
