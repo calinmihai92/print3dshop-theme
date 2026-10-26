@@ -765,9 +765,9 @@ add_action( 'pre_get_posts', function ( $q ) {
 } );
 
 // Cardul „Filamente 3D”, pe poziția 4 din prima pagină a magazinului.
-add_action( 'woocommerce_shop_loop', function () {
+add_action( 'the_post', function ( $post, $query ) {
 	static $i = 0;
-	if ( ! is_shop() || is_search() || is_paged() ) {
+	if ( ! $query->is_main_query() || ! is_shop() || is_search() || is_paged() || ! did_action( 'woocommerce_before_shop_loop' ) || did_action( 'woocommerce_after_shop_loop' ) ) {
 		return;
 	}
 	$i++;
@@ -794,7 +794,7 @@ add_action( 'woocommerce_shop_loop', function () {
 		echo '<span class="p3d-loop-ship" style="color:#b32d2e">Vizibil doar pentru administrator – încă nu e niciun filament publicat.</span>';
 	}
 	echo '</a><a href="' . esc_url( $url ) . '" class="button">Vezi toate filamentele</a></li>';
-} );
+}, 10, 2 );
 
 /** Filtrele de pe pagina filamentelor: brand (subcategorii) și material. */
 function p3d_dkw_filters_html() {
