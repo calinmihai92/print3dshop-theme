@@ -122,7 +122,7 @@ p { margin: 0 0 1em; }
 .brand-mark { width: 38px; height: 38px; flex-shrink: 0; }
 .brand-word { font-family: var(--brand); font-weight: 700; font-size: 23px; letter-spacing: -.02em; line-height: 1; }
 .brand-word span { color: var(--accent-text); }
-.nav-links { display: flex; align-items: center; gap: 18px; font-size: 15.5px; white-space: nowrap; }
+.nav-links { display: flex; align-items: center; gap: 16px; font-size: 15.5px; white-space: nowrap; }
 .nav-links > a:not(.btn) { text-decoration: none; color: var(--ink-2); }
 .nav-links > a:not(.btn):hover, .nav-links > a[aria-current="page"] { color: var(--accent-text); }
 .nav-links .nav-strong { color: var(--ink) !important; font-weight: 600; }
@@ -146,7 +146,7 @@ p { margin: 0 0 1em; }
 .nav-mobile-panel a.is-service { background: var(--tint-2); font-weight: 600; }
 .nav-mobile-panel .sep { height: 1px; background: var(--line); margin: 6px 4px; }
 .nav-mobile-panel .btn { margin-top: 6px; }
-@media (max-width: 1240px) { .nav-links { display: none; } .nav-mobile { display: block; } }
+@media (max-width: 1340px) { .nav-links { display: none; } .nav-mobile { display: block; } }
 @media (max-width: 420px) { .brand-word { font-size: 20px; } .brand-mark { width: 34px; height: 34px; } }
 
 /* ---------- Hero ---------- */

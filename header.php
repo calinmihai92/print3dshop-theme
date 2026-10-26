@@ -8,16 +8,24 @@ $p3d_svc_more = array(
 	array( p3d_service_url( 'prelucrare-cnc-matrite' ), 'Prelucrare CNC și matrițe', p3d_is( 'prelucrare-cnc-matrite' ), false, 'gear' ),
 	array( p3d_service_url( 'design-grafic-tipar' ), 'Design grafic și tipar', p3d_is( 'design-grafic-tipar' ), false, 'palette' ),
 );
+$p3d_fil_url = '';
+if ( function_exists( 'p3d_dkw_root_term' ) && p3d_dkw_root_term() ) {
+	list( $p3d_fil_n ) = p3d_dkw_published_stats();
+	if ( $p3d_fil_n || current_user_can( 'manage_woocommerce' ) ) {
+		$p3d_fil_url = get_term_link( p3d_dkw_root_term() );
+	}
+}
 $p3d_svc_on = is_page( 'our-services' ) || in_array( true, wp_list_pluck( $p3d_svc_more, 2 ), true );
-$p3d_nav = array(
+$p3d_nav = array_filter( array(
 	array( p3d_service_url( 'support' ), 'Service imprimante 3D', p3d_is( 'support' ), true, 'wrench' ),
+	$p3d_fil_url ? array( $p3d_fil_url, 'Filamente 3D', function_exists( 'p3d_dkw_is_fil_archive' ) && p3d_dkw_is_fil_archive(), true, 'layers' ) : null,
 	'servicii',
 	array( home_url( '/preturi/' ), 'Prețuri', is_page( 'preturi' ), false, 'doc' ),
-	array( home_url( '/magazin/' ), 'Magazin', is_page( 'magazin' ) || ( function_exists( 'is_woocommerce' ) && is_woocommerce() ), false, 'cart' ),
+	array( home_url( '/magazin/' ), 'Magazin', is_page( 'magazin' ) || ( function_exists( 'is_woocommerce' ) && is_woocommerce() && ! ( function_exists( 'p3d_dkw_is_fil_archive' ) && p3d_dkw_is_fil_archive() ) ), false, 'cart' ),
 	array( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/blog-standard/' ), 'Ghiduri', is_home() || is_singular( 'post' ) || is_category(), false, 'doc' ),
 	array( home_url( '/despre-noi/' ), 'Despre noi', is_page( 'despre-noi' ), false, 'users' ),
 	array( home_url( '/contacts/' ), 'Contact', is_page( 'contacts' ), false, 'pin' ),
-);
+) );
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
