@@ -751,7 +751,9 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 	.p3d-fil-side .p3d-fil-filters { margin: 0; padding: 18px 16px; gap: 18px; }
 	.p3d-fil-side .p3d-fil-row { flex-direction: column; gap: 8px; }
 	.p3d-fil-side .p3d-fil-label { flex: none; padding: 0 0 2px; font-weight: 600; color: var(--ink); }
-	.p3d-fil-side .p3d-fil-chips { flex-direction: column; flex-wrap: nowrap; gap: 2px; }
+	.p3d-fil-side .p3d-fil-chips { display: flex; flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 2px; width: 100%; overflow: visible; margin: 0; padding: 0; }
+	.p3d-fil-side .p3d-fil-row { align-items: stretch; }
+	.p3d-fil-side .p3d-fil-chip { width: 100%; box-sizing: border-box; }
 	.p3d-fil-side .p3d-fil-chip { justify-content: flex-start; border: 0; background: transparent; border-radius: 10px; padding: 7px 10px; font-size: 14.5px; }
 	.p3d-fil-side .p3d-fil-chip small { margin-left: auto; }
 	.p3d-fil-side .p3d-fil-chip:hover { background: var(--tint-2); }
