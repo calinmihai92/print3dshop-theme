@@ -51,6 +51,10 @@ $p3d_nav = array(
 				<?php endif; ?>
 				<a href="<?php echo esc_url( $n[0] ); ?>"<?php echo $n[2] ? ' aria-current="page"' : ''; ?><?php echo $n[3] ? ' class="nav-strong"' : ''; ?>><?php echo esc_html( $n[1] ); ?></a>
 			<?php endforeach; ?>
+			<?php if ( function_exists( 'wc_get_page_permalink' ) ) : ?>
+				<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="nav-icon<?php echo is_account_page() ? ' is-on' : ''; ?>" title="<?php echo is_user_logged_in() ? 'Contul meu' : 'Autentificare'; ?>" aria-label="<?php echo is_user_logged_in() ? 'Contul meu' : 'Autentificare'; ?>"><?php echo p3d_icon( 'user', 20 ); // phpcs:ignore ?></a>
+				<a href="<?php echo esc_url( wc_get_cart_url() ); ?>" class="nav-icon nav-cart<?php echo is_cart() ? ' is-on' : ''; ?>" title="Coșul meu" aria-label="Coșul meu"><?php echo p3d_icon( 'cart', 20 ); // phpcs:ignore ?><span class="nav-cart-dot" hidden></span></a>
+			<?php endif; ?>
 			<a href="<?php echo esc_attr( p3d_tel() ); ?>" class="btn btn-primary nav-cta"><?php echo p3d_icon( 'phone', 17 ); // phpcs:ignore ?> <?php echo esc_html( p3d_opt( 'phone' ) ); ?></a>
 		</div>
 
@@ -65,6 +69,11 @@ $p3d_nav = array(
 					<?php endif; ?>
 					<a href="<?php echo esc_url( $n[0] ); ?>"<?php echo $n[3] ? ' class="is-service"' : ''; ?>><?php echo esc_html( $n[1] ); ?></a>
 				<?php endforeach; ?>
+				<?php if ( function_exists( 'wc_get_page_permalink' ) ) : ?>
+					<span class="sep" aria-hidden="true"></span>
+					<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>"><?php echo is_user_logged_in() ? 'Contul meu' : 'Autentificare / Cont nou'; ?></a>
+					<a href="<?php echo esc_url( wc_get_cart_url() ); ?>">Coșul meu</a>
+				<?php endif; ?>
 				<span class="sep" aria-hidden="true"></span>
 				<a href="<?php echo esc_attr( p3d_tel() ); ?>" class="btn btn-primary"><?php echo p3d_icon( 'phone', 17 ); // phpcs:ignore ?> Sună: <?php echo esc_html( p3d_opt( 'phone' ) ); ?></a>
 				<a href="<?php echo esc_url( p3d_wa() ); ?>" class="btn btn-ghost" rel="noopener"><?php echo p3d_icon( 'whatsapp', 17 ); // phpcs:ignore ?> Scrie pe WhatsApp</a>

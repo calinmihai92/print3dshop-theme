@@ -80,6 +80,7 @@ function p3d_icon( $name, $size = 20 ) {
 		'alert'    => '<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>',
 		'cycle'    => '<path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v4h-4"/>',
 		'doc'      => '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
+		'user'     => '<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c0-4.1 3.4-7 7.5-7s7.5 2.9 7.5 7"/>',
 		'users'    => '<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5a3 3 0 0 1 0 6"/><path d="M18 14.3c1.8.8 3 2.6 3 5.7"/>',
 		'menu'     => '<path d="M4 7h16M4 12h16M4 17h16"/>',
 		'card'     => '<rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><path d="M7 15h4"/>',
