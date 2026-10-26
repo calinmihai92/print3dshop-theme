@@ -52,7 +52,7 @@ add_filter( 'woocommerce_package_rates', function ( $rates ) {
 		if ( p3d_is_fanbox_rate( $id ) ) {
 			$rate->set_cost( 0 );
 			$rate->set_taxes( array() );
-			$rate->set_label( $rate->get_label() . ' – gratuit' );
+			$rate->set_label( preg_replace( '/\s*[–-]\s*gratuit.*$/u', '', $rate->get_label() ) . ' – gratuit' );
 		}
 	}
 	return $rates;
