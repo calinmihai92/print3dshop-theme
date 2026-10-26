@@ -62,17 +62,25 @@ function p3d_free_shipping_notice() {
 	if ( ! WC()->cart || WC()->cart->is_empty() ) {
 		return;
 	}
-	$min = function_exists( 'p3d_fanbox_free_min' ) ? p3d_fanbox_free_min() : p3d_free_shipping_min();
-	if ( $min <= 0 ) {
-		return;
+	$min = function_exists( 'p3d_fanbox_free_min' ) ? p3d_fanbox_free_min() : 250;
+	$tot = array( 'own' => 0, 'fil' => 0 );
+	foreach ( WC()->cart->get_cart() as $item ) {
+		$type          = function_exists( 'p3d_is_fil_product' ) && p3d_is_fil_product( $item['product_id'] ) ? 'fil' : 'own';
+		$tot[ $type ] += (float) $item['line_total'] + (float) $item['line_tax'];
 	}
-	$total = (float) WC()->cart->get_displayed_subtotal() - (float) WC()->cart->get_discount_total();
-	if ( $total >= $min ) {
-		echo '<div class="p3d-freeship is-ok">' . p3d_icon( 'truck', 18 ) . ' <span>Ai livrare <strong>gratuită la FANbox</strong>.</span></div>'; // phpcs:ignore
-		return;
+	$labels = array( 'own' => 'prin curier', 'fil' => 'la FANbox pentru filamente' );
+	foreach ( $tot as $type => $total ) {
+		if ( $total <= 0 ) {
+			continue;
+		}
+		if ( $total >= $min ) {
+			echo '<div class="p3d-freeship is-ok">' . p3d_icon( 'truck', 18 ) . ' <span>Ai livrare <strong>gratuită ' . esc_html( $labels[ $type ] ) . '</strong>.</span></div>'; // phpcs:ignore
+			continue;
+		}
+		$pct = max( 4, min( 100, round( $total / $min * 100 ) ) );
+		$what = 'fil' === $type ? 'filamente' : 'produse';
+		echo '<div class="p3d-freeship">' . p3d_icon( 'truck', 18 ) . ' <span>Mai adaugă ' . esc_html( $what ) . ' de <strong>' . wc_price( $min - $total ) . '</strong> și ai livrare gratuită ' . esc_html( $labels[ $type ] ) . ' (peste ' . wc_price( $min ) . ').</span><i style="--p:' . (int) $pct . '%"></i></div>'; // phpcs:ignore
 	}
-	$pct = max( 4, min( 100, round( $total / $min * 100 ) ) );
-	echo '<div class="p3d-freeship">' . p3d_icon( 'truck', 18 ) . ' <span>Mai adaugă produse de <strong>' . wc_price( $min - $total ) . '</strong> și ai livrare gratuită la FANbox (comenzi peste ' . wc_price( $min ) . ').</span><i style="--p:' . (int) $pct . '%"></i></div>'; // phpcs:ignore
 }
 add_action( 'woocommerce_before_cart_table', 'p3d_free_shipping_notice' );
 add_action( 'woocommerce_before_checkout_form', 'p3d_free_shipping_notice', 5 );

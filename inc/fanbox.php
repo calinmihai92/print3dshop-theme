@@ -36,27 +36,98 @@ function p3d_is_fanbox_rate( $rate_id ) {
 
 function p3d_fanbox_chosen() {
 	$chosen = WC()->session ? (array) WC()->session->get( 'chosen_shipping_methods' ) : array();
-	return ! empty( $chosen[0] ) && p3d_is_fanbox_rate( $chosen[0] );
+	foreach ( $chosen as $c ) {
+		if ( $c && p3d_is_fanbox_rate( $c ) ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/** Metoda e pentru filamente (livrate de furnizor)? După titlu: „FANbox” sau „FAN Courier”. */
+function p3d_is_fil_method_rate( $rate_id ) {
+	$parts = explode( ':', (string) $rate_id );
+	if ( ! isset( $parts[1] ) ) {
+		return false;
+	}
+	$m = WC_Shipping_Zones::get_shipping_method( (int) $parts[1] );
+	return $m && preg_match( '/fanbox|fan\s*courier/i', (string) $m->get_title() );
+}
+
+function p3d_is_fil_product( $product_id ) {
+	return '' !== (string) get_post_meta( $product_id, '_dkw_id', true );
 }
 
 function p3d_cart_goods_total() {
 	return WC()->cart ? (float) WC()->cart->get_displayed_subtotal() - (float) WC()->cart->get_discount_total() : 0;
 }
 
-// FANbox gratuit peste prag.
-add_filter( 'woocommerce_package_rates', function ( $rates ) {
-	if ( p3d_cart_goods_total() < p3d_fanbox_free_min() ) {
-		return $rates;
+function p3d_package_total( $package ) {
+	$t = 0;
+	foreach ( (array) ( $package['contents'] ?? array() ) as $item ) {
+		$t += (float) ( $item['line_total'] ?? 0 ) + (float) ( $item['line_tax'] ?? 0 );
 	}
+	return $t;
+}
+
+// Coșul se împarte în două colete: produsele noastre (Sameday / ridicare) și filamentele (furnizor: FANbox / FAN Courier).
+add_filter( 'woocommerce_cart_shipping_packages', function ( $packages ) {
+	if ( empty( $packages[0]['contents'] ) ) {
+		return $packages;
+	}
+	$base = $packages[0];
+	$own  = array();
+	$fil  = array();
+	foreach ( $base['contents'] as $key => $item ) {
+		if ( p3d_is_fil_product( $item['product_id'] ) ) {
+			$fil[ $key ] = $item;
+		} else {
+			$own[ $key ] = $item;
+		}
+	}
+	$out = array();
+	foreach ( array( 'own' => $own, 'fil' => $fil ) as $type => $items ) {
+		if ( ! $items ) {
+			continue;
+		}
+		$p                  = $base;
+		$p['contents']      = $items;
+		$p['contents_cost'] = array_sum( wp_list_pluck( $items, 'line_total' ) );
+		$p['p3d_type']      = $type;
+		$out[]              = $p;
+	}
+	return $out;
+} );
+
+add_filter( 'woocommerce_shipping_package_name', function ( $name, $i, $package ) {
+	if ( empty( $package['p3d_type'] ) || count( WC()->cart->get_shipping_packages() ) < 2 ) {
+		return 'fil' === ( $package['p3d_type'] ?? '' ) ? 'Livrare filamente' : $name;
+	}
+	return 'fil' === $package['p3d_type'] ? 'Livrare filamente (de la furnizor)' : 'Livrare celelalte produse';
+}, 10, 3 );
+
+// Fiecare colet vede doar metodele lui; FANbox gratuit peste prag; Sameday gratuit peste prag doar pe coletul nostru.
+add_filter( 'woocommerce_package_rates', function ( $rates, $package ) {
+	$type  = $package['p3d_type'] ?? 'own';
+	$total = p3d_package_total( $package );
 	foreach ( $rates as $id => $rate ) {
-		if ( p3d_is_fanbox_rate( $id ) ) {
+		$fil = p3d_is_fil_method_rate( $id );
+		if ( ( 'fil' === $type ) !== (bool) $fil ) {
+			unset( $rates[ $id ] );
+			continue;
+		}
+		if ( 'own' === $type && 'free_shipping' === $rate->get_method_id() && $total < p3d_fanbox_free_min() ) {
+			unset( $rates[ $id ] );
+			continue;
+		}
+		if ( p3d_is_fanbox_rate( $id ) && $total >= p3d_fanbox_free_min() ) {
 			$rate->set_cost( 0 );
 			$rate->set_taxes( array() );
 			$rate->set_label( preg_replace( '/\s*[–-]\s*gratuit.*$/u', '', $rate->get_label() ) . ' – gratuit' );
 		}
 	}
 	return $rates;
-}, 90 );
+}, 90, 2 );
 
 // La FANbox nu se poate plăti ramburs.
 add_filter( 'woocommerce_available_payment_gateways', function ( $gws ) {
@@ -81,9 +152,12 @@ add_action( 'woocommerce_after_checkout_billing_form', function ( $checkout ) {
 	<script>
 	jQuery(function ($) {
 		function sync() {
-			var v = $('input[name^="shipping_method"]:checked').val() || $('input[name^="shipping_method"]').val() || '';
-			var label = $('input[name^="shipping_method"][value="' + v + '"]').closest('li').text() || $('.woocommerce-shipping-totals td').text();
-			var on = /fanbox/i.test(label);
+			var on = false;
+			$('input[name^="shipping_method"]').each(function () {
+				if ((this.type === 'radio' && !this.checked)) return;
+				var label = $(this).closest('li').text() || $(this).closest('td').text();
+				if (/fanbox/i.test(label)) on = true;
+			});
 			$('.p3d-fanbox-field').prop('hidden', !on);
 		}
 		$(document.body).on('updated_checkout change', 'input[name^="shipping_method"]', sync).on('updated_checkout', sync);

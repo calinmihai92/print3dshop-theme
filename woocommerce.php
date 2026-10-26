@@ -34,7 +34,7 @@ elseif ( is_shop() || is_product_taxonomy() ) :
 			<ul class="hero-points">
 				<li><?php echo p3d_icon( 'check', 16 ); // phpcs:ignore ?> Produse proprii, printate la noi</li>
 				<li><?php echo p3d_icon( 'palette', 16 ); // phpcs:ignore ?> Culori la alegere</li>
-				<li><?php echo p3d_icon( 'truck', 16 ); // phpcs:ignore ?> Livrare gratuită la FANbox peste 250 lei</li>
+				<li><?php echo p3d_icon( 'truck', 16 ); // phpcs:ignore ?> Livrare gratuită peste 250 lei</li>
 				<li><?php echo p3d_icon( 'lock', 16 ); // phpcs:ignore ?> Plata la livrare sau cu cardul</li>
 			</ul>
 		</div>
