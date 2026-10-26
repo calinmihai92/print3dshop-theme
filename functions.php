@@ -121,7 +121,7 @@ add_action( 'template_redirect', function () {
  * și serviciile ascunse — noindex și scoase din sitemap (Rank Math).
  */
 function p3d_seo_hidden_slugs() {
-	return array_merge( array( 'cart', 'checkout', 'my-account', 'privacy-policy' ), p3d_hidden_services() );
+	return array_merge( array( 'cart', 'checkout', 'my-account', 'contul-meu', 'privacy-policy' ), p3d_hidden_services() );
 }
 
 add_filter( 'rank_math/frontend/robots', function ( $robots ) {
