@@ -119,6 +119,10 @@ add_action( 'woocommerce_before_shop_loop', function () {
 		echo '<article class="p3d-qline" data-items="' . esc_attr( wp_json_encode( $l['items'] ) ) . '">';
 		echo '<a class="p3d-qimg" href="' . esc_url( $first['url'] ) . '"><img src="' . esc_url( $first['img'] ) . '" alt="" loading="lazy"></a>';
 		echo '<div class="p3d-qbody">';
+		$logo = 'assets/img/brands/' . sanitize_title( $l['brand'] ) . '.png';
+		if ( '' !== $l['brand'] && file_exists( get_template_directory() . '/' . $logo ) ) {
+			echo '<img class="p3d-qlogo" src="' . esc_url( get_template_directory_uri() . '/' . $logo ) . '" alt="' . esc_attr( $l['brand'] ) . '" loading="lazy">';
+		}
 		echo '<span class="p3d-qbrand">Filament ' . esc_html( $l['brand'] ) . '</span>';
 		echo '<h3 class="p3d-qtitle">' . esc_html( $l['title'] ) . '</h3>';
 		echo '<div class="p3d-qprice"><strong>' . ( $pmin === $pmax ? wc_price( $pmin ) : 'de la ' . wc_price( $pmin ) ) . '</strong> <span>' . (int) $l['in'] . '/' . count( $l['items'] ) . ' culori în stoc</span></div>'; // phpcs:ignore

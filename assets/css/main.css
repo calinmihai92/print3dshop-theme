@@ -729,3 +729,7 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 .p3d-qadd[disabled] { opacity: .5; cursor: not-allowed; }
 @media (max-width: 640px) { .p3d-qline { grid-template-columns: 96px minmax(0,1fr); gap: 14px; } .p3d-qtitle { font-size: 18px; } }
 .p3d-quick { clear: both; width: 100%; }
+
+.p3d-qbody { position: relative; }
+.p3d-qlogo { position: absolute; top: 2px; right: 4px; max-width: 150px; max-height: 44px; width: auto; height: auto; object-fit: contain; opacity: .9; }
+@media (max-width: 640px) { .p3d-qlogo { max-width: 80px; max-height: 24px; } }
