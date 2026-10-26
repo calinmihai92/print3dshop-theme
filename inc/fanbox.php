@@ -73,7 +73,7 @@ add_action( 'woocommerce_after_checkout_billing_form', function ( $checkout ) {
 		'type'        => 'text',
 		'label'       => 'FANbox ales',
 		'placeholder' => 'ex. FANbox Kaufland Pantelimon, Șos. Iancului 53',
-		'required'    => false,
+		'required'    => true,
 		'description' => '<a href="' . esc_url( P3D_FANBOX_LIST ) . '" target="_blank" rel="noopener">Consultă lista de FANbox-uri</a>. Scrie numele sau adresa FANbox-ului. La FANbox plata se face online, cu cardul.',
 	), $checkout->get_value( 'p3d_fanbox' ) );
 	echo '</div>';

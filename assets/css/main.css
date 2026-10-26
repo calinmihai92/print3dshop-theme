@@ -685,3 +685,5 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 .p3d-freeship { position: relative; display: flex; gap: 10px; align-items: center; padding: 14px 18px 20px; margin: 0 0 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--tint-2); font-size: 15.5px; overflow: hidden; }
 .p3d-freeship i { position: absolute; left: 0; bottom: 0; height: 5px; width: var(--p); background: var(--accent); border-radius: 0 3px 3px 0; }
 .p3d-freeship.is-ok { padding-bottom: 14px; background: #e9f7ee; border-color: #bfe5cc; color: #1d6b3a; }
+.p3d-fanbox-field .description { display: block !important; margin-top: 6px; font-size: 14px; color: var(--muted); }
+.p3d-fanbox-field .description a { color: var(--accent-text); font-weight: 600; }
