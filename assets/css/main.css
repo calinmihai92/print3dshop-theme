@@ -679,3 +679,4 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 }
 .woocommerce-account .woocommerce:has(.woocommerce-MyAccount-navigation) > .woocommerce-notices-wrapper { grid-column: 1 / -1; }
 .woocommerce-account .woocommerce:has(.woocommerce-MyAccount-navigation) > .woocommerce-notices-wrapper:empty { display: none; }
+.woocommerce-account .woocommerce:has(.woocommerce-MyAccount-navigation)::before, .woocommerce-account .woocommerce:has(.woocommerce-MyAccount-navigation)::after, #customer_login.col2-set::before, #customer_login.col2-set::after, .woocommerce-Addresses.col2-set::before, .woocommerce-Addresses.col2-set::after { display: none; }
