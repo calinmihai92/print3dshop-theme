@@ -777,6 +777,10 @@ add_action( 'pre_get_posts', function ( $q ) {
 		$tax[] = array( 'taxonomy' => 'product_cat', 'field' => 'slug', 'terms' => array( 'filamente' ), 'operator' => 'NOT IN', 'include_children' => true );
 		$q->set( 'tax_query', $tax );
 	}
+	// Administratorul vede și ciornele pe pagina filamentelor (previzualizare).
+	if ( $q->is_tax( 'product_cat' ) && current_user_can( 'manage_woocommerce' ) && p3d_dkw_preview_archive( $q ) ) {
+		$q->set( 'post_status', array( 'publish', 'draft', 'private' ) );
+	}
 	if ( $q->is_tax( 'product_cat' ) && ! empty( $_GET['material'] ) ) { // phpcs:ignore
 		$meta   = (array) $q->get( 'meta_query' );
 		$meta[] = array( 'key' => '_dkw_material', 'value' => sanitize_text_field( wp_unslash( $_GET['material'] ) ) ); // phpcs:ignore
@@ -835,7 +839,8 @@ function p3d_dkw_filters_html() {
 	global $wpdb;
 	$ids  = array_merge( array( (int) $cur->term_id ), array_map( 'intval', get_term_children( $cur->term_id, 'product_cat' ) ) );
 	$in   = implode( ',', $ids );
-	$mats = $wpdb->get_col( "SELECT pm.meta_value FROM {$wpdb->postmeta} pm JOIN {$wpdb->posts} p ON p.ID = pm.post_id AND p.post_status = 'publish'
+	$st   = current_user_can( 'manage_woocommerce' ) ? "'publish','draft','private'" : "'publish'";
+	$mats = $wpdb->get_col( "SELECT pm.meta_value FROM {$wpdb->postmeta} pm JOIN {$wpdb->posts} p ON p.ID = pm.post_id AND p.post_status IN ($st)
 		JOIN {$wpdb->term_relationships} tr ON tr.object_id = p.ID JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id AND tt.term_id IN ($in)
 		WHERE pm.meta_key = '_dkw_material' AND pm.meta_value <> '' GROUP BY pm.meta_value ORDER BY pm.meta_value" ); // phpcs:ignore
 	if ( $mats ) {
@@ -856,3 +861,30 @@ add_action( 'woocommerce_archive_description', function () {
 		remove_action( 'woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10 );
 	}
 }, 1 );
+
+
+/** Interogarea e pe „Filamente” sau o subcategorie? (folosit înainte ca get_queried_object să fie gata) */
+function p3d_dkw_preview_archive( $q ) {
+	$root = p3d_dkw_root_term();
+	$slug = (string) $q->get( 'product_cat' );
+	if ( ! $root || '' === $slug ) {
+		return false;
+	}
+	$t = get_term_by( 'slug', $slug, 'product_cat' );
+	return $t && ( (int) $t->term_id === (int) $root->term_id || term_is_ancestor_of( $root->term_id, $t->term_id, 'product_cat' ) );
+}
+
+// Ciornele se deschid în modul previzualizare (pentru administrator).
+add_filter( 'post_type_link', function ( $link, $post ) {
+	if ( 'product' === $post->post_type && 'draft' === $post->post_status && ! is_admin() && current_user_can( 'manage_woocommerce' ) && get_post_meta( $post->ID, '_dkw_id', true ) ) {
+		return add_query_arg( array( 'post_type' => 'product', 'p' => $post->ID, 'preview' => 'true' ), home_url( '/' ) );
+	}
+	return $link;
+}, 10, 2 );
+
+// Bandă de avertizare pe pagina filamentelor, când administratorul vede ciorne.
+add_action( 'woocommerce_before_shop_loop', function () {
+	if ( p3d_dkw_is_fil_archive() && current_user_can( 'manage_woocommerce' ) ) {
+		echo '<div class="p3d-preview-note">Previzualizare: vezi și filamentele în ciornă. Clienții văd doar produsele publicate.</div>';
+	}
+}, 5 );
