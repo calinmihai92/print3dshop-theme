@@ -98,6 +98,8 @@ function p3d_of_statuses() {
 	return array(
 		'ciorna'   => array( 'Ciornă', '#6b7280' ),
 		'trimisa'  => array( 'Trimisă clientului', '#b45309' ),
+		'acceptata' => array( 'Acceptată de client', '#15803d' ),
+		'intrebari' => array( 'Clientul are întrebări', '#b91c1c' ),
 		'platita'  => array( 'Plătită', '#15803d' ),
 		'lucru'    => array( 'În lucru', '#1d4ed8' ),
 		'livrata'  => array( 'Livrată / predată', '#374151' ),
@@ -251,6 +253,7 @@ add_filter( 'enter_title_here', function ( $t, $post ) {
 
 add_action( 'add_meta_boxes_' . P3D_OF_CPT, function () {
 	add_meta_box( 'p3d_of_main', 'Configurator printare 3D', 'p3d_of_box_main', P3D_OF_CPT, 'normal', 'high' );
+	add_meta_box( 'p3d_of_accept', 'Link de acceptare', 'p3d_of_box_accept', P3D_OF_CPT, 'side', 'high' );
 	add_meta_box( 'p3d_of_pay', 'Link de plată', 'p3d_of_box_pay', P3D_OF_CPT, 'side', 'high' );
 	add_meta_box( 'p3d_of_log', 'Istoric', 'p3d_of_box_log', P3D_OF_CPT, 'side', 'default' );
 } );
@@ -316,6 +319,12 @@ function p3d_of_box_main( $post ) {
 	$c    = $d['client'];
 	$paid = p3d_of_is_paid( $post->ID );
 	wp_nonce_field( 'p3d_of_save', 'p3d_of_nonce' );
+	$acc = get_post_meta( $post->ID, '_p3d_of_accept', true );
+	if ( $acc && ! $paid ) {
+		echo p3d_of_accept_valid( $post->ID )
+			? '<div class="p3d-alert ok"><strong>Acceptată de client</strong> — ' . esc_html( $acc['name'] ) . ', ' . esc_html( wp_date( 'j M Y, H:i', $acc['t'] ) ) . '. Dacă modifici piesele sau prețurile, clientul va trebui să accepte din nou.</div>'
+			: '<div class="p3d-alert warn"><strong>Oferta a fost modificată după acceptare.</strong> Trimite din nou linkul clientului ca să o reaccepte.</div>';
+	}
 	if ( $paid ) {
 		echo '<div class="p3d-alert ok"><strong>Oferta e plătită.</strong> Modificările de aici nu mai schimbă comanda plătită.</div>';
 	}
@@ -546,9 +555,17 @@ add_action( 'save_post_' . P3D_OF_CPT, function ( $id, $post ) {
 		} elseif ( $order && ! $order->is_paid() && in_array( $order->get_status(), array( 'pending', 'failed', 'on-hold' ), true ) ) {
 			p3d_of_sync_order( $id, $order );
 		}
-		if ( ! empty( $_POST['p3d_of_mail'] ) && p3d_of_order( $id ) && $d['client']['email'] ) { // phpcs:ignore
-			$ok = p3d_of_mail_client( $id );
-			p3d_of_log( $id, $ok ? 'Ofertă trimisă pe email la ' . $d['client']['email'] : 'Emailul nu a putut fi trimis' );
+	}
+	// Modificată după acceptare → trebuie acceptată din nou.
+	if ( get_post_meta( $id, '_p3d_of_accept', true ) && ! p3d_of_accept_valid( $id ) && 'acceptata' === p3d_of_status( $id ) ) {
+		update_post_meta( $id, '_p3d_of_status', 'trimisa' );
+		p3d_of_log( $id, 'Modificată după acceptare — trebuie reacceptată' );
+	}
+	if ( ! empty( $_POST['p3d_of_mail'] ) && $d['client']['email'] && 'publish' === get_post_status( $id ) ) { // phpcs:ignore
+		$ok = p3d_of_mail_client( $id );
+		p3d_of_log( $id, $ok ? 'Ofertă trimisă pe email la ' . $d['client']['email'] : 'Emailul nu a putut fi trimis' );
+		if ( $ok && 'ciorna' === p3d_of_status( $id ) ) {
+			update_post_meta( $id, '_p3d_of_status', 'trimisa' );
 		}
 	}
 	$running = false;
@@ -655,7 +672,8 @@ function p3d_of_mail_client( $id ) {
 	if ( $d['term'] ) {
 		$msg .= 'Termen de execuție: ' . $d['term'] . "\n";
 	}
-	$msg .= "\nVedeți oferta completă" . ( p3d_of_card_ready() ? ' și o puteți plăti online, cu cardul' : '' ) . ":\n" . p3d_of_url( $id ) . "\n\nPentru întrebări: " . p3d_opt( 'phone' ) . "\n\nMulțumim,\nPrint3D Shop\nprint3dshop.ro";
+	$pay  = p3d_of_order( $id ) && p3d_of_card_ready();
+	$msg .= "\nVedeți oferta completă" . ( p3d_of_accept_valid( $id ) ? ( $pay ? ' și o puteți plăti online, cu cardul' : '' ) : ' și, dacă sunteți de acord, acceptați-o online' . ( $pay ? ' și plătiți cu cardul' : '' ) ) . ":\n" . p3d_of_url( $id ) . "\n\nPentru întrebări: " . p3d_opt( 'phone' ) . "\n\nMulțumim,\nPrint3D Shop\nprint3dshop.ro";
 	return wp_mail( $d['client']['email'], 'Oferta de printare 3D nr. ' . $nr . ' — Print3D Shop', $msg, array( 'Content-Type: text/plain; charset=UTF-8', 'Reply-To: Print3D Shop <' . p3d_opt( 'email' ) . '>' ) );
 }
 
@@ -682,7 +700,7 @@ add_action( 'woocommerce_order_status_changed', function ( $order_id, $from, $to
 	if ( ! $oid || get_post_type( $oid ) !== P3D_OF_CPT ) {
 		return;
 	}
-	if ( in_array( $to, array( 'processing', 'completed' ), true ) && in_array( p3d_of_status( $oid ), array( 'ciorna', 'trimisa' ), true ) ) {
+	if ( in_array( $to, array( 'processing', 'completed' ), true ) && in_array( p3d_of_status( $oid ), array( 'ciorna', 'trimisa', 'acceptata', 'intrebari' ), true ) ) {
 		update_post_meta( $oid, '_p3d_of_status', 'platita' );
 		p3d_of_log( $oid, 'Plătită online (comanda #' . $order->get_order_number() . ')' );
 	} elseif ( 'cancelled' === $to ) {
@@ -816,19 +834,63 @@ function p3d_of_render( $id ) {
 			<div><strong>Oferta este plătită</strong><br>Mulțumim! Comanda nr. <?php echo esc_html( $order->get_order_number() ); ?> · <?php echo esc_html( p3d_money( $order->get_total() ) ); ?></div>
 		</div>
 	<?php elseif ( 'anulata' !== $st ) : ?>
-		<div class="card fisa-card fisa-confirm of-pay">
-			<h2 class="h3">Plata</h2>
-			<?php if ( $order && $card ) : ?>
+		<?php
+		$acc   = get_post_meta( $id, '_p3d_of_accept', true );
+		$ok    = p3d_of_accept_valid( $id );
+		$self  = p3d_of_url( $id );
+		$err   = isset( $_GET['eroare'] ) ? 'Bifați acordul și scrieți numele complet pentru a accepta oferta.' : ''; // phpcs:ignore
+		?>
+		<?php if ( isset( $_GET['acceptat'] ) && $ok ) : // phpcs:ignore ?>
+			<p class="form-ok" role="status">Mulțumim! Am primit acceptarea ofertei. Vă contactăm în scurt timp pentru plată și începerea printării.</p>
+		<?php elseif ( isset( $_GET['intrebare'] ) ) : // phpcs:ignore ?>
+			<p class="form-ok" role="status">Mulțumim! Am primit mesajul și vă răspundem cât mai repede.</p>
+		<?php endif; ?>
+
+		<?php if ( $ok ) : ?>
+			<div class="card fisa-card fisa-confirmed">
+				<span class="icon-tile solid"><?php echo p3d_icon( 'check', 22 ); // phpcs:ignore ?></span>
+				<div><strong>Ofertă acceptată</strong><br>de <?php echo esc_html( $acc['name'] ); ?>, pe <?php echo esc_html( wp_date( 'j F Y, H:i', $acc['t'] ) ); ?> · total <?php echo esc_html( p3d_money( $acc['total'] ) ); ?></div>
+			</div>
+		<?php else : ?>
+			<?php if ( $acc ) : ?><p class="form-err">Oferta a fost actualizată după acceptarea anterioară. Vă rugăm să o verificați și să o acceptați din nou.</p><?php endif; ?>
+			<div class="card fisa-card fisa-confirm" id="acceptare">
+				<h2 class="h3">Acceptați <em>oferta</em></h2>
+				<?php if ( $err ) : ?><p class="form-err" role="alert"><?php echo esc_html( $err ); ?></p><?php endif; ?>
+				<form method="post" class="p3d-form" action="<?php echo esc_url( $self ); ?>#acceptare">
+					<input type="hidden" name="p3d_of_act" value="accept">
+					<input type="hidden" name="t" value="<?php echo esc_attr( p3d_of_form_token( $id, 'accept' ) ); ?>">
+					<label class="consent"><input type="checkbox" name="acord" value="1" required> <span>Am verificat piesele, materialele și cantitățile și sunt de acord cu printarea la prețul total de <strong><?php echo esc_html( p3d_money( $tot['total'] ) ); ?></strong>.</span></label>
+					<label>Nume și prenume<input type="text" name="nume" autocomplete="name" value="<?php echo esc_attr( $d['client']['name'] ); ?>" required minlength="3"></label>
+					<div><button type="submit" class="btn btn-primary"><?php echo p3d_icon( 'check', 18 ); // phpcs:ignore ?> Accept oferta</button></div>
+				</form>
+				<details class="fisa-q">
+					<summary>Am întrebări sau vreau modificări</summary>
+					<form method="post" class="p3d-form" action="<?php echo esc_url( $self ); ?>">
+						<input type="hidden" name="p3d_of_act" value="question">
+						<input type="hidden" name="t" value="<?php echo esc_attr( p3d_of_form_token( $id, 'question' ) ); ?>">
+						<label>Mesajul dvs.<textarea name="mesaj" required minlength="3"></textarea></label>
+						<div><button type="submit" class="btn btn-ghost">Trimite mesajul</button></div>
+					</form>
+				</details>
+			</div>
+		<?php endif; ?>
+
+		<?php if ( $order && $card ) : ?>
+			<div class="card fisa-card fisa-confirm of-pay">
+				<h2 class="h3">Plata</h2>
 				<p>Poți plăti online, în siguranță, cu cardul. După plată începem printarea.</p>
 				<a href="<?php echo esc_url( $order->get_checkout_payment_url() ); ?>" class="btn btn-primary"><?php echo p3d_icon( 'shield', 18 ); // phpcs:ignore ?> Plătește <?php echo esc_html( p3d_money( $tot['total'] ) ); ?> cu cardul</a>
-			<?php else : ?>
-				<p>Plata online cu cardul va fi disponibilă în curând. Până atunci, sună-ne sau scrie-ne pe WhatsApp și stabilim împreună plata și începerea lucrului.</p>
+			</div>
+		<?php elseif ( $ok ) : ?>
+			<div class="card fisa-card of-pay">
+				<h2 class="h3">Plata</h2>
+				<p>Vă trimitem în scurt timp linkul de plată online cu cardul. Pentru orice întrebare, sunați-ne sau scrieți-ne pe WhatsApp.</p>
 				<div class="ctas">
 					<a href="<?php echo esc_attr( p3d_tel() ); ?>" class="btn btn-primary"><?php echo p3d_icon( 'phone', 18 ); // phpcs:ignore ?> <?php echo esc_html( p3d_opt( 'phone' ) ); ?></a>
-					<a href="<?php echo esc_url( p3d_wa( 'Bună ziua! Am primit oferta de printare 3D nr. ' . $nr . '. ' ) ); ?>" class="btn btn-ghost" rel="noopener"><?php echo p3d_icon( 'whatsapp', 18 ); // phpcs:ignore ?> WhatsApp</a>
+					<a href="<?php echo esc_url( p3d_wa( 'Bună ziua! Am acceptat oferta de printare 3D nr. ' . $nr . '. ' ) ); ?>" class="btn btn-ghost" rel="noopener"><?php echo p3d_icon( 'whatsapp', 18 ); // phpcs:ignore ?> WhatsApp</a>
 				</div>
-			<?php endif; ?>
-		</div>
+			</div>
+		<?php endif; ?>
 	<?php endif; ?>
 	<p class="muted center">Întrebări? Sunați la <a href="<?php echo esc_attr( p3d_tel() ); ?>"><?php echo esc_html( p3d_opt( 'phone' ) ); ?></a> · <?php echo esc_html( p3d_opt( 'hours' ) ); ?></p>
 	<?php
