@@ -185,7 +185,8 @@ add_action( 'wp_head', function () {
 		'@context'                  => 'https://schema.org',
 		'@type'                     => 'LocalBusiness',
 		'@id'                       => home_url( '/#business' ),
-		'name'                      => 'Print3D Shop',
+		'name'                      => 'Print 3D Shop',
+		'alternateName'             => array( 'Print3D Shop', 'print3dshop', 'print3dshop.ro' ),
 		'description'               => 'Service și reparații imprimante 3D, printare 3D la comandă, proiectare 3D, scanare 3D, prelucrare CNC și matrițe în București.',
 		'url'                       => home_url( '/' ),
 		'telephone'                 => '+' . preg_replace( '/\D/', '', p3d_opt( 'whatsapp' ) ),
@@ -195,8 +196,12 @@ add_action( 'wp_head', function () {
 			'@type'           => 'PostalAddress',
 			'streetAddress'   => 'Șoseaua Iancului nr. 53',
 			'addressLocality' => 'București',
+			'addressRegion'   => 'București',
+			'postalCode'      => '021884',
 			'addressCountry'  => 'RO',
 		),
+		'hasMap'                    => 'https://www.google.com/maps?cid=6448232225682744552',
+		'sameAs'                    => array( 'https://www.google.com/maps?cid=6448232225682744552' ),
 		'openingHoursSpecification' => array(
 			array(
 				'@type'     => 'OpeningHoursSpecification',

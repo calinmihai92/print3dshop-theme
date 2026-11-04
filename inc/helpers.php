@@ -14,7 +14,7 @@ function p3d_opt( $key ) {
 		'whatsapp' => '40785813441',
 		'email'    => 'office@print3dshop.ro',
 		'address'  => 'Șoseaua Iancului nr. 53, București',
-		'maps'     => 'https://www.google.com/maps/search/?api=1&query=%C8%98oseaua+Iancului+53+Bucure%C8%99ti',
+		'maps'     => 'https://www.google.com/maps?cid=6448232225682744552', // profilul Google „Print 3D Shop”
 		'hours'    => 'Luni–Vineri: 09:00–18:00 · Sâmbătă–Duminică: închis',
 	);
 	$val = get_theme_mod( 'p3d_' . $key, '' );
