@@ -46,6 +46,13 @@ add_action( 'template_redirect', function () {
 	nocache_headers();
 	header( 'X-Robots-Tag: noindex, nofollow' );
 }, 1 );
+add_filter( 'woocommerce_product_is_visible', function ( $visible, $id ) {
+	if ( ! $visible && p3d_dkw_guest_preview() && 'draft' === get_post_status( $id ) && get_post_meta( $id, '_dkw_id', true ) ) {
+		$p       = wc_get_product( $id );
+		$visible = $p && $p->is_in_stock();
+	}
+	return $visible;
+}, 10, 2 );
 add_filter( 'term_link', function ( $link, $term, $tax ) {
 	return ( 'product_cat' === $tax && p3d_dkw_guest_preview() ) ? add_query_arg( 'previzualizare', p3d_dkw_preview_token(), $link ) : $link;
 }, 10, 3 );
