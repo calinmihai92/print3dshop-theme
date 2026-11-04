@@ -22,6 +22,7 @@ function p3d_services() {
 			'lead'     => 'Imprimanta nu mai printează cum trebuie? O verificăm, o reparăm și o reglăm, ca să printeze din nou precis și fiabil. Întreținere și suport tehnic specializat pentru cele mai populare imprimante 3D.',
 			'card'     => 'Diagnoză, reparații, piese de schimb și întreținere pentru cele mai populare imprimante 3D.',
 			'points'   => array( 'Diagnoză și evaluare', 'Piese de schimb și reparații', 'Întreținere preventivă' ),
+			'seo'      => array( 'Service imprimante 3D București – reparații Bambu Lab, Prusa, Creality | Print3D Shop', 'Service și reparații imprimante 3D în București, Sector 2: diagnostic gratuit, piese de schimb, calibrare și întreținere pentru Bambu Lab, Prusa, Creality, Anycubic, Elegoo, Voron. Luni–Vineri 09–18.' ),
 			'brands'   => array( 'Bambu Lab', 'Prusa', 'Creality', 'Anycubic', 'Elegoo', 'Voron', 'și alte mărci' ),
 			'problems' => array(
 				array( 'Nu mai extrudează', 'Duză înfundată, extruder care sare sau filament care nu mai iese.' ),
@@ -47,6 +48,8 @@ function p3d_services() {
 				array( 'Reparăm și reglăm', 'Înlocuim ce e nevoie, calibrăm și imprimanta e gata de lucru.' ),
 			),
 			'faq'      => array(
+				array( 'Cât costă diagnosticul?', 'Diagnosticul este gratuit. După ce verificăm imprimanta îți spunem ce trebuie reparat și cât costă, iar lucrăm doar după ce ești de acord. Prețurile orientative pentru reparații sunt pe pagina de prețuri.' ),
+				array( 'Unde vă găsim și care e programul?', 'Atelierul este în București, Sector 2, pe Șoseaua Iancului nr. 53. Programul este de luni până vineri, între 09:00 și 18:00. Sună-ne înainte să vii, ca să te putem primi imediat.' ),
 				array( 'Ce mărci de imprimante 3D reparați?', 'Lucrăm cu cele mai populare imprimante 3D, printre care Bambu Lab, Prusa, Creality, Anycubic, Elegoo și Voron, dar și alte mărci. Dacă nu ești sigur, sună-ne sau scrie-ne modelul imprimantei.' ),
 				array( 'Pot trimite întâi poze sau un video cu problema?', 'Da. Scrie-ne pe WhatsApp cu o descriere și, dacă poți, poze sau un video scurt. Ne ajută să înțelegem problema mai repede.' ),
 				array( 'Faceți și întreținere preventivă?', 'Da. Întreținerea preventivă (curățare, reglaje, verificarea pieselor uzate) ajută imprimanta să funcționeze fiabil și previne defectele.' ),
@@ -65,6 +68,19 @@ function p3d_services() {
 			'lead'     => 'Servicii de printare 3D în București pentru proiecte unice, prototipuri, piese de schimb sau obiecte personalizate. Printăm din PLA, PETG, ABS, ASA și TPU, cu precizie și atenție la detalii, de la o singură piesă până la serii mici.',
 			'card'     => 'Prototipuri, piese de schimb, obiecte unicat. Trimiți modelul, alegi culoarea, primești piesele.',
 			'points'   => array( 'Diverse materiale și culori', 'Prototipuri și piese unicat', 'Ridicare sau livrare' ),
+			'seo'      => array( 'Printare 3D București la comandă — de la 1 leu/g | Print3D Shop', 'Servicii de printare 3D în București: piese, prototipuri și obiecte personalizate din PLA, PETG, ABS, ASA, TPU. De la 1 leu/g + 15 lei/oră. Ofertă rapidă pe WhatsApp.' ),
+			'also'     => array(
+				'title' => array( 'Din ce printăm ', 'și pe ce imprimante' ),
+				'lead'  => 'Printăm în atelierul nostru din București, Sector 2, pe imprimante Bambu Lab P1S. Alegem împreună materialul potrivit pentru ce trebuie să facă piesa.',
+				'items' => array(
+					array( 'layers', 'PLA', 'Cel mai folosit material: precis, rigid și ieftin. Bun pentru prototipuri, machete, decoruri și obiecte personalizate.' ),
+					array( 'shield', 'PETG', 'Mai rezistent la șocuri și la căldură decât PLA. Bun pentru piese funcționale, suporturi și carcase.' ),
+					array( 'thermo', 'ABS și ASA', 'Rezistă la temperaturi mai mari; ASA rezistă și la soare și ploaie. Bune pentru piese auto și de exterior.' ),
+					array( 'cycle', 'TPU (flexibil)', 'Material elastic, ca un cauciuc: garnituri, protecții, huse și piese care trebuie să se îndoaie.' ),
+					array( 'cube', 'Până la 25 × 25 × 25 cm', 'Volumul maxim de printare al imprimantelor Bambu Lab P1S. Piesele mai mari le printăm din mai multe bucăți.' ),
+					array( 'upload', 'Fișiere STL, 3MF, STEP, OBJ', 'Trimite modelul pe WhatsApp sau pe email. Nu ai fișier? Îl proiectăm noi, după o schiță, o poză sau piesa originală.' ),
+				),
+			),
 			'whatTitle' => array( 'Pentru ', 'ce printăm' ),
 			'what'     => array(
 				array( 'cube', 'Prototipuri', 'Testezi forma și funcția unui produs înainte de producție.' ),
@@ -84,7 +100,10 @@ function p3d_services() {
 				array( 'Cât costă printarea 3D în București?', 'Prețul depinde de materialul folosit și de timpul de printare: de la 1 leu/gram pentru PLA, plus 15 lei pe oră de printare. Vezi pagina de prețuri sau trimite-ne modelul și îți spunem prețul exact.' ),
 				array( 'Ce trebuie să trimit pentru printare?', 'Ideal, modelul 3D al piesei. Dacă nu ai model, poți aduce piesa existentă sau ne poți descrie ideea, iar noi o proiectăm.' ),
 				array( 'Pot alege materialul și culoarea?', 'Da. Alegi materialul, culoarea și dimensiunile potrivite nevoilor tale.' ),
-				array( 'Cum primesc piesele?', 'Poți alege ridicarea personală sau livrarea la domiciliu.' ),
+				array( 'Cum primesc piesele?', 'Poți ridica piesele de la atelierul nostru din București (Șoseaua Iancului nr. 53, Sector 2) sau ți le trimitem prin curier, în București și în toată țara.' ),
+				array( 'Ce fișiere acceptați?', 'Lucrăm cu STL, 3MF, STEP și OBJ. Dacă ai alt format sau doar o schiță, o poză ori piesa originală, scrie-ne și găsim o soluție.' ),
+				array( 'Cât de mare poate fi o piesă?', 'Pe o singură printare, până la 25 × 25 × 25 cm. Obiectele mai mari le împărțim în bucăți care se asamblează după printare.' ),
+				array( 'Faceți și serii mici?', 'Da. Printăm de la o singură piesă până la serii mici, pe mai multe imprimante în paralel. Spune-ne câte bucăți îți trebuie și îți facem oferta.' ),
 				array( 'Printați și piese tehnice sau doar decorative?', 'Printăm atât prototipuri și piese funcționale, cât și obiecte decorative sau personalizate.' ),
 			),
 			'wa'       => 'Bună ziua! Aș vrea o printare 3D: ',

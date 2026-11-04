@@ -178,7 +178,7 @@ add_action( 'template_redirect', function () {
  * Date structurate LocalBusiness (adresă, telefon, program) pe prima pagină și la Contact.
  */
 add_action( 'wp_head', function () {
-	if ( ! is_front_page() && ! is_page( 'contacts' ) ) {
+	if ( ! is_front_page() && ! is_page( 'contacts' ) && ! is_singular( 'cpt_services' ) ) {
 		return;
 	}
 	$data = array(
@@ -208,6 +208,29 @@ add_action( 'wp_head', function () {
 	);
 	echo '<script type="application/ld+json">' . wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>' . "\n";
 }, 31 );
+
+/**
+ * Titlul și descrierea din Google pentru paginile de servicii (din inc/data.php, câmpul 'seo').
+ */
+function p3d_service_seo( $i ) {
+	if ( ! is_singular( 'cpt_services' ) ) {
+		return null;
+	}
+	$s = p3d_service( get_post_field( 'post_name', get_queried_object_id() ) );
+	return $s['seo'][ $i ] ?? null;
+}
+add_filter( 'rank_math/frontend/title', function ( $t ) {
+	return p3d_service_seo( 0 ) ?? $t;
+}, 20 );
+add_filter( 'rank_math/frontend/description', function ( $d ) {
+	return p3d_service_seo( 1 ) ?? $d;
+}, 20 );
+add_filter( 'rank_math/opengraph/facebook/og_title', function ( $t ) {
+	return p3d_service_seo( 0 ) ?? $t;
+}, 20 );
+add_filter( 'rank_math/opengraph/facebook/og_description', function ( $d ) {
+	return p3d_service_seo( 1 ) ?? $d;
+}, 20 );
 
 /**
  * FAQ ca date structurate pe paginile de servicii și pe prima pagină.
