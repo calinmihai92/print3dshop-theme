@@ -576,7 +576,9 @@ function p3d_dkw_page() {
 	foreach ( array( 40, 55, 75, 90, 140 ) as $x ) {
 		printf( '<tr><td>%d lei</td><td>%s%%</td><td>%s lei</td></tr>', $x, esc_html( (string) p3d_dkw_markup( $x, $o ) ), esc_html( p3d_dkw_price( $x, $o ) ) );
 	}
-	echo '</tbody></table></div>';
+	echo '</tbody></table>';
+	do_action( 'p3d_dkw_page_after' );
+	echo '</div>';
 }
 
 /* =====================================================================
@@ -825,9 +827,9 @@ add_action( 'admin_post_p3d_dkw_orders', function () {
 	exit;
 } );
 
-add_action( 'admin_footer-product_page_p3d-dkw', function () {
+add_action( 'p3d_dkw_page_after', function () {
 	$o = p3d_dkw_order_opts();
-	echo '<div class="wrap"><h2>Comenzi către dkw.ro (dropshipping)</h2><form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="p3d_dkw_orders">';
+	echo '<div><h2 style="margin-top:32px">Comenzi către dkw.ro (dropshipping)</h2><form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="p3d_dkw_orders">';
 	wp_nonce_field( 'p3d_dkw_orders' );
 	echo '<table class="form-table">';
 	echo '<tr><th>Trimitere comenzi</th><td><select name="mode">';
