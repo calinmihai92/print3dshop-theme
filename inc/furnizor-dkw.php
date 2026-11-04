@@ -873,8 +873,8 @@ add_action( 'admin_post_p3d_dkw_report', function () {
 	header( 'Content-Disposition: attachment; filename="decont-dkw-' . $m . '.csv"' );
 	$out = fopen( 'php://output', 'w' );
 	fwrite( $out, "\xEF\xBB\xBF" );
-	fputcsv( $out, array( 'Data', 'Comanda print3dshop', 'Comanda dkw', 'Status comandă', 'Status dkw', 'Plată', 'Ramburs încasat de dkw (lei)', 'Plătit la print3dshop (lei)', 'Produse', 'Cost achiziție (lei)', 'AWB' ), ';' );
-	$sum = array( 0, 0, 0 );
+	fputcsv( $out, array( 'Data', 'Comanda print3dshop', 'Comanda dkw', 'Status comandă', 'Status dkw', 'Plată', 'Ramburs încasat de dkw (lei)', 'Plătit la print3dshop (lei)', 'Produse', 'Cost achiziție (lei)', 'Transport (al dkw, lei)', 'De plătit către dkw (lei)', 'AWB' ), ';' );
+	$sum = array( 0, 0, 0, 0, 0 );
 	foreach ( $orders as $order ) {
 		$items = p3d_dkw_order_items( $order );
 		$cost  = 0;
@@ -885,9 +885,18 @@ add_action( 'admin_post_p3d_dkw_report', function () {
 		}
 		$cod  = 'cod' === $order->get_payment_method();
 		$tot  = (float) $order->get_total();
+		$ship = 0;
+		foreach ( $order->get_items( 'shipping' ) as $sh ) {
+			if ( p3d_is_fil_method_rate( $sh->get_method_id() . ':' . $sh->get_instance_id() ) || false !== stripos( $sh->get_method_title(), 'fan' ) ) {
+				$ship += (float) $sh->get_total() + (float) $sh->get_total_tax();
+			}
+		}
+		$owed = $cost + $ship; // ce i se cuvine lui dkw pentru comanda asta
 		$sum[0] += $cod ? $tot : 0;
 		$sum[1] += $cod ? 0 : $tot;
 		$sum[2] += $cost;
+		$sum[3] += $ship;
+		$sum[4] += $owed;
 		fputcsv( $out, array(
 			$order->get_date_created() ? $order->get_date_created()->date( 'Y-m-d' ) : '',
 			$order->get_order_number(),
@@ -899,10 +908,15 @@ add_action( 'admin_post_p3d_dkw_report', function () {
 			$cod ? '' : number_format( $tot, 2, ',', '' ),
 			implode( ' | ', $names ),
 			number_format( $cost, 2, ',', '' ),
+			number_format( $ship, 2, ',', '' ),
+			number_format( $owed, 2, ',', '' ),
 			(string) $order->get_meta( '_dkw_awb' ),
 		), ';' );
 	}
-	fputcsv( $out, array( 'TOTAL', '', '', '', '', '', number_format( $sum[0], 2, ',', '' ), number_format( $sum[1], 2, ',', '' ), '', number_format( $sum[2], 2, ',', '' ), '' ), ';' );
+	fputcsv( $out, array( 'TOTAL', '', '', '', '', '', number_format( $sum[0], 2, ',', '' ), number_format( $sum[1], 2, ',', '' ), '', number_format( $sum[2], 2, ',', '' ), number_format( $sum[3], 2, ',', '' ), number_format( $sum[4], 2, ',', '' ), '' ), ';' );
+	// Soldul lunii: dkw a încasat rambursurile (ale noastre în parte), noi am încasat plățile cu cardul.
+	$sold = $sum[4] - $sum[0];
+	fputcsv( $out, array( $sold >= 0 ? 'SOLD: print3dshop plătește către dkw' : 'SOLD: dkw plătește către print3dshop', number_format( abs( $sold ), 2, ',', '' ) . ' lei' ), ';' );
 	fclose( $out );
 	exit;
 } );
