@@ -77,7 +77,7 @@ function p3d_dkw_defaults() {
 		'base'     => 'https://dkw.ro',
 		// „prag:procent” pe rânduri; ultima linie cu prag 0 = peste ultimul prag.
 		'tiers'    => "60:15\n120:12\n0:10",
-		'livrare'  => '2–4 zile lucrătoare',
+		'livrare' => '1–2 zile lucrătoare',
 		'include'  => 'filamente-',
 		'exclude'  => 'filamente-accesorii',
 		'batch'    => 25,
@@ -594,9 +594,14 @@ function p3d_dkw_order_opts() {
 		'url'     => '',
 		'secret'  => '',
 		'email'   => '',
-		'sender'  => 'Print3dShop.ro',
+		'sender'  => 'DKW 3D Print',
 		'complete'=> 1,
 	) );
+}
+
+/** Discountul de revânzător primit de la dkw.ro (procent din prețul afișat pe dkw.ro). */
+function p3d_dkw_discount() {
+	return (float) apply_filters( 'p3d_dkw_discount', 3 );
 }
 
 function p3d_dkw_order_items( WC_Order $order ) {
@@ -607,12 +612,15 @@ function p3d_dkw_order_items( WC_Order $order ) {
 		if ( '' === $dkw_id ) {
 			continue;
 		}
-		$items[] = array(
-			'dkw_id'      => $dkw_id,
-			'sku'         => (string) get_post_meta( $pid, '_sku', true ),
-			'name'        => $item->get_name(),
-			'qty'         => (int) $item->get_quantity(),
-			'dkw_price'   => (float) get_post_meta( $pid, '_dkw_price', true ),
+		$dkw_price = (float) get_post_meta( $pid, '_dkw_price', true );
+		$items[]   = array(
+			'dkw_id'         => $dkw_id,
+			'sku'            => (string) get_post_meta( $pid, '_sku', true ),
+			'name'           => $item->get_name(),
+			'qty'            => (int) $item->get_quantity(),
+			'dkw_price'      => $dkw_price,
+			'purchase_price' => round( $dkw_price * ( 1 - p3d_dkw_discount() / 100 ), 2 ),
+			'sale_price'     => round( ( (float) $item->get_total() + (float) $item->get_total_tax() ) / max( 1, (int) $item->get_quantity() ), 2 ),
 		);
 	}
 	return $items;
@@ -628,6 +636,7 @@ function p3d_dkw_payload( WC_Order $order, $items ) {
 	$states  = WC()->countries->get_states( 'RO' );
 	$county  = $g( 'state' );
 	return array(
+		'version'   => 1,
 		'source'    => 'print3dshop.ro',
 		'order'     => (string) $order->get_order_number(),
 		'order_id'  => $order->get_id(),
@@ -648,6 +657,12 @@ function p3d_dkw_payload( WC_Order $order, $items ) {
 			'cod'          => 'cod' === $order->get_payment_method(),
 			// Suma de încasat la livrare: doar dacă toată comanda e de la dkw (altfel se stabilește manual).
 			'cod_amount'   => ( 'cod' === $order->get_payment_method() && $all_dkw ) ? (float) $order->get_total() : null,
+			'paid'         => 'cod' !== $order->get_payment_method(),
+			'currency'     => $order->get_currency(),
+		),
+		'totals'    => array(
+			'shipping'       => round( (float) $order->get_shipping_total() + (float) $order->get_shipping_tax(), 2 ),
+			'purchase_total' => round( array_sum( array_map( function ( $i ) { return $i['purchase_price'] * $i['qty']; }, $items ) ), 2 ),
 		),
 		'shipping'  => array( 'method' => $order->get_shipping_method(), 'pickup' => false !== stripos( $order->get_shipping_method(), 'ridicare' ), 'fanbox' => (string) $order->get_meta( '_p3d_fanbox' ) ),
 		'note'      => (string) $order->get_customer_note(),
@@ -683,7 +698,11 @@ function p3d_dkw_forward( $order_id, $attempt = 1 ) {
 		if ( $code >= 200 && $code < 300 ) {
 			$ok   = true;
 			$resp = json_decode( wp_remote_retrieve_body( $res ), true );
-			$ref  = is_array( $resp ) && ! empty( $resp['id'] ) ? ' (comanda la dkw: ' . sanitize_text_field( $resp['id'] ) . ')' : '';
+				$ref  = '';
+			if ( is_array( $resp ) && ! empty( $resp['id'] ) ) {
+				$order->update_meta_data( '_dkw_order_ref', sanitize_text_field( (string) $resp['id'] ) );
+				$ref = ' (comanda la dkw: ' . sanitize_text_field( (string) $resp['id'] ) . ')';
+			}
 			$order->add_order_note( 'Comanda a fost trimisă automat la dkw.ro' . $ref . '.' );
 		} else {
 			$err = is_wp_error( $res ) ? $res->get_error_message() : 'HTTP ' . $code;
@@ -739,21 +758,48 @@ add_action( 'rest_api_init', function () {
 				return new WP_Error( 'forbidden', 'Semnătură invalidă.', array( 'status' => 403 ) );
 			}
 			$d     = json_decode( $body, true );
+			$d     = is_array( $d ) ? $d : array();
 			$order = wc_get_order( (int) ( $d['order_id'] ?? 0 ) );
-			if ( ! $order || empty( $d['awb'] ) ) {
-				return new WP_Error( 'bad_request', 'Comandă sau AWB lipsă.', array( 'status' => 400 ) );
+			$event = sanitize_key( $d['status'] ?? 'shipped' );
+			if ( ! $order || ! $order->get_meta( '_dkw_forwarded' ) ) {
+				return new WP_Error( 'not_found', 'Comanda nu există sau nu a fost trimisă la dkw.ro.', array( 'status' => 404 ) );
 			}
-			$awb     = sanitize_text_field( $d['awb'] );
-			$courier = sanitize_text_field( $d['courier'] ?? '' );
-			$url     = esc_url_raw( $d['tracking_url'] ?? '' );
-			$order->update_meta_data( '_dkw_awb', $awb );
-			$order->update_meta_data( '_dkw_courier', $courier );
-			$order->update_meta_data( '_dkw_tracking_url', $url );
-			$order->save();
-			$msg = 'Comanda ta a fost predată curierului' . ( $courier ? ' ' . $courier : '' ) . '. AWB: ' . $awb . ( $url ? ' – urmărire: ' . $url : '' );
-			$order->add_order_note( $msg, true ); // notă către client (primește email)
-			if ( $o['complete'] && p3d_dkw_order_items( $order ) && count( p3d_dkw_order_items( $order ) ) === count( $order->get_items() ) ) {
-				$order->update_status( 'completed', 'AWB primit de la dkw.ro.' );
+			if ( ! in_array( $event, array( 'received', 'shipped', 'delivered', 'returned', 'cancelled' ), true ) ) {
+				return new WP_Error( 'bad_request', 'Status necunoscut.', array( 'status' => 400 ) );
+			}
+			if ( ! empty( $d['dkw_order_id'] ) ) {
+				$order->update_meta_data( '_dkw_order_ref', sanitize_text_field( (string) $d['dkw_order_id'] ) );
+			}
+			$order->update_meta_data( '_dkw_status', $event );
+			$only_dkw = count( p3d_dkw_order_items( $order ) ) === count( $order->get_items() );
+			if ( 'shipped' === $event ) {
+				if ( empty( $d['awb'] ) ) {
+					return new WP_Error( 'bad_request', 'AWB lipsă.', array( 'status' => 400 ) );
+				}
+				$awb     = sanitize_text_field( $d['awb'] );
+				$courier = sanitize_text_field( $d['courier'] ?? '' );
+				$url     = esc_url_raw( $d['tracking_url'] ?? '' );
+				if ( $order->get_meta( '_dkw_awb' ) === $awb ) {
+					$order->save();
+					return array( 'ok' => true, 'duplicate' => true );
+				}
+				$order->update_meta_data( '_dkw_awb', $awb );
+				$order->update_meta_data( '_dkw_courier', $courier );
+				$order->update_meta_data( '_dkw_tracking_url', $url );
+				$order->save();
+				$msg = 'Comanda ta a fost predată curierului' . ( $courier ? ' ' . $courier : '' ) . '. AWB: ' . $awb . ( $url ? ' – urmărire: ' . $url : '' );
+				$order->add_order_note( $msg, true ); // notă către client (primește email)
+				if ( $o['complete'] && $only_dkw ) {
+					$order->update_status( 'completed', 'AWB primit de la dkw.ro.' );
+				}
+			} else {
+				$order->save();
+				$labels = array( 'received' => 'dkw.ro a preluat comanda', 'delivered' => 'dkw.ro: coletul a fost livrat', 'returned' => 'dkw.ro: coletul s-a întors (refuzat sau neridicat)', 'cancelled' => 'dkw.ro a anulat comanda' );
+				$why    = sanitize_text_field( $d['reason'] ?? '' );
+				$order->add_order_note( $labels[ $event ] . ( $why ? ': ' . $why : '' ) . '.' );
+				if ( in_array( $event, array( 'returned', 'cancelled' ), true ) ) {
+					wp_mail( get_option( 'admin_email' ), 'Comanda #' . $order->get_order_number() . ': ' . $labels[ $event ], 'Verifică comanda: ' . admin_url( 'post.php?post=' . $order->get_id() . '&action=edit' ) . ( $why ? "\nMotiv: " . $why : '' ) );
+				}
 			}
 			return array( 'ok' => true );
 		},
@@ -769,7 +815,7 @@ add_action( 'admin_post_p3d_dkw_orders', function () {
 	$o['mode']     = in_array( $in['mode'] ?? '', array( 'none', 'webhook', 'email', 'both' ), true ) ? $in['mode'] : 'none';
 	$o['url']      = esc_url_raw( $in['url'] ?? '' );
 	$o['email']    = sanitize_email( $in['email'] ?? '' );
-	$o['sender']   = sanitize_text_field( $in['sender'] ?? 'Print3dShop.ro' );
+	$o['sender']   = sanitize_text_field( $in['sender'] ?? 'DKW 3D Print' );
 	$o['complete'] = empty( $in['complete'] ) ? 0 : 1;
 	if ( ! $o['secret'] || ! empty( $in['newsecret'] ) ) {
 		$o['secret'] = wp_generate_password( 40, false );
@@ -797,7 +843,66 @@ add_action( 'admin_footer-product_page_p3d-dkw', function () {
 	echo '<tr><th>La primirea AWB-ului</th><td><label><input type="checkbox" name="complete" value="1"' . checked( ! empty( $o['complete'] ), true, false ) . '> Marchează comanda „Finalizată” (dacă are doar produse dkw)</label></td></tr>';
 	echo '</table>';
 	submit_button( 'Salvează setările pentru comenzi' );
-	echo '</form></div>';
+	echo '</form>';
+	echo '<h2>Decont lunar cu dkw.ro</h2><form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="p3d_dkw_report">';
+	wp_nonce_field( 'p3d_dkw_report' );
+	echo '<p>Toate comenzile trimise la dkw.ro într-o lună, cu numărul comenzii de la noi și de la ei, plata, rambursul, costul de achiziție (preț dkw − ' . esc_html( p3d_dkw_discount() ) . '%) și AWB-ul. Se deschide în Excel.</p>';
+	echo '<p><input type="month" name="month" value="' . esc_attr( wp_date( 'Y-m', strtotime( 'first day of last month' ) ) ) . '"> ';
+	submit_button( 'Descarcă decontul (CSV)', 'secondary', 'submit', false );
+	echo '</p></form></div>';
+} );
+
+add_action( 'admin_post_p3d_dkw_report', function () {
+	if ( ! current_user_can( 'manage_woocommerce' ) || ! check_admin_referer( 'p3d_dkw_report' ) ) {
+		wp_die( 'Nu ai voie.' );
+	}
+	$m = preg_match( '/^\d{4}-\d{2}$/', $_POST['month'] ?? '' ) ? $_POST['month'] : wp_date( 'Y-m' ); // phpcs:ignore
+	$from   = $m . '-01';
+	$to     = wp_date( 'Y-m-t', strtotime( $from ) );
+	$orders = wc_get_orders( array(
+		'limit'        => -1,
+		'date_created' => $from . '...' . $to,
+		'meta_key'     => '_dkw_forwarded', // phpcs:ignore
+		'meta_compare' => 'EXISTS',
+		'orderby'      => 'date',
+		'order'        => 'ASC',
+	) );
+	header( 'Content-Type: text/csv; charset=utf-8' );
+	header( 'Content-Disposition: attachment; filename="decont-dkw-' . $m . '.csv"' );
+	$out = fopen( 'php://output', 'w' );
+	fwrite( $out, "\xEF\xBB\xBF" );
+	fputcsv( $out, array( 'Data', 'Comanda print3dshop', 'Comanda dkw', 'Status comandă', 'Status dkw', 'Plată', 'Ramburs încasat de dkw (lei)', 'Plătit la print3dshop (lei)', 'Produse', 'Cost achiziție (lei)', 'AWB' ), ';' );
+	$sum = array( 0, 0, 0 );
+	foreach ( $orders as $order ) {
+		$items = p3d_dkw_order_items( $order );
+		$cost  = 0;
+		$names = array();
+		foreach ( $items as $i ) {
+			$cost   += $i['purchase_price'] * $i['qty'];
+			$names[] = $i['qty'] . ' x ' . $i['name'] . ' (' . $i['sku'] . ')';
+		}
+		$cod  = 'cod' === $order->get_payment_method();
+		$tot  = (float) $order->get_total();
+		$sum[0] += $cod ? $tot : 0;
+		$sum[1] += $cod ? 0 : $tot;
+		$sum[2] += $cost;
+		fputcsv( $out, array(
+			$order->get_date_created() ? $order->get_date_created()->date( 'Y-m-d' ) : '',
+			$order->get_order_number(),
+			(string) $order->get_meta( '_dkw_order_ref' ),
+			wc_get_order_status_name( $order->get_status() ),
+			(string) $order->get_meta( '_dkw_status' ),
+			$order->get_payment_method_title(),
+			$cod ? number_format( $tot, 2, ',', '' ) : '',
+			$cod ? '' : number_format( $tot, 2, ',', '' ),
+			implode( ' | ', $names ),
+			number_format( $cost, 2, ',', '' ),
+			(string) $order->get_meta( '_dkw_awb' ),
+		), ';' );
+	}
+	fputcsv( $out, array( 'TOTAL', '', '', '', '', '', number_format( $sum[0], 2, ',', '' ), number_format( $sum[1], 2, ',', '' ), '', number_format( $sum[2], 2, ',', '' ), '' ), ';' );
+	fclose( $out );
+	exit;
 } );
 
 
