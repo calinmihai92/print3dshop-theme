@@ -22,7 +22,7 @@ function p3d_services() {
 			'lead'     => 'Imprimanta nu mai printează cum trebuie? O verificăm, o reparăm și o reglăm, ca să printeze din nou precis și fiabil. Întreținere și suport tehnic specializat pentru cele mai populare imprimante 3D.',
 			'card'     => 'Diagnoză, reparații, piese de schimb și întreținere pentru cele mai populare imprimante 3D.',
 			'points'   => array( 'Diagnostic gratuit', 'Garanție 1 an la manoperă', 'Primim imprimante prin curier din toată țara' ),
-			'seo'      => array( 'Service imprimante 3D București – reparații Bambu Lab, Prusa, Creality | Print3D Shop', 'Service și reparații imprimante 3D în București, Sector 2: diagnostic gratuit, piese de schimb, calibrare și întreținere pentru Bambu Lab, Prusa, Creality, Anycubic, Elegoo, Voron. Garanție 1 an la manoperă, imprimante primite și prin curier din toată țara.' ),
+			'seo'      => array( 'Service imprimante 3D București – reparații Bambu Lab, Prusa, Creality | Print 3D Shop', 'Service și reparații imprimante 3D în București, Sector 2: diagnostic gratuit, piese de schimb, calibrare și întreținere pentru Bambu Lab, Prusa, Creality, Anycubic, Elegoo, Voron. Garanție 1 an la manoperă, imprimante primite și prin curier din toată țara.' ),
 			'brands'   => array( 'Bambu Lab', 'Prusa', 'Creality', 'Anycubic', 'Elegoo', 'Voron', 'și alte mărci' ),
 			'problems' => array(
 				array( 'Nu mai extrudează', 'Duză înfundată, extruder care sare sau filament care nu mai iese.' ),
@@ -70,7 +70,7 @@ function p3d_services() {
 			'lead'     => 'Servicii de printare 3D în București pentru proiecte unice, prototipuri, piese de schimb sau obiecte personalizate. Printăm din PLA, PETG, ABS, ASA și TPU, cu precizie și atenție la detalii, de la o singură piesă până la serii mici.',
 			'card'     => 'Prototipuri, piese de schimb, obiecte unicat. Trimiți modelul, alegi culoarea, primești piesele.',
 			'points'   => array( 'Diverse materiale și culori', 'Prototipuri și piese unicat', 'Ridicare sau livrare' ),
-			'seo'      => array( 'Printare 3D București la comandă — de la 1 leu/g | Print3D Shop', 'Servicii de printare 3D în București: piese, prototipuri și obiecte personalizate din PLA, PETG, ABS, ASA, TPU. De la 1 leu/g + 15 lei/oră. Ofertă rapidă pe WhatsApp.' ),
+			'seo'      => array( 'Printare 3D București la comandă — de la 1 leu/g | Print 3D Shop', 'Servicii de printare 3D în București: piese, prototipuri și obiecte personalizate din PLA, PETG, ABS, ASA, TPU. De la 1 leu/g + 15 lei/oră. Ofertă rapidă pe WhatsApp.' ),
 			'also'     => array(
 				'title' => array( 'Din ce printăm ', 'și pe ce imprimante' ),
 				'lead'  => 'Printăm în atelierul nostru din București, Sector 2, pe imprimante Bambu Lab P1S. Alegem împreună materialul potrivit pentru ce trebuie să facă piesa.',
