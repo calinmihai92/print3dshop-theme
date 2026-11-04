@@ -24,7 +24,7 @@ function p3d_quick_lines() {
 	}
 	$q = new WP_Query( array(
 		'post_type'              => 'product',
-		'post_status'            => current_user_can( 'manage_woocommerce' ) ? array( 'publish', 'draft', 'private' ) : 'publish',
+		'post_status'            => p3d_dkw_can_preview() ? array( 'publish', 'draft', 'private' ) : 'publish',
 		'posts_per_page'         => 1000,
 		'fields'                 => 'ids',
 		'no_found_rows'          => true,

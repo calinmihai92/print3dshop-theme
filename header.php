@@ -11,7 +11,7 @@ $p3d_svc_more = array(
 $p3d_fil_url = '';
 if ( function_exists( 'p3d_dkw_root_term' ) && p3d_dkw_root_term() ) {
 	list( $p3d_fil_n ) = p3d_dkw_published_stats();
-	if ( $p3d_fil_n || current_user_can( 'manage_woocommerce' ) ) {
+	if ( $p3d_fil_n || p3d_dkw_can_preview() ) {
 		$p3d_fil_url = get_term_link( p3d_dkw_root_term() );
 	}
 }

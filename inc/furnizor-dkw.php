@@ -12,6 +12,49 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Previzualizare filamente: administratorul sau oricine are linkul secret
+ * (/c/filamente/?previzualizare=<cod>) vede și filamentele în ciornă. Linkul nu permite comenzi.
+ */
+function p3d_dkw_preview_token() {
+	$t = get_option( 'p3d_dkw_preview_token' );
+	if ( ! $t ) {
+		$t = wp_generate_password( 16, false );
+		update_option( 'p3d_dkw_preview_token', $t, false );
+	}
+	return $t;
+}
+function p3d_dkw_guest_preview() {
+	$g = isset( $_GET['previzualizare'] ) ? sanitize_text_field( wp_unslash( $_GET['previzualizare'] ) ) : ''; // phpcs:ignore
+	if ( '' === $g ) {
+		return false;
+	}
+	$t = get_option( 'p3d_dkw_preview_token' );
+	return $t && hash_equals( (string) $t, $g ) && ! current_user_can( 'manage_woocommerce' );
+}
+function p3d_dkw_can_preview() {
+	return current_user_can( 'manage_woocommerce' ) || p3d_dkw_guest_preview();
+}
+// Linkul de previzualizare: fără cache, fără Google, iar linkurile din pagină păstrează codul.
+add_action( 'template_redirect', function () {
+	if ( ! p3d_dkw_guest_preview() ) {
+		return;
+	}
+	if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+		define( 'DONOTCACHEPAGE', true );
+	}
+	nocache_headers();
+	header( 'X-Robots-Tag: noindex, nofollow' );
+}, 1 );
+add_filter( 'term_link', function ( $link, $term, $tax ) {
+	return ( 'product_cat' === $tax && p3d_dkw_guest_preview() ) ? add_query_arg( 'previzualizare', p3d_dkw_preview_token(), $link ) : $link;
+}, 10, 3 );
+add_action( 'wp_head', function () {
+	if ( p3d_dkw_guest_preview() ) {
+		echo '<meta name="robots" content="noindex, nofollow">' . "\n" . '<style>.p3d-qadd,.single_add_to_cart_button{display:none!important}</style>' . "\n";
+	}
+}, 1 );
+
 if ( ! class_exists( 'WooCommerce' ) ) {
 	return;
 }
@@ -800,8 +843,12 @@ add_action( 'pre_get_posts', function ( $q ) {
 		$q->set( 'tax_query', $tax );
 	}
 	// Administratorul vede și ciornele pe pagina filamentelor (previzualizare).
-	if ( $q->is_tax( 'product_cat' ) && current_user_can( 'manage_woocommerce' ) && p3d_dkw_preview_archive( $q ) ) {
+	if ( $q->is_tax( 'product_cat' ) && p3d_dkw_can_preview() && p3d_dkw_preview_archive( $q ) ) {
 		$q->set( 'post_status', array( 'publish', 'draft', 'private' ) );
+	}
+	// Cu linkul de previzualizare se deschid și paginile filamentelor în ciornă.
+	if ( p3d_dkw_guest_preview() && 'product' === $q->get( 'post_type' ) && $q->get( 'p' ) && get_post_meta( (int) $q->get( 'p' ), '_dkw_id', true ) ) {
+		$q->set( 'post_status', array( 'publish', 'draft' ) );
 	}
 	if ( $q->is_tax( 'product_cat' ) ) {
 		$meta = (array) $q->get( 'meta_query' );
@@ -935,7 +982,7 @@ function p3d_dkw_facet( $key, $term_id, $skip_param ) {
 	global $wpdb;
 	$ids   = array_merge( array( (int) $term_id ), array_map( 'intval', get_term_children( $term_id, 'product_cat' ) ) );
 	$in    = implode( ',', $ids );
-	$st    = current_user_can( 'manage_woocommerce' ) ? "'publish','draft','private'" : "'publish'";
+	$st    = p3d_dkw_can_preview() ? "'publish','draft','private'" : "'publish'";
 	$joins = '';
 	$n     = 0;
 	foreach ( p3d_dkw_filter_keys() as $param => $k ) {
@@ -1047,8 +1094,13 @@ function p3d_dkw_preview_archive( $q ) {
 
 // Ciornele se deschid în modul previzualizare (pentru administrator).
 add_filter( 'post_type_link', function ( $link, $post ) {
-	if ( 'product' === $post->post_type && 'draft' === $post->post_status && ! is_admin() && current_user_can( 'manage_woocommerce' ) && get_post_meta( $post->ID, '_dkw_id', true ) ) {
-		return add_query_arg( array( 'post_type' => 'product', 'p' => $post->ID, 'preview' => 'true' ), home_url( '/' ) );
+	if ( 'product' === $post->post_type && 'draft' === $post->post_status && ! is_admin() && get_post_meta( $post->ID, '_dkw_id', true ) ) {
+		if ( current_user_can( 'manage_woocommerce' ) ) {
+			return add_query_arg( array( 'post_type' => 'product', 'p' => $post->ID, 'preview' => 'true' ), home_url( '/' ) );
+		}
+		if ( p3d_dkw_guest_preview() ) {
+			return add_query_arg( array( 'post_type' => 'product', 'p' => $post->ID, 'previzualizare' => p3d_dkw_preview_token() ), home_url( '/' ) );
+		}
 	}
 	return $link;
 }, 10, 2 );
@@ -1056,6 +1108,8 @@ add_filter( 'post_type_link', function ( $link, $post ) {
 // Bandă de avertizare pe pagina filamentelor, când administratorul vede ciorne.
 add_action( 'woocommerce_before_shop_loop', function () {
 	if ( p3d_dkw_is_fil_archive() && current_user_can( 'manage_woocommerce' ) ) {
-		echo '<div class="p3d-preview-note">Previzualizare: vezi și filamentele în ciornă. Clienții văd doar produsele publicate.</div>';
+		echo '<div class="p3d-preview-note">Previzualizare: vezi și filamentele în ciornă. Clienții văd doar produsele publicate. Link de previzualizare pentru alții: <a href="' . esc_url( add_query_arg( 'previzualizare', p3d_dkw_preview_token(), get_term_link( p3d_dkw_root_term() ) ) ) . '">' . esc_html( add_query_arg( 'previzualizare', p3d_dkw_preview_token(), get_term_link( p3d_dkw_root_term() ) ) ) . '</a></div>';
+	} elseif ( p3d_dkw_is_fil_archive() && p3d_dkw_guest_preview() ) {
+		echo '<div class="p3d-preview-note">Previzualizare: pagina filamentelor nu este încă publică, iar comenzile nu sunt active momentan.</div>';
 	}
 }, 5 );
