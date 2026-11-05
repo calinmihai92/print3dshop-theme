@@ -63,7 +63,7 @@ function p3d_services() {
 		),
 
 		'printare-3d-personalizata' => array(
-			'photos'   => array( 22690, 22786, 22660 ), // poze din Media
+			'photos'   => array( 24528, 24529, 24530 ), // Unsplash (licență liberă)
 			'label'    => 'Printare 3D',
 			'icon'     => 'layers',
 			'eyebrow'  => 'Printare 3D la comandă · București',
@@ -116,7 +116,7 @@ function p3d_services() {
 		),
 
 		'prototyping' => array(
-			'photos'   => array( 22739, 22818, 22688, 22758, 22740 ), // poze din Media
+			'photos'   => array( 24531, 24532, 24533 ), // Unsplash (licență liberă)
 			'label'    => 'Proiectare 3D',
 			'icon'     => 'pen',
 			'eyebrow'  => 'Proiectare și modelare 3D · desen tehnic CAD · București',
@@ -204,6 +204,7 @@ function p3d_services() {
 		),
 
 		'design-grafic-tipar' => array(
+			'photos'   => array( 24537, 24538, 24539 ), // Unsplash (licență liberă)
 			'label'    => 'Design grafic și tipar',
 			'icon'     => 'palette',
 			'eyebrow'  => 'Design grafic și tipar · la comandă',
@@ -245,6 +246,7 @@ function p3d_services() {
 		),
 
 		'scanare-3d' => array(
+			'photos'   => array( 24534, 24535, 24536 ), // Unsplash (licență liberă)
 			'label'    => 'Scanare 3D',
 			'icon'     => 'scan',
 			'eyebrow'  => 'Scanare 3D București · la comandă',
