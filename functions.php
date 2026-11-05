@@ -67,7 +67,7 @@ add_action( 'wp_enqueue_scripts', function () {
 }, 999 );
 
 add_action( 'wp_head', function () {
-	$fonts = array( 'lora-ro-500-normal', 'source-sans-3-ro-400-normal' );
+	$fonts = array( 'space-grotesk-ro-var', 'dm-sans-ro-var' );
 	foreach ( $fonts as $f ) {
 		printf( '<link rel="preload" href="%s/assets/fonts/%s.woff2" as="font" type="font/woff2" crossorigin>' . "\n", esc_url( P3D_URI ), esc_attr( $f ) );
 	}
