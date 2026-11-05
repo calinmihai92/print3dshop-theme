@@ -14,6 +14,10 @@ defined( 'ABSPATH' ) || exit;
 		$wide     = ! $featured && ( ++$p3d_n === $p3d_others ) && ( $p3d_others % 2 );
 		?>
 		<a href="<?php echo esc_url( p3d_service_url( $slug ) ); ?>" class="card path<?php echo $featured ? ' featured' : ''; ?><?php echo $wide ? ' wide' : ''; ?>"<?php echo $featured ? ' style="--rows:' . (int) $p3d_rows . '"' : ''; ?>>
+			<?php $p3d_thumb = ( ! $featured && ! empty( $s['photos'][0] ) && wp_attachment_is_image( $s['photos'][0] ) ) ? (int) $s['photos'][0] : 0; ?>
+			<?php if ( $p3d_thumb ) : ?>
+				<span class="path-thumb"><?php echo wp_get_attachment_image( $p3d_thumb, 'medium_large', false, array( 'loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width: 640px) 92vw, (max-width: 1000px) 45vw, 360px', 'alt' => $s['label'] ) ); // phpcs:ignore ?></span>
+			<?php endif; ?>
 			<span class="path-top">
 				<span class="icon-tile"><?php echo p3d_icon( $s['icon'], 22 ); // phpcs:ignore ?></span>
 				<?php if ( $featured ) : ?><span class="pill dark">Cel mai cerut</span><?php endif; ?>

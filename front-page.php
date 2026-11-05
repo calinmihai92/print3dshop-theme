@@ -62,6 +62,13 @@ get_header();
 			<span class="eyebrow">De ce noi</span>
 			<h2 class="h2">Tehnologii 3D moderne, <em>făcute cu grijă</em></h2>
 		</div>
+		<div class="home-strip">
+			<?php foreach ( array( 24524, 24529, 24533, 24536 ) as $p3d_img ) : ?>
+				<?php if ( wp_attachment_is_image( $p3d_img ) ) : ?>
+					<figure class="home-strip-item"><?php echo wp_get_attachment_image( $p3d_img, 'medium_large', false, array( 'loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width: 640px) 46vw, 280px' ) ); // phpcs:ignore ?></figure>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</div>
 		<div class="grid grid-4">
 			<article class="card feat"><span class="icon-tile"><?php echo p3d_icon( 'palette', 22 ); // phpcs:ignore ?></span><h3>Personalizare</h3><p>Diverse materiale și culori, ca fiecare piesă să fie exact cum ți-ai imaginat-o.</p></article>
 			<article class="card feat"><span class="icon-tile"><?php echo p3d_icon( 'zap', 22 ); // phpcs:ignore ?></span><h3>Expertiză și inovație</h3><p>Tehnicieni pentru printare și service, designeri pentru modelare 3D.</p></article>
