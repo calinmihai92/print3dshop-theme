@@ -14,7 +14,7 @@ function p3d_services() {
 	return array(
 
 		'support' => array(
-			'photos'   => array( 22749, 24524, 24523, 22748, 24525 ), // Media + Unsplash
+			'photos'   => array( 24524, 24523, 24525 ), // Unsplash (licență liberă)
 			'label'    => 'Service imprimante 3D',
 			'icon'     => 'wrench',
 			'eyebrow'  => 'Service imprimante 3D · București',
