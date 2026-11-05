@@ -72,6 +72,23 @@ get_header();
 	</div>
 </section>
 
+<?php
+$p3d_photos = array_filter( (array) ( $s['photos'] ?? array() ), 'wp_attachment_is_image' );
+if ( $p3d_photos ) :
+	?>
+	<section class="section svc-photos-sec">
+		<div class="wrap">
+			<div class="svc-photos<?php echo count( $p3d_photos ) === 1 ? ' is-single' : ''; ?>">
+				<?php foreach ( $p3d_photos as $pid ) : ?>
+					<a class="svc-photo" href="<?php echo esc_url( wp_get_attachment_image_url( $pid, 'full' ) ); ?>" target="_blank" rel="noopener">
+						<?php echo wp_get_attachment_image( $pid, 'large', false, array( 'loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width: 640px) 92vw, (max-width: 1000px) 45vw, 380px', 'alt' => $s['label'] ) ); // phpcs:ignore ?>
+					</a>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</section>
+<?php endif; ?>
+
 <?php if ( ! empty( $s['also'] ) ) : ?>
 	<section class="section">
 		<div class="wrap">

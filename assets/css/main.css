@@ -763,3 +763,11 @@ a.price-val.is-link:hover { text-decoration: underline; text-underline-offset: 3
 	.p3d-fil-main .p3d-quick-head { margin-top: 0; }
 }
 @media (max-width: 1023px) { .p3d-fil-more { display: none; } .p3d-fil-chip.is-hidden { display: inline-flex; } }
+
+/* ---------- Poze pe paginile de servicii ---------- */
+.svc-photos-sec { padding-top: 0; }
+.svc-photos { columns: 3 260px; column-gap: 16px; }
+.svc-photo { display: block; break-inside: avoid; margin: 0 0 16px; border-radius: 16px; overflow: hidden; background: var(--line, #e7e2db); }
+.svc-photo img { display: block; width: 100%; height: auto; transition: transform .3s ease; }
+.svc-photo:hover img { transform: scale(1.03); }
+.svc-photos.is-single { columns: auto; max-width: 760px; margin: 0 auto; }

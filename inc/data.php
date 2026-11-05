@@ -14,6 +14,7 @@ function p3d_services() {
 	return array(
 
 		'support' => array(
+			'photos'   => array( 22749, 22748 ), // poze din Media
 			'label'    => 'Service imprimante 3D',
 			'icon'     => 'wrench',
 			'eyebrow'  => 'Service imprimante 3D · București',
@@ -62,6 +63,7 @@ function p3d_services() {
 		),
 
 		'printare-3d-personalizata' => array(
+			'photos'   => array( 22690, 22786, 22660 ), // poze din Media
 			'label'    => 'Printare 3D',
 			'icon'     => 'layers',
 			'eyebrow'  => 'Printare 3D la comandă · București',
@@ -114,6 +116,7 @@ function p3d_services() {
 		),
 
 		'prototyping' => array(
+			'photos'   => array( 22739, 22818, 22688, 22758, 22740 ), // poze din Media
 			'label'    => 'Proiectare 3D',
 			'icon'     => 'pen',
 			'eyebrow'  => 'Proiectare și modelare 3D · desen tehnic CAD · București',
@@ -159,6 +162,7 @@ function p3d_services() {
 		),
 
 		'prelucrare-cnc-matrite' => array(
+			'photos'   => array( 22736 ), // poze din Media
 			'label'    => 'Prelucrare CNC și matrițe',
 			'short'    => 'CNC și matrițe',
 			'icon'     => 'gear',
