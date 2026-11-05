@@ -78,7 +78,7 @@ if ( $p3d_photos ) :
 	?>
 	<section class="section svc-photos-sec">
 		<div class="wrap">
-			<div class="svc-photos<?php echo count( $p3d_photos ) === 1 ? ' is-single' : ''; ?>">
+			<div class="svc-photos n-<?php echo (int) min( 5, count( $p3d_photos ) ); ?>">
 				<?php foreach ( $p3d_photos as $pid ) : ?>
 					<a class="svc-photo" href="<?php echo esc_url( wp_get_attachment_image_url( $pid, 'full' ) ); ?>" target="_blank" rel="noopener">
 						<?php echo wp_get_attachment_image( $pid, 'large', false, array( 'loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width: 640px) 92vw, (max-width: 1000px) 45vw, 380px', 'alt' => $s['label'] ) ); // phpcs:ignore ?>
