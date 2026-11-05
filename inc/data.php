@@ -162,7 +162,7 @@ function p3d_services() {
 		),
 
 		'prelucrare-cnc-matrite' => array(
-			'photos'   => array( 22736 ), // poze din Media
+			'photos'   => array( 24520, 24521, 24522 ), // Unsplash (licență liberă)
 			'label'    => 'Prelucrare CNC și matrițe',
 			'short'    => 'CNC și matrițe',
 			'icon'     => 'gear',
