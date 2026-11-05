@@ -179,6 +179,10 @@ p { margin: 0 0 1em; }
 .path.featured p { color: #c9c6c0; }
 .path.featured .path-more { color: #ffb48a; }
 .path.featured .icon-tile { background: var(--accent); color: var(--ink); }
+.path-img { display: block; flex: 1 1 auto; min-height: 200px; border-radius: 14px; overflow: hidden; position: relative; margin: 6px 0 4px; }
+.path-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%; transition: transform .3s ease; }
+.path.featured:hover .path-img img { transform: scale(1.03); }
+@media (max-width: 1000px) { .path-img { min-height: 0; aspect-ratio: 16 / 9; } }
 
 /* ---------- Bandă service (închisă) ---------- */
 .band { background: var(--dark); color: #e9e6e1; border-radius: 28px; padding: 56px; display: grid; gap: 40px; grid-template-columns: 1.05fr 1fr; align-items: start; }

@@ -20,6 +20,9 @@ defined( 'ABSPATH' ) || exit;
 			</span>
 			<h3 class="h3"><?php echo esc_html( $s['h1a'] ); ?> <em><?php echo esc_html( $s['h1b'] ); ?></em></h3>
 			<p><?php echo esc_html( $s['card'] ); ?></p>
+			<?php if ( $featured && wp_attachment_is_image( 24526 ) ) : ?>
+				<span class="path-img"><?php echo wp_get_attachment_image( 24526, 'large', false, array( 'loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width: 1000px) 92vw, 420px' ) ); // phpcs:ignore ?></span>
+			<?php endif; ?>
 			<span class="path-more">Detalii <?php echo p3d_icon( 'arrow', 16 ); // phpcs:ignore ?></span>
 		</a>
 	<?php endforeach; ?>
